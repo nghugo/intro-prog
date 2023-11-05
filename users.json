@@ -1,0 +1,1 @@
+{"admin": {"password": "111", "isAdmin": true, "isActivated": true}, "volunteer1": {"password": "111", "isAdmin": false, "isActivated": true}, "volunteer2": {"password": "111", "isAdmin": false, "isActivated": true}, "volunteer3": {"password": "111", "isAdmin": false, "isActivated": false}}
