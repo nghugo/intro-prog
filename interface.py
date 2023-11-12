@@ -68,10 +68,8 @@ class Interface:
                     password=password,
                     is_admin=accountType == "a"
                 )
-                print(f"You are now logged in as {self.user.username} ({
-                      'admin' if self.user.is_admin else 'volunteer'}).")
         else:
-            print("Account not found or incorrect password. Please try again:")
+            print("The username or password you entered is incorrect. Please try again:")
 
     def prompt_options(self):
         """Provides options available to the currently logged in user"""
@@ -84,7 +82,7 @@ class Interface:
 
     def prompt_admin_options(self):  # TODO: implement handling for the other user_option values
         user_option = self.input_until_valid(
-            input_message = "Please choose an option:\
+            input_message = f"Please choose an option (logged in as {'admin' if self.user.is_admin else 'volunteer'} {self.user.username}):\
                 \n[1] Log out\
                 \n[2] Admin option 1 (TODO placeholder)\
                 \n[3] Admin option 2 (TODO placeholder)",
@@ -97,7 +95,7 @@ class Interface:
 
     def prompt_volunteer_options(self):  # TODO: implement handling for the other user_option values
         user_option = self.input_until_valid(
-            input_message = "Please choose an option:\
+            input_message = f"Please choose an option (logged in as {'admin' if self.user.is_admin else 'volunteer'} {self.user.username}):\
                 \n[1] Log out\
                 \n[2] Volunteer option 1 (TODO placeholder)\
                 \n[3] Volunteer option 2 (TODO placeholder)",
