@@ -16,6 +16,7 @@ class Interface:
 	
 	def start(self):
 		"""Starts the user interface and immediately prompts login. Any application logic stems from login."""
+		print("Welcome to the humanitarian management system.")
 		while not self.terminate:
 			if not self.user:
 				self.prompt_login()
@@ -45,10 +46,16 @@ class Interface:
 	def prompt_login(self):
 		"""Asks the user to log in, and checks against persisted (existing) users using methods from Auth class"""
 		accountType = self.input_until_valid(
-			input_message = "Enter your account type (a or v):\n[a] Admin\n[v] Volunteer", 
-			is_valid = lambda x: x=="a" or x=="v", 
-			validation_message = "Unrecognized input, please try again (a or v)\n[a] Admin\n[v] Volunteer"
+			input_message = "Enter your account type for log in (a/v) or exit(e):\n[a] Admin\n[v] Volunteer\n[e] Exit", 
+			is_valid = lambda user_input: user_input=="a" or user_input=="v" or user_input=="e",
+			validation_message = "Unrecognized input. Please enter account type for log in (a/v) or exit(e)\n[a] Admin\n[v] Volunteer\n[e] Exit"
+			
 		)
+
+		if accountType == "e":
+			self.exit()
+			return
+
 		username = self.input_until_valid("Enter your username:")
 		password = self.input_until_valid("Enter your password:")
 		
@@ -92,6 +99,6 @@ class Interface:
 	def prompt_logout(user):  # TODO: Implement this function. It currently does not react to inputs.
 		pass
 	
-	def exit(self, user):
+	def exit(self):
 		self.user = None
 		self.terminate = True
