@@ -1,4 +1,4 @@
-class User:
+class CurrentUser:
 	def __init__(self, username, password, is_admin = False):
 		self.username = username
 		self.password = password

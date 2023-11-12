@@ -1,24 +1,24 @@
-from user import User
+from user import CurrentUser
 
 
 class Interface:
 
-	def __init__(self, auth, user=None):
-		self.auth = auth
-		self.user = user
+	def __init__(self, users, current_user=None):
+		self.users = users
+		self.current_user = current_user
 		self.terminate = False  # TODO: use this attribute to exit the program
 
-		# self.auth.add_user("vol4", "112", False, True)  # TODO: for testing only, remove later
-		# self.auth.remove_user("vol4")  # TODO: for testing only, remove later
-		# self.auth.modify_user("vol4", "is_admin", True)  # TODO: for testing only, remove later
-		# self.auth.modify_user("vol4", "is_activated", False)  # TODO: for testing only, remove later
-		# self.auth.modify_user("vol4", "is_admin", False)  # TODO: for testing only, remove later
+		# self.users.add_user("vol4", "112", False, True)  # TODO: for testing only, remove later
+		# self.users.remove_user("vol4")  # TODO: for testing only, remove later
+		# self.users.modify_user("vol4", "is_admin", True)  # TODO: for testing only, remove later
+		# self.users.modify_user("vol4", "is_activated", False)  # TODO: for testing only, remove later
+		# self.users.modify_user("vol4", "is_admin", False)  # TODO: for testing only, remove later
 
 	def start(self):
 		"""Starts the user interface and immediately prompts login. Any application logic stems from login."""
 		print("\nWelcome to the humanitarian management system.")
 		while not self.terminate:
-			if not self.user:
+			if not self.current_user:
 				self.prompt_login()
 			self.prompt_options()  # prompt corresponding features (add resources, edit names, etc)
 
@@ -44,7 +44,7 @@ class Interface:
 		return validated_input
 
 	def prompt_login(self):
-		"""Asks the user to log in, and checks against persisted (existing) users using methods from Auth class"""
+		"""Asks the user to log in, and checks against persisted (existing) users using methods from Users class"""
 		accountType = self.input_until_valid(
 			input_message="\nEnter your account type for login (a/v) or exit(e):\n[a] Admin\n[v] Volunteer\n[e] Exit",
 			is_valid=lambda user_input: user_input in {"a", "v", "e"},
@@ -58,12 +58,12 @@ class Interface:
 		username = self.input_until_valid("Enter your username:")
 		password = self.input_until_valid("Enter your password:")
 
-		if self.auth.users and username in self.auth.users and self.auth.users[username]['password'] == password:
-			if not self.auth.users[username]["is_activated"]:
+		if self.users.users and username in self.users.users and self.users.users[username]['password'] == password:
+			if not self.users.users[username]["is_activated"]:
 				print(
 					"Your account has been deactivated, contact the administrator.\nYou may try another account.")
 			else:
-				self.user = User(
+				self.current_user = CurrentUser(
 					username=username,
 					password=password,
 					is_admin=accountType == "a"
@@ -73,8 +73,8 @@ class Interface:
 
 	def prompt_options(self):
 		"""Provides options available to the currently logged in user"""
-		if self.user:
-			if self.user.is_admin:
+		if self.current_user:
+			if self.current_user.is_admin:
 				self.prompt_admin_options()
 			else:
 				self.prompt_volunteer_options()
@@ -82,12 +82,12 @@ class Interface:
 
 	def prompt_admin_options(self):  # TODO: implement handling for the other user_option values
 		user_option = self.input_until_valid(
-			input_message = f"\nPlease choose an option (logged in as {'admin' if self.user.is_admin else 'volunteer'} {self.user.username}):\
+			input_message = f"\nPlease choose an option (logged in as {'admin' if self.current_user.is_admin else 'volunteer'} {self.current_user.username}):\
 				\n[1] Log out\
 				\n[2] Admin option 1 (TODO placeholder)\
 				\n[3] Admin option 2 (TODO placeholder)",
 			is_valid=lambda user_input: user_input in {"1", "2", "3"},
-			validation_message="Unrecognized input. BRUHHHHH"
+			validation_message="Unrecognized input. Please choose from the above list."
 		)
 		if user_option == "1":
 			self.prompt_logout()
@@ -95,12 +95,12 @@ class Interface:
 
 	def prompt_volunteer_options(self):  # TODO: implement handling for the other user_option values
 		user_option = self.input_until_valid(
-			input_message = f"\nPlease choose an option (logged in as {'admin' if self.user.is_admin else 'volunteer'} {self.user.username}):\
+			input_message = f"\nPlease choose an option (logged in as {'admin' if self.current_user.is_admin else 'volunteer'} {self.current_user.username}):\
 				\n[1] Log out\
 				\n[2] Volunteer option 1 (TODO placeholder)\
 				\n[3] Volunteer option 2 (TODO placeholder)",
 			is_valid=lambda user_input: user_input in {"1", "2", "3"},
-			validation_message="Unrecognized input. BRUHHHHH"
+			validation_message="Unrecognized input. Please choose from the above list."
 		)
 		if user_option == "1":
 			self.prompt_logout()
@@ -115,8 +115,8 @@ class Interface:
 		)
 
 		if user_input == "y":
-			print(f"Goodbye {self.user.username}! You are now logged out.")
-			self.user = None
+			print(f"Goodbye {self.current_user.username}! You are now logged out.")
+			self.current_user = None
 			
 	
 	def prompt_exit(self):
@@ -130,7 +130,7 @@ class Interface:
 
 		if user_input == "y":
 			print("Thank you for using the humanitarian management system. See you again soon.")
-			self.user = None
+			self.current_user = None
 			self.terminate = True
 
 		
