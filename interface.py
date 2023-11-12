@@ -2,78 +2,79 @@ from auth import Auth
 from user import User
 
 class Interface:
-	def __init__(self, user = None, existingUserSet = None):
+
+	def __init__(self, user = None):
 		self.user = user
 		self.terminate = False
 	
 	def start(self):
 		while not self.terminate:
 			if not self.user:
-				self.promptLogin()
-			self.promptOptions()  # prompt corresponding features (add resources, edit names, etc)
+				self.prompt_login()
+			self.prompt_options()  # prompt corresponding features (add resources, edit names, etc)
 	
 	@staticmethod
-	def inputUntilValid(inputMessage, isValid = lambda x: True, validationMessage = ""):
-		print(inputMessage)
-		validatedInput = None
-		while validatedInput is None:
-			candiateInput = input()
-			if isValid(candiateInput):
-				validatedInput = candiateInput
+	def input_until_valid(input_message, is_valid = lambda x: True, validation_message = ""):
+		print(input_message)
+		validated_input = None
+		while validated_input is None:
+			candiate_input = input()
+			if is_valid(candiate_input):
+				validated_input = candiate_input
 			else:
-				print(validationMessage)
-		return validatedInput 
+				print(validation_message)
+		return validated_input 
 	
 	
-	def promptLogin(self):
-		accountType = self.inputUntilValid(
-			inputMessage = "Enter your account type (a for admin, v for volunteer):", 
-			isValid = lambda x: x=="a" or x=="v", 
-			validationMessage = "Unrecognized input. Please enter a for admin or v for volunteer:"
+	def prompt_login(self):
+		accountType = self.input_until_valid(
+			input_message = "Enter your account type (a for admin, v for volunteer):", 
+			is_valid = lambda x: x=="a" or x=="v", 
+			validation_message = "Unrecognized input. Please enter a for admin or v for volunteer:"
 		)
-		username = self.inputUntilValid("Enter your username:")
-		password= self.inputUntilValid("Enter your password:")
+		username = self.input_until_valid("Enter your username:")
+		password = self.input_until_valid("Enter your password:")
 		
 		auth = Auth()
 		
-		if auth.users and username in auth.users:
-			if not auth.users[username]["isActivated"]:
+		if auth.users and username in auth.users and auth.users[username]['password'] == password:
+			if not auth.users[username]["is_activated"]:
 				print("Your account has been deactivated, contact the administrator.")
 			else:
 				self.user = User(
 					username = username, 
 					password = password, 
-					isAdmin = accountType  == "a"
+					is_admin = accountType  == "a"
 				)
-				print(f"You are now logged in as {self.user.username} ({'admin' if self.user.isAdmin else 'volunteer'})")
+				print(f"You are now logged in as {self.user.username} ({'admin' if self.user.is_admin else 'volunteer'})")
 		else:
-			print("Account not found. Please try again:")
+			print("Account not found or incorrect password. Please try again:")
 	
 	
-	def promptOptions(self):
+	def prompt_options(self):
 		if self.user:
-			if self.user.isAdmin:
-				self.promptAdminOptions()
+			if self.user.is_admin:
+				self.prompt_admin_options()
 			else:
-				self.promptVolunteerOptions()
+				self.prompt_volunteer_options()
 	
 	@staticmethod
-	def promptAdminOptions():
-		print("Option 1: Exit")
+	def prompt_admin_options():
+		print("Option 1: Log out")
 		print("Option 2: Add resources as admin")
 		print("Option 3: Remove resources as admin")
 		option = input()
 		print("Your option has been received")
 	
 	@staticmethod
-	def promptVolunteerOptions():
-		print("Option 1: Exit")
+	def prompt_volunteer_options():
+		print("Option 1: Log out")
 		print("Option 2: Volunteer option 1")
 		print("Option 3: Volunteer option 2")
 		option = input()
 		print("Your option has been received")
 		
-	def promptLogout(user):
+	def prompt_logout(user):
 		pass
 	
 	def exit(self, user):
