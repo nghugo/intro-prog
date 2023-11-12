@@ -5,7 +5,7 @@ class Interface:
 
 	def __init__(self, user = None):
 		self.user = user
-		self.terminate = False
+		self.terminate = False  # TODO: use this attribute to exit the program
 	
 	def start(self):
 		while not self.terminate:
@@ -24,7 +24,6 @@ class Interface:
 			else:
 				print(validation_message)
 		return validated_input 
-	
 	
 	def prompt_login(self):
 		accountType = self.input_until_valid(
@@ -49,7 +48,6 @@ class Interface:
 				print(f"You are now logged in as {self.user.username} ({'admin' if self.user.is_admin else 'volunteer'})")
 		else:
 			print("Account not found or incorrect password. Please try again:")
-	
 	
 	def prompt_options(self):
 		if self.user:

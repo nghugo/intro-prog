@@ -4,25 +4,59 @@ class Auth:
 	def __init__(self):
 		self.users = self.load_users()  # username: {password: xxx, is_admin: xxx, is_activated: xxx}
 	
-	def load_users(self):  # TODO exception handling
-		with open("users.json", "r") as jsonFile:  # https://www.w3schools.com/python/ref_func_open.asp
-			return json.load(jsonFile)
+	
+	@staticmethod
+	def load_users():  # TODO exception handling
+		with open("users.json", "r") as json_file:  # https://www.w3schools.com/python/ref_func_open.asp
+			return json.load(json_file)
+
+
+	@staticmethod	
+	def add_user(username, password, is_admin, is_activated):
 		
-	def add_volunteer():
-		pass  # TODO json persistence
-		# https://stackoverflow.com/questions/13949637/how-to-update-json-file-with-python
+		with open("users.json", "r") as json_file:
+			data = json.load(json_file)
+		
+		if username in data:  # reject, as username collides with that of an existing user
+			return False
+		
+		data[username] = {
+			"password": password,
+			"is_admin": is_admin,
+			"is_activated": is_activated,
+		}
+		with open("users.json", "w") as json_file:
+			json.dump(data, json_file)
+		return True
+
+
+	@staticmethod
+	def remove_user(username):
+
+		with open("users.json", "r") as json_file:
+			data = json.load(json_file)
+		
+		if username not in data:
+			return False  # reject, as username does not match that of an existing user
+		
+		del data[username]
+		with open("users.json", "w") as json_file:
+			json.dump(data, json_file)
+		return True
+		
+
+	@staticmethod
+	def modify_user(username, field, new_value):
+
+		with open("users.json", "r") as json_file:
+			data = json.load(json_file)
+
+		if username not in data:
+			return False  # reject, as username does not match that of an existing user
+			
+		data[username][field] = new_value
+		with open("users.json", "w") as json_file:
+			json.dump(data, json_file)
+		return True
 	
-	def remove_volunteer():
-		pass  # TODO json persistence
 	
-	def deactivate_volunteer():
-		pass  # TODO json persistence
-	
-	def activate_volunteer():
-		pass  # TODO json persistence
-	
-	def add_admin():
-		pass  # TODO json persistence
-	
-	def remove_admin():
-		pass  # TODO json persistence

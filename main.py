@@ -6,6 +6,5 @@ overwrite_users_json(dummy_users)
 
 # dummy data - - - -  - - - -  - - - -  - - - - 
 
-    
 interface = Interface()
 interface.start()

@@ -24,5 +24,5 @@ dummy_users = {
 }
 
 def overwrite_users_json(dummyUsers):
-    with open("users.json", "w") as jsonFile:
-        json.dump(dummyUsers, jsonFile)
+    with open("users.json", "w") as json_file:
+        json.dump(dummyUsers, json_file)
