@@ -30,7 +30,7 @@ class Interface:
 		accountType = self.input_until_valid(
 			input_message = "Enter your account type (a for admin, v for volunteer):", 
 			is_valid = lambda x: x=="a" or x=="v", 
-			validation_message = "Unrecognized input. Please enter a for admin or v for volunteer:"
+			validation_message = "Unrecognized input, please try again (a for admin or v for volunteer):"
 		)
 		username = self.input_until_valid("Enter your username:")
 		password = self.input_until_valid("Enter your password:")
@@ -39,12 +39,12 @@ class Interface:
 		
 		if auth.users and username in auth.users and auth.users[username]['password'] == password:
 			if not auth.users[username]["is_activated"]:
-				print("Your account has been deactivated, contact the administrator.")
+				print("Your account has been deactivated, contact the administrator.\nYou may try another account.")
 			else:
 				self.user = User(
 					username = username, 
 					password = password, 
-					is_admin = accountType  == "a"
+					is_admin = accountType == "a"
 				)
 				print(f"You are now logged in as {self.user.username} ({'admin' if self.user.is_admin else 'volunteer'})")
 		else:
