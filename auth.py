@@ -5,14 +5,19 @@ class Auth:
 		self.users = self.load_users()  # username: {password: xxx, is_admin: xxx, is_activated: xxx}
 	
 	@staticmethod
-	def load_users():  # TODO exception handling
-		with open("users.json", "r") as json_file:  # https://www.w3schools.com/python/ref_func_open.asp
+	def load_users():
+		"""Loads users from users.json (persistent). Creates users.json if not found."""
+		with open("users.json", "w") as json_file:  # https://www.w3schools.com/python/ref_func_open.asp
 			return json.load(json_file)
 
 
 	@staticmethod	
 	def add_user(username, password, is_admin, is_activated):
-		
+		"""
+		Adds user to users.json. 
+		Halts and returns False if username is already existing.
+		Otherwise, returns True indicating success.
+		"""
 		with open("users.json", "r") as json_file:
 			data = json.load(json_file)
 		
@@ -31,7 +36,11 @@ class Auth:
 
 	@staticmethod
 	def remove_user(username):
-
+		"""
+		Removes user from users.json. 
+		Halts and returns False if username is not existing.
+		Otherwise, returns True indicating success.
+		"""
 		with open("users.json", "r") as json_file:
 			data = json.load(json_file)
 		
@@ -46,12 +55,18 @@ class Auth:
 
 	@staticmethod
 	def modify_user(username, field, new_value):
-
+		"""
+		Overwrites the value in the field of a user in users.json.
+		Halts and returns False if username is not existing or if the field is not found in users.json (prevents typo)
+		Otherwise, returns True indicating success.
+		"""
 		with open("users.json", "r") as json_file:
 			data = json.load(json_file)
 
-		if username not in data:
-			return False  # reject, as username does not match that of an existing user
+		# reject if username does not match that of an existing user
+		# also reject if field is not already defined in users.json (prevents typo)
+		if username not in data or field not in data[username]:
+			return False
 			
 		data[username][field] = new_value
 		with open("users.json", "w") as json_file:

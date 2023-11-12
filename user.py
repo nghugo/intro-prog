@@ -3,3 +3,5 @@ class User:
 		self.username = username
 		self.password = password
 		self.is_admin = is_admin
+	
+	# TODO: Add to this class later to provide functionality for the current user
