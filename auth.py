@@ -4,10 +4,9 @@ class Auth:
 	def __init__(self):
 		self.users = self.loadUsers()  # username: {password: xxx, isAdmin: xxx, isActivated: xxx}
 	
-	@staticmethod
-	def loadUsers():  # TODO exception handling
+	def loadUsers(self):  # TODO exception handling
 		with open("users.json", "r") as jsonFile:  # https://www.w3schools.com/python/ref_func_open.asp
-			users= json.load(jsonFile)
+			return json.load(jsonFile)
 		
 	def addVolunteer():
 		pass  # TODO json persistence

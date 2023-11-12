@@ -10,7 +10,7 @@ class Interface:
 		while not self.terminate:
 			if not self.user:
 				self.promptLogin()
-			self.promptOptions(self.user)  # prompt corresponding features (add resources, edit names, etc)
+			self.promptOptions()  # prompt corresponding features (add resources, edit names, etc)
 	
 	@staticmethod
 	def inputUntilValid(inputMessage, isValid = lambda x: True, validationMessage = ""):
@@ -26,7 +26,6 @@ class Interface:
 	
 	
 	def promptLogin(self):
-		print("Enter your account type (a for admin, v for volunteer):")
 		accountType = self.inputUntilValid(
 			inputMessage = "Enter your account type (a for admin, v for volunteer):", 
 			isValid = lambda x: x=="a" or x=="v", 
@@ -37,8 +36,8 @@ class Interface:
 		
 		auth = Auth()
 		
-		if username in auth.users:
-			if not auth.users.username.isActiviated:
+		if auth.users and username in auth.users:
+			if not auth.users[username]["isActivated"]:
 				print("Your account has been deactivated, contact the administrator.")
 			else:
 				self.user = User(
@@ -46,15 +45,19 @@ class Interface:
 					password = password, 
 					isAdmin = accountType  == "a"
 				)
-				print(f"You are now logged in as {self.user.name} ({'admin' if self.user.isAdmin else 'volunteer'})")
+				print(f"You are now logged in as {self.user.username} ({'admin' if self.user.isAdmin else 'volunteer'})")
 		else:
-			print("Account not found.")
+			print("Account not found. Please try again:")
 	
 	
-	def promptOptions(self, user):
-		if self.user.isAdmin():
-			self.promptAdminOptions()
+	def promptOptions(self):
+		if self.user:
+			if self.user.isAdmin:
+				self.promptAdminOptions()
+			else:
+				self.promptVolunteerOptions()
 	
+	@staticmethod
 	def promptAdminOptions():
 		print("Option 1: Exit")
 		print("Option 2: Add resources as admin")
@@ -62,10 +65,11 @@ class Interface:
 		option = input()
 		print("Your option has been received")
 	
+	@staticmethod
 	def promptVolunteerOptions():
 		print("Option 1: Exit")
-		print("Option 2: Add resources as admin")
-		print("Option 3: Remove resources as admin")
+		print("Option 2: Volunteer option 1")
+		print("Option 3: Volunteer option 2")
 		option = input()
 		print("Your option has been received")
 		
