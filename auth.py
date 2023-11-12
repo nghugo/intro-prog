@@ -1,3 +1,4 @@
+import os.path
 import json
 
 class Auth:
@@ -7,8 +8,11 @@ class Auth:
 	@staticmethod
 	def load_users():
 		"""Loads users from users.json (persistent). Creates users.json if not found."""
-		with open("users.json", "w+") as json_file:  # https://www.w3schools.com/python/ref_func_open.asp
-			# return json.load(json_file)
+		
+		if not os.path.exists("users.json"):
+			open('users.json', 'x').close()
+
+		with open("users.json", "r") as json_file:  # https://www.w3schools.com/python/ref_func_open.asp
 			try: 
 				json_load = json.load(json_file)
 			except ValueError: 
