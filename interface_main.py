@@ -1,18 +1,15 @@
-from user import CurrentUser
+from current_user import CurrentUser
+from interface_admin_options import InterfaceAdminOptions
+from interface_helper import input_until_valid
 
+from users import Users
 
-class Interface:
+class InterfaceMain:
 
-	def __init__(self, users, current_user=None):
-		self.users = users
+	def __init__(self, current_user = None):
 		self.current_user = current_user
 		self.terminate = False  # TODO: use this attribute to exit the program
 
-		# self.users.add_user("vol4", "112", False, True)  # TODO: for testing only, remove later
-		# self.users.remove_user("vol4")  # TODO: for testing only, remove later
-		# self.users.modify_user("vol4", "is_admin", True)  # TODO: for testing only, remove later
-		# self.users.modify_user("vol4", "is_activated", False)  # TODO: for testing only, remove later
-		# self.users.modify_user("vol4", "is_admin", False)  # TODO: for testing only, remove later
 
 	def start(self):
 		"""Starts the user interface and immediately prompts login. Any application logic stems from login."""
@@ -22,30 +19,10 @@ class Interface:
 				self.prompt_login()
 			self.prompt_options()  # prompt corresponding features (add resources, edit names, etc)
 
-	@staticmethod
-	def input_until_valid(input_message, is_valid=lambda user_input: True, validation_message=""):
-		"""
-		Loops through input() until a valid input is provided.
-
-		Parameters:
-		----------
-		input_message: message printed on terminal before input()
-		is_valid (optional): validation function that checks if the user_input is valid, returns Boolean
-		validation_message (optional): message printed on terminal when invalid input is recevied from user
-		"""
-		print(input_message)
-		validated_input = None
-		while validated_input is None:
-			user_input = input()
-			if is_valid(user_input):
-				validated_input = user_input
-			else:
-				print(validation_message)
-		return validated_input
 
 	def prompt_login(self):
 		"""Asks the user to log in, and checks against persisted (existing) users using methods from Users class"""
-		accountType = self.input_until_valid(
+		accountType = input_until_valid(
 			input_message="\nEnter your account type for login (a/v) or exit(e):\n[a] Admin\n[v] Volunteer\n[e] Exit",
 			is_valid=lambda user_input: user_input in {"a", "v", "e"},
 			validation_message="Unrecognized input. Please enter account type for login (a/v) or exit(e)\n[a] Admin\n[v] Volunteer\n[e] Exit"
@@ -55,11 +32,12 @@ class Interface:
 			self.prompt_exit()
 			return  # early termination
 
-		username = self.input_until_valid("Enter your username:")
-		password = self.input_until_valid("Enter your password:")
+		username = input_until_valid("Enter your username:")
+		password = input_until_valid("Enter your password:")
 
-		if self.users.users and username in self.users.users and self.users.users[username]['password'] == password:
-			if not self.users.users[username]["is_activated"]:
+		users = Users()
+		if users.users and username in users.users and users.users[username]['password'] == password:
+			if not users.users[username]["is_activated"]:
 				print(
 					"Your account has been deactivated, contact the administrator.\nYou may try another account.")
 			else:
@@ -81,20 +59,30 @@ class Interface:
 
 
 	def prompt_admin_options(self):  # TODO: implement handling for the other user_option values
-		user_option = self.input_until_valid(
+		user_option = input_until_valid(
+			# make sure the input message matches the is_valid validation function and the options in interface_admin_options.py
 			input_message = f"\nPlease choose an option (logged in as {'admin' if self.current_user.is_admin else 'volunteer'} {self.current_user.username}):\
 				\n[1] Log out\
-				\n[2] Admin option 1 (TODO placeholder)\
-				\n[3] Admin option 2 (TODO placeholder)",
-			is_valid=lambda user_input: user_input in {"1", "2", "3"},
+				\n[2] Add user\
+				\n[3] Activate user\
+				\n[4] Deactivate user\
+				\n[5] Modify user\
+				\n[6] Delete user\
+				\n[7] some other command (TODO placeholder)\
+				\n[8] some other command (TODO placeholder)",
+			is_valid=lambda user_input: user_input in {"1", "2", "3", "4", "5", "6"},
 			validation_message="Unrecognized input. Please choose from the above list."
 		)
+		users = Users()
+		interface_admin_options = InterfaceAdminOptions(users)
 		if user_option == "1":
 			self.prompt_logout()
+		else:
+			interface_admin_options.execute_option(user_option)
 
 
 	def prompt_volunteer_options(self):  # TODO: implement handling for the other user_option values
-		user_option = self.input_until_valid(
+		user_option = input_until_valid(
 			input_message = f"\nPlease choose an option (logged in as {'admin' if self.current_user.is_admin else 'volunteer'} {self.current_user.username}):\
 				\n[1] Log out\
 				\n[2] Volunteer option 1 (TODO placeholder)\
@@ -108,7 +96,7 @@ class Interface:
 	def prompt_logout(self):
 		print("\nAre you sure you want to log out?")
 		
-		user_input = self.input_until_valid(
+		user_input = input_until_valid(
 			input_message="Please confirm your logout (y/n):\n[y] Yes\n[n] No",
 			is_valid=lambda user_input: user_input == "y" or user_input == "n",
 			validation_message="Unrecognized input. Please confirm your logout (y/n):\n[y] Yes\n[n] No"
@@ -122,7 +110,7 @@ class Interface:
 	def prompt_exit(self):
 		print("\nAre you sure you want to exit?")
 
-		user_input = self.input_until_valid(
+		user_input = input_until_valid(
 			input_message="Please confirm your exit (y/n):\n[y] Yes\n[n] No",
 			is_valid=lambda user_input: user_input == "y" or user_input == "n",
 			validation_message="Unrecognized input. Please confirm your exit (y/n):\n[y] Yes\n[n] No"

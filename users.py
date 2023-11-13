@@ -45,9 +45,9 @@ class Users:
 
 
 	@staticmethod
-	def remove_user(username):
+	def delete_user(username):
 		"""
-		Removes user from users.json. 
+		Deletes user from users.json. 
 		Halts and returns False if username is not existing.
 		Otherwise, returns True indicating success.
 		"""

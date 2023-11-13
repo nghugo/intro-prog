@@ -1,7 +1,1 @@
-{
-    "admin": { "password": "111", "is_admin": true, "is_activated": true },
-    "volunteer1": { "password": "111", "is_admin": false, "is_activated": true },
-    "volunteer2": { "password": "111", "is_admin": false, "is_activated": true },
-    "volunteer3": { "password": "111", "is_admin": false, "is_activated": false }
-  }
-  
+{"admin": {"password": "111", "is_admin": true, "is_activated": true}, "volunteer1": {"password": "111", "is_admin": false, "is_activated": true}, "volunteer2": {"password": "111", "is_admin": false, "is_activated": true}, "volunteer3": {"password": "111", "is_admin": false, "is_activated": false}, "x": {"password": "xx", "is_admin": "y", "is_activated": "n"}, "y": {"password": "x", "is_admin": "y", "is_activated": "y"}}
