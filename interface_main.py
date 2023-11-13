@@ -23,9 +23,9 @@ class InterfaceMain:
 	def prompt_login(self):
 		"""Asks the user to log in, and checks against persisted (existing) users using methods from Users class"""
 		accountType = input_until_valid(
-			input_message="\nEnter your account type for login (a/v) or exit(e):\n[a] Admin\n[v] Volunteer\n[e] Exit",
+			input_message="\nEnter your account type for login (a/v) or exit (e):\n[a] Admin\n[v] Volunteer\n[e] Exit",
 			is_valid=lambda user_input: user_input in {"a", "v", "e"},
-			validation_message="Unrecognized input. Please enter account type for login (a/v) or exit(e)\n[a] Admin\n[v] Volunteer\n[e] Exit"
+			validation_message="Unrecognized input. Please enter account type for login (a/v) or exit (e)\n[a] Admin\n[v] Volunteer\n[e] Exit"
 		)
 
 		if accountType == "e":
