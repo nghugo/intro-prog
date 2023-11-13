@@ -1,3 +1,5 @@
+import pandas as pd
+
 from interface_helper import input_until_valid
 
 
@@ -20,8 +22,12 @@ class InterfaceAdminOptions:
 		if user_option == "6":
 			self.prompt_delete_user()
 		if user_option == "7":
-			pass  # TODO: implement
+			self.list_users()
 		if user_option == "8":
+			pass  # TODO: implement
+		if user_option == "9":
+			pass  # TODO: implement
+		if user_option == "10":
 			pass  # TODO: implement
 
 
@@ -155,3 +161,9 @@ class InterfaceAdminOptions:
 		else:
 			self.users.delete_user(username)
 			print(f"User {username} has been deleted.")
+
+	def list_users(self):
+		print("--- Users are as follows ---")
+		users_df = pd.DataFrame.from_dict(self.users.users).transpose()  # using pandas just for pretty print
+		print(users_df)
+		print("--- End of users list ---")
