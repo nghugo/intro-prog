@@ -85,6 +85,10 @@ class InterfaceAdminOptions:
 			self.users.modify_user(username, "is_activated", False)
 			print(f"User {username} has been deactivated.")
 
+	@staticmethod
+	def valid_inputs_of_field(field):
+		if field in {"is_admin", "is_activated"}:
+			return {"True", "False"}
 
 	def prompt_modify_user(self):
 		username = input_until_valid(
@@ -97,7 +101,15 @@ class InterfaceAdminOptions:
 			is_valid=lambda user_input: user_input in {"username", "password", "is_admin", "is_activated", ""},
 			validation_message="Unrecognized input. Please enter a valid field (username/password/is_admin/is_activated)."
 		)
-		value = input_until_valid("Enter the new value for the field:")  
+		if field in {"is_admin", "is_activated"}:
+			value = input_until_valid(
+				input_message=f"Specify the new value for the field {field} (y/n):\n[y] Yes\n[n] No",
+				is_valid=lambda user_input: user_input == "y" or user_input == "n",
+				validation_message=f"Unrecognized input. Please specify the new value for the field {field} (y/n):\n[y] Yes\n[n] No"
+				)
+			value = True if value == "y" else False
+		else:
+			value = input_until_valid("Enter the new value for the field:")
 		# TODO: dynamically check the valid inputs for the field
 		# do not allow deactivation or admin disabling of own account
 
@@ -106,15 +118,12 @@ class InterfaceAdminOptions:
 			is_valid=lambda user_input: user_input == "y" or user_input == "n",
 			validation_message="Unrecognized input. Please confirm details of the user modification (y/n):\n[y] Yes\n[n] No (abort)"
 		)
-		if confirm:
+		if confirm == "y":
 			# modify persistent store and reload current_user if username matches
 			self.users.modify_user(username, field, value)
 			if username == self.current_user.username:
 				if field == "username":
 					self.current_user.set_username(value)
-					print("**************")
-					print(self.current_user.username)
-					print("**************")
 				elif field == "password":
 					self.current_user.set_password(value)
 
