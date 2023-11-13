@@ -117,7 +117,7 @@ class InterfaceMain:
 		)
 
 		if user_input == "y":
-			print("Thank you for using the humanitarian management system. See you again soon.")
+			print("Thanks for using the humanitarian management system. See you soon.")
 			self.current_user = None
 			self.terminate = True
 

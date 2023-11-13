@@ -42,7 +42,7 @@ class InterfaceAdminOptions:
 			validation_message="Unrecognized input. Please specify if the new user is activated (y/n):\n[y] Yes\n[n] No"
 		)
 		confirm = input_until_valid(
-			input_message=f"Please confirm details of the new user (y/n):\n->Username: {username}\n->Password: {password}\n->Is Admin: {"yes" if is_admin else "no"}\n->Is Activated: {"yes" if is_activated else "no"}\n[y] Yes\n[n] No",
+			input_message=f"Please confirm details of the new user (y/n):\n->Username: {username}\n->Password: {password}\n->Is Admin: {"yes" if is_admin else "no"}\n->Is Activated: {"yes" if is_activated else "no"}\n[y] Yes\n[n] No (abort)",
 			is_valid=lambda user_input: user_input == "y" or user_input == "n",
 			validation_message="Unrecognized input. Please specify if the new user is activated (y/n):\n[y] Yes\n[n] No (abort)"
 		)
@@ -59,7 +59,7 @@ class InterfaceAdminOptions:
 
 	def prompt_activate_user(self):
 		username = input_until_valid(
-			input_message="\nEnter the username of the user to activate:",
+			input_message="\nEnter the username of the user to activate or leave empty to abort.:",
 			is_valid=lambda user_input: user_input in self.users.users or user_input == "",
 			validation_message="Username not found. Please enter an existing username or leave empty to abort."
 		)
@@ -71,9 +71,8 @@ class InterfaceAdminOptions:
 
 
 	def prompt_deactivate_user(self):
-
 		username = input_until_valid(
-			input_message="\nEnter the username of the user to deactivate:",
+			input_message="\nEnter the username of the user to deactivate or leave empty to abort.:",
 			is_valid=lambda user_input: user_input in self.users.users or user_input == "",
 			validation_message="Username not found. Please enter an existing username or leave empty to abort."
 		)
