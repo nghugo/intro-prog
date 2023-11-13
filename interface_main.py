@@ -23,7 +23,7 @@ class InterfaceMain:
 	def prompt_login(self):
 		"""Asks the user to log in, and checks against persisted (existing) users using methods from Users class"""
 		account_type_or_exit = input_until_valid(
-			input_message="\nEnter your account type for login (a/v) or exit(e):\n[a] Admin\n[v] Volunteer\n[e] Exit",
+			input_message="\nEnter your account type for login (a/v) or exit (e):\n[a] Admin\n[v] Volunteer\n[e] Exit",
 			is_valid=lambda user_input: user_input in {"a", "v", "e"},
 			validation_message="Unrecognized input. Please enter account type for login (a/v) or exit (e)\n[a] Admin\n[v] Volunteer\n[e] Exit"
 		)
@@ -65,7 +65,7 @@ class InterfaceMain:
 
 	def prompt_admin_options(self):  # TODO: implement handling for the other user_option values
 		user_option = input_until_valid(
-			# make sure the input message matches the is_valid validation function and the options in interface_admin_options.py
+			# when extending this list, make sure the input message matches the is_valid validation function and the options in interface_admin_options.py
 			input_message = f"\nPlease choose an option (logged in as {'admin' if self.current_user.is_admin else 'volunteer'} {self.current_user.username}):\
 				\n[1] Log out\
 				\n[2] Add user\
@@ -73,9 +73,10 @@ class InterfaceMain:
 				\n[4] Deactivate user\
 				\n[5] Modify user\
 				\n[6] Delete user\
-				\n[7] some other command (TODO placeholder)\
-				\n[8] some other command (TODO placeholder)",
-			is_valid=lambda user_input: user_input in {"1", "2", "3", "4", "5", "6"},
+				\n[7] List all users\
+				\n[9] some other command (TODO placeholder)\
+				\n[10] some other command (TODO placeholder)",
+			is_valid=lambda user_input: user_input in {"1", "2", "3", "4", "5", "6", "7", "8", "9", "10"},
 			validation_message="Unrecognized input. Please choose from the above list."
 		)
 		users = Users()
@@ -88,6 +89,8 @@ class InterfaceMain:
 
 	def prompt_volunteer_options(self):  # TODO: implement handling for the other user_option values
 		user_option = input_until_valid(
+			# when extending this list, make sure the input message matches the is_valid validation function and the options in interface_volunteer_options.py
+			# interface_volunteer_options.py currently has not currently been built
 			input_message = f"\nPlease choose an option (logged in as {'admin' if self.current_user.is_admin else 'volunteer'} {self.current_user.username}):\
 				\n[1] Log out\
 				\n[2] Volunteer option 1 (TODO placeholder)\
