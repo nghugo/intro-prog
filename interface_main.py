@@ -74,7 +74,7 @@ class InterfaceMain:
 			validation_message="Unrecognized input. Please choose from the above list."
 		)
 		users = Users()
-		interface_admin_options = InterfaceAdminOptions(users)
+		interface_admin_options = InterfaceAdminOptions(users, self.current_user)
 		if user_option == "1":
 			self.prompt_logout()
 		else:
@@ -92,6 +92,7 @@ class InterfaceMain:
 		)
 		if user_option == "1":
 			self.prompt_logout()
+	
 	
 	def prompt_logout(self):
 		print("\nAre you sure you want to log out?")

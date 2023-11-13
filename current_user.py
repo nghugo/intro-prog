@@ -5,3 +5,10 @@ class CurrentUser:
 		self.is_admin = is_admin
 	
 	# TODO: Add to this class later to provide functionality for the current user
+
+	def set_username(self, new_username):
+		self.username = new_username
+	
+	def set_password(self, new_password):
+		self.password = new_password
+	

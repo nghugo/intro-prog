@@ -2,8 +2,9 @@ from interface_helper import input_until_valid
 
 
 class InterfaceAdminOptions:
-	def __init__(self, users):
+	def __init__(self, users, current_user):
 		self.users = users
+		self.current_user = current_user
 
 
 	def execute_option(self, user_option):
@@ -44,7 +45,7 @@ class InterfaceAdminOptions:
 		confirm = input_until_valid(
 			input_message=f"Please confirm details of the new user (y/n):\n->Username: {username}\n->Password: {password}\n->Is Admin: {"yes" if is_admin else "no"}\n->Is Activated: {"yes" if is_activated else "no"}\n[y] Yes\n[n] No (abort)",
 			is_valid=lambda user_input: user_input == "y" or user_input == "n",
-			validation_message="Unrecognized input. Please specify if the new user is activated (y/n):\n[y] Yes\n[n] No (abort)"
+			validation_message="Unrecognized input. Please confirm details of the new user (y/n):\n[y] Yes\n[n] No (abort)"
 		)
 		if confirm == "y":
 			success = self.users.add_user(
@@ -59,7 +60,7 @@ class InterfaceAdminOptions:
 
 	def prompt_activate_user(self):
 		username = input_until_valid(
-			input_message="\nEnter the username of the user to activate or leave empty to abort.:",
+			input_message="\nEnter the username of the user to activate or leave empty to abort:",
 			is_valid=lambda user_input: user_input in self.users.users or user_input == "",
 			validation_message="Username not found. Please enter an existing username or leave empty to abort."
 		)
@@ -72,24 +73,67 @@ class InterfaceAdminOptions:
 
 	def prompt_deactivate_user(self):
 		username = input_until_valid(
-			input_message="\nEnter the username of the user to deactivate or leave empty to abort.:",
+			input_message="\nEnter the username of the user to deactivate or leave empty to abort:",
 			is_valid=lambda user_input: user_input in self.users.users or user_input == "",
 			validation_message="Username not found. Please enter an existing username or leave empty to abort."
 		)
 		if username == "":
 			print("User deactivation aborted.")
+		elif username == self.current_user.username:
+			print("You are not allowed to deactivate your own account. User deactivation aborted.")
 		else:
 			self.users.modify_user(username, "is_activated", False)
 			print(f"User {username} has been deactivated.")
 
 
 	def prompt_modify_user(self):
-		
-		self.users.modify_user("vol4", "is_activated", False)
-		print("User has been modified")
+		username = input_until_valid(
+			input_message="\nEnter the username of the user to modify:",
+			is_valid=lambda user_input: user_input in self.users.users or user_input == "",
+			validation_message="Username not found. Please enter an existing username or leave empty to abort."
+		)
+		field = input_until_valid(
+			input_message="Enter the field (username/password/is_admin/is_activated) to modify:",
+			is_valid=lambda user_input: user_input in {"username", "password", "is_admin", "is_activated", ""},
+			validation_message="Unrecognized input. Please enter a valid field (username/password/is_admin/is_activated)."
+		)
+		value = input_until_valid("Enter the new value for the field:")  
+		# TODO: dynamically check the valid inputs for the field
+		# do not allow deactivation or admin disabling of own account
+
+		confirm = input_until_valid(
+			input_message=f"Please confirm details of the user modification (y/n):\n->Username: {username}\n->Field: {field}\n->Previous Value: {self.users.users[username][field] if field != "username" else username}\n->New Value: {value}\n[y] Yes\n[n] No (abort)",
+			is_valid=lambda user_input: user_input == "y" or user_input == "n",
+			validation_message="Unrecognized input. Please confirm details of the user modification (y/n):\n[y] Yes\n[n] No (abort)"
+		)
+		if confirm:
+			# modify persistent store and reload current_user if username matches
+			self.users.modify_user(username, field, value)
+			if username == self.current_user.username:
+				if field == "username":
+					self.current_user.set_username(value)
+					print("**************")
+					print(self.current_user.username)
+					print("**************")
+				elif field == "password":
+					self.current_user.set_password(value)
+
+			print("Successfully modified user.")
+		else:
+			print("User modification aborted.")
 
 
 	def prompt_delete_user(self):
-		
-		self.users.delete_user("vol4", "is_activated", False)
-		print("User has been deleted")
+
+		username = input_until_valid(
+			input_message="\nEnter the username of the user to delete or leave empty to abort:",
+			is_valid=lambda user_input: user_input in self.users.users or user_input == "",
+			validation_message="Username not found. Please enter an existing username or leave empty to abort."
+		)
+		if username == "":
+			print("User deletion aborted.")
+		elif username == self.current_user.username:
+			print("You are not allowed to delete your own account. User deletion aborted.")
+		else:
+			self.users.delete_user(username)
+			print(f"User {username} has been deleted.")

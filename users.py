@@ -73,10 +73,14 @@ class Users:
 
 		# reject if username does not match that of an existing user
 		# also reject if field is not already defined in users.json (prevents typo)
-		if username not in data or field not in data[username]:
+		if username not in data or (field != "username" and field not in data[username]):
 			return False
-			
-		data[username][field] = new_value
+
+		if field != "username":
+			data[username][field] = new_value
+		else:  # changing username needs to be handled differently than other fields, as they are on different levels
+			data[new_value] = data.pop(username)
+
 		with open("users.json", "w") as json_file:
 			json.dump(data, json_file)
 		return True
