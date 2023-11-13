@@ -92,16 +92,25 @@ class InterfaceAdminOptions:
 
 	def prompt_modify_user(self):
 		username = input_until_valid(
-			input_message="\nEnter the username of the user to modify:",
+			input_message="\nEnter the username of the user to modify or leave empty to abort:",
 			is_valid=lambda user_input: user_input in self.users.users or user_input == "",
 			validation_message="Username not found. Please enter an existing username or leave empty to abort."
 		)
+		
+		if username == "":
+			print("User modification aborted.")
+			return  # early termination
+		
 		field = input_until_valid(
 			input_message="Enter the field (username/password/is_admin/is_activated) to modify:",
 			is_valid=lambda user_input: user_input in {"username", "password", "is_admin", "is_activated", ""},
 			validation_message="Unrecognized input. Please enter a valid field (username/password/is_admin/is_activated)."
 		)
 		if field in {"is_admin", "is_activated"}:
+			if username == self.current_user.username:
+				print(f"You are not allowed to modify the {field} field of your own account. Modification aborted.")
+				return
+
 			value = input_until_valid(
 				input_message=f"Specify the new value for the field {field} (y/n):\n[y] Yes\n[n] No",
 				is_valid=lambda user_input: user_input == "y" or user_input == "n",
