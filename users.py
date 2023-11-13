@@ -20,7 +20,6 @@ class Users:
 			finally:
 				return json_load
 
-
 	@staticmethod	
 	def add_user(username, password, is_admin, is_activated):
 		"""
@@ -42,7 +41,6 @@ class Users:
 		with open("users.json", "w") as json_file:
 			json.dump(data, json_file)
 		return True
-
 
 	@staticmethod
 	def delete_user(username):
