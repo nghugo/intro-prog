@@ -22,29 +22,34 @@ class InterfaceMain:
 
 	def prompt_login(self):
 		"""Asks the user to log in, and checks against persisted (existing) users using methods from Users class"""
-		accountType = input_until_valid(
-			input_message="\nEnter your account type for login (a/v) or exit (e):\n[a] Admin\n[v] Volunteer\n[e] Exit",
+		account_type_or_exit = input_until_valid(
+			input_message="\nEnter your account type for login (a/v) or exit(e):\n[a] Admin\n[v] Volunteer\n[e] Exit",
 			is_valid=lambda user_input: user_input in {"a", "v", "e"},
 			validation_message="Unrecognized input. Please enter account type for login (a/v) or exit (e)\n[a] Admin\n[v] Volunteer\n[e] Exit"
 		)
 
-		if accountType == "e":
+		if account_type_or_exit == "e":
 			self.prompt_exit()
 			return  # early termination
 
 		username = input_until_valid("Enter your username:")
 		password = input_until_valid("Enter your password:")
+		is_admin = account_type_or_exit=="a"
 
 		users = Users()
-		if users.users and username in users.users and users.users[username]['password'] == password:
+		if (users.users  # check that the users dictionary (from persistent storage) is not empty
+	  		and username in users.users  # check if the specified username matches a user
+			and users.users[username]['password'] == password  # check against password associated with the username
+			and users.users[username]['is_admin'] == is_admin  # check if user is of correct type (admin vs volunteer)
+		):
 			if not users.users[username]["is_activated"]:
 				print(
 					"Your account has been deactivated, contact the administrator.\nYou may try another account.")
 			else:
 				self.current_user = CurrentUser(
-					username=username,
-					password=password,
-					is_admin=accountType == "a"
+					username = username,
+					password = password,
+					is_admin = is_admin
 				)
 		else:
 			print("The username or password you entered is incorrect. Please try again:")
