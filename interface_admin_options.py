@@ -14,13 +14,13 @@ class InterfaceAdminOptions:
 		if user_option == "2":
 			self.prompt_add_user()
 		if user_option == "3":
-			self.prompt_activate_user()
-		if user_option == "4":
-			self.prompt_deactivate_user()
-		if user_option == "5":
-			self.prompt_modify_user()
-		if user_option == "6":
 			self.prompt_delete_user()
+		if user_option == "4":
+			self.prompt_activate_user()
+		if user_option == "5":
+			self.prompt_deactivate_user()
+		if user_option == "6":
+			self.prompt_modify_user()
 		if user_option == "7":
 			self.list_users()
 		if user_option == "8":
@@ -118,11 +118,11 @@ class InterfaceAdminOptions:
 				return
 
 			value = input_until_valid(
-				input_message=f"Specify the new value for the field {field} (y/n):\n[y] Yes\n[n] No",
-				is_valid=lambda user_input: user_input == "y" or user_input == "n",
-				validation_message=f"Unrecognized input. Please specify the new value for the field {field} (y/n):\n[y] Yes\n[n] No"
+				input_message=f"Specify the new value for the field {field} (t/f):\n[t] True\n[f] False",
+				is_valid=lambda user_input: user_input == "t" or user_input == "f",
+				validation_message=f"Unrecognized input. Please specify the new value for the field {field} (t/f):\n[t] True\n[f] False"
 				)
-			value = True if value == "y" else False
+			value = True if value == "t" else False
 		else:
 			value = input_until_valid("Enter the new value for the field:")
 		# TODO: dynamically check the valid inputs for the field
