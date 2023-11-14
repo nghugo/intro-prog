@@ -69,11 +69,12 @@ class InterfaceMain:
 			input_message = f"\nPlease choose an option (logged in as {'admin' if self.current_user.is_admin else 'volunteer'} {self.current_user.username}):\
 				\n[1] Log out\
 				\n[2] Add user\
-				\n[3] Activate user\
-				\n[4] Deactivate user\
-				\n[5] Modify user\
-				\n[6] Delete user\
+				\n[3] Delete user\
+				\n[4] Activate user\
+				\n[5] Deactivate user\
+				\n[6] Modify user\
 				\n[7] List all users\
+				\n[8] some other command (TODO placeholder)\
 				\n[9] some other command (TODO placeholder)\
 				\n[10] some other command (TODO placeholder)",
 			is_valid=lambda user_input: user_input in {"1", "2", "3", "4", "5", "6", "7", "8", "9", "10"},
