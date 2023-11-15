@@ -37,10 +37,10 @@ class InterfaceAdminOptions:
         )
         password = input_until_valid("Enter the password for the new user:")
         phone_number = input_until_valid(
-            input_message=f"Specify the new phone number (5+ digits or leave empty)",
+            input_message=f"Enter the new phone number (5+ digits or leave empty)",
             is_valid=lambda user_input: (user_input == "") or (
                 user_input.isnumeric() and len(user_input) >= 5),
-            validation_message=f"Unrecognized input. Please specify the new phone number (5+ digits or leave empty)"
+            validation_message=f"Unrecognized input. Please enter the new phone number (5+ digits or leave empty)"
         )
         is_admin = input_until_valid(
             input_message="Specify if the new user is an admin (t/f):\n[t] True\n[f] False",
@@ -114,7 +114,7 @@ class InterfaceAdminOptions:
         field = input_until_valid(
             input_message="Enter the field (username/password/phone_number/is_admin/is_activated) to modify:",
             is_valid=lambda user_input: user_input in {
-                "username", "password", "phone_number", "is_admin", "is_activated", ""},
+                "username", "password", "phone_number", "is_admin", "is_activated"},
             validation_message="Unrecognized input. Please enter a valid field (username/password/phone_number/is_admin/is_activated)."
         )
         if field in {"is_admin", "is_activated"}:
@@ -125,11 +125,9 @@ class InterfaceAdminOptions:
                 return
 
             value = input_until_valid(
-                input_message=f"Specify the new value for the field {
-                    field} (t/f):\n[t] True\n[f] False",
+                input_message=f"Specify the new value for the {field} field (t/f):\n[t] True\n[f] False",
                 is_valid=lambda user_input: user_input == "t" or user_input == "f",
-                validation_message=f"Unrecognized input. Please specify the new value for the field {
-                    field} (t/f):\n[t] True\n[f] False"
+                validation_message=f"Unrecognized input. Please specify the new value for the {field} field (t/f):\n[t] True\n[f] False"
             )
             value = True if value == "t" else False
         elif field == "phone_number":
@@ -140,7 +138,7 @@ class InterfaceAdminOptions:
                 validation_message=f"Unrecognized input. Please specify the new phone number (5+ digits or leave empty)"
             )
         else:
-            value = input_until_valid("Enter the new value for the field:")
+            value = input_until_valid(f"Enter the new value for the {field} field:")
 
         confirm = input_until_valid(
             input_message=f"Please confirm details of the user modification (y/n):\n->Username: {username}\n->Field: {field}\n->Previous Value: {

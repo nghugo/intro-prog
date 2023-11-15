@@ -1,5 +1,6 @@
 from current_user import CurrentUser
 from interface_admin_options import InterfaceAdminOptions
+from interface_volunteer_options import InterfaceVolunteerOptions
 from interface_helper import input_until_valid
 
 from users import Users
@@ -94,14 +95,20 @@ class InterfaceMain:
 			# interface_volunteer_options.py currently has not currently been built
 			input_message = f"\nPlease choose an option (logged in as {'admin' if self.current_user.is_admin else 'volunteer'} {self.current_user.username}):\
 				\n[1] Log out\
-				\n[2] Volunteer option 1 (TODO placeholder)\
-				\n[3] Volunteer option 2 (TODO placeholder)",
-			is_valid=lambda user_input: user_input in {"1", "2", "3"},
+				\n[2] Modify my details\
+				\n[3] List my details\
+				\n[4] Volunteer option 1 (TODO placeholder)\
+				\n[5] Volunteer option 1 (TODO placeholder)\
+				\n[6] Volunteer option 2 (TODO placeholder)",
+			is_valid=lambda user_input: user_input in {"1", "2", "3", "4", "5", "6"},
 			validation_message="Unrecognized input. Please choose from the above list."
 		)
+		users = Users()
+		interface_volunteer_options = InterfaceVolunteerOptions(users, self.current_user)
 		if user_option == "1":
 			self.prompt_logout()
-	
+		else:
+			interface_volunteer_options.execute_option(user_option)
 	
 	def prompt_logout(self):
 		print("\nAre you sure you want to log out?")
