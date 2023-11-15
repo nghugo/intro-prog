@@ -34,8 +34,8 @@ class InterfaceAdminOptions:
 	def prompt_add_user(self):
 		username = input_until_valid(
 			input_message="\nEnter the username for the new user:",
-			is_valid=lambda user_input: user_input not in self.users.users,
-			validation_message="Username already taken. Please enter a different username for the new user"
+			is_valid=lambda user_input: user_input != "" and user_input not in self.users.users,
+			validation_message="Username cannot be empty or is already taken. Please enter a different username for the new user"
 		)
 		password = input_until_valid("Enter the password for the new user:")
 		is_admin = input_until_valid(
@@ -55,7 +55,7 @@ class InterfaceAdminOptions:
 		)
 		if confirm == "y":
 			success = self.users.add_user(
-				username=username, password=password, is_admin=is_admin, is_activated=is_activated)
+				username = username, password = password, is_admin = is_admin=="y", is_activated = is_activated=="y")
 			if success:
 				print(f"Successfully added user {username}")
 			else:
