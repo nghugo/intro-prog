@@ -39,14 +39,14 @@ class InterfaceAdminOptions:
 		)
 		password = input_until_valid("Enter the password for the new user:")
 		is_admin = input_until_valid(
-			input_message="Specify if the new user is an admin (y/n):\n[y] Yes\n[n] No",
-			is_valid=lambda user_input: user_input == "y" or user_input == "n",
-			validation_message="Unrecognized input. Please specify if the new user is an admin (y/n):\n[y] Yes\n[n] No"
+			input_message="Specify if the new user is an admin (t/f):\n[t] Yes\n[f] No",
+			is_valid=lambda user_input: user_input == "t" or user_input == "f",
+			validation_message="Unrecognized input. Please specify if the new user is an admin (t/f):\n[t] Yes\n[f] No"
 		)
 		is_activated = input_until_valid(
-			input_message="Specify if the new user is activated (y/n):\n[y] Yes\n[n] No",
-			is_valid=lambda user_input: user_input == "y" or user_input == "n",
-			validation_message="Unrecognized input. Please specify if the new user is activated (y/n):\n[y] Yes\n[n] No"
+			input_message="Specify if the new user is activated (t/f):\n[t] Yes\n[f] No",
+			is_valid=lambda user_input: user_input == "t" or user_input == "f",
+			validation_message="Unrecognized input. Please specify if the new user is activated (t/f):\n[t] Yes\n[f] No"
 		)
 		confirm = input_until_valid(
 			input_message=f"Please confirm details of the new user (y/n):\n->Username: {username}\n->Password: {password}\n->Is Admin: {"yes" if is_admin else "no"}\n->Is Activated: {"yes" if is_activated else "no"}\n[y] Yes\n[n] No (abort)",
