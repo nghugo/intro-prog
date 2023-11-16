@@ -110,7 +110,7 @@ class InterfaceVolunteerOptions:
             with open("refugees.json", "w") as json_file:
                 json.dump(recorded_refugees, json_file, indent=2)
 
-            print(f"Refugee {name} added successfully.")
+            print(f"Refugee {name} is added successfully.")
             
         else:
             print(f"Aborted refugee addition.")
