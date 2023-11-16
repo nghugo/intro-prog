@@ -98,7 +98,7 @@ class InterfaceMain:
 				\n[2] Modify my details\
 				\n[3] List my details\
 				\n[4] Volunteer option 1 (TODO placeholder)\
-				\n[5] Volunteer option 1 (TODO placeholder)\
+				\n[5] Create refugee profile\
 				\n[6] Volunteer option 2 (TODO placeholder)",
 			is_valid=lambda user_input: user_input in {"1", "2", "3", "4", "5", "6"},
 			validation_message="Unrecognized input. Please choose from the above list."

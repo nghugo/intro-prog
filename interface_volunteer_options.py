@@ -1,4 +1,5 @@
 import pandas as pd
+import json
 
 from interface_helper import input_until_valid
 
@@ -16,7 +17,7 @@ class InterfaceVolunteerOptions:
         if user_option == "4":
             pass  # TODO
         if user_option == "5":
-            pass  # TODO
+            self.add_refugee()
         if user_option == "6":
             pass  # TODO
 
@@ -67,3 +68,57 @@ class InterfaceVolunteerOptions:
             # print(field, ":", value)
             print(f'{field:16}{value}')
         print("--- End of your details ---")
+
+
+    def add_refugee(self):
+        name = input_until_valid(
+            input_message="Enter the name of the refugee:",
+            is_valid=lambda user_input: user_input.strip() != "",
+            validation_message="Name cannot be empty. Please enter a valid name."
+        )
+
+        camp_identification = input_until_valid(
+            input_message="Enter camp identification:",
+            is_valid=lambda user_input: user_input.strip() != "",
+            validation_message="Camp identification cannot be empty. Please enter a valid camp identification."
+        )
+
+        medical_condition = input_until_valid(
+            input_message="Enter medical condition:",
+            is_valid=lambda user_input: user_input.strip() != "",
+            validation_message="Medical condition cannot be empty. Please enter a valid medical condition."
+        )
+
+        recorded_refugees = self.load_refugees()
+
+        
+        refugee_infomation = {
+            "name": name,
+            "camp_identification": camp_identification,
+            "medical_condition": medical_condition,
+        }
+
+
+        recorded_refugees[name] = refugee_infomation
+
+        confirm = input_until_valid(
+            input_message=f"Please confirm details of the new user (y/n):\n->Name: {name}\n->Camp Identification: {camp_identification}\n->Medical condition: {medical_condition}\n[y] Yes\n[n] No (abort)",
+            is_valid=lambda user_input: user_input == "y" or user_input == "n",
+            validation_message="Unrecognized input. Please confirm details of the new user (y/n):\n[y] Yes\n[n] No (abort)"
+        )
+        if confirm == "y":
+            with open("refugees.json", "w") as json_file:
+                json.dump(recorded_refugees, json_file, indent=2)
+
+            print(f"Refugee {name} added successfully.")
+            
+        else:
+            print(f"Aborted refugee addition.")
+    
+    def load_refugees(self):
+        try:
+            with open("refugees.json", "r") as json_file:
+                json_load = json.load(json_file)
+                return json_load
+        except FileNotFoundError:
+            return {}
