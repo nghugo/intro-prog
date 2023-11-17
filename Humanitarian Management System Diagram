@@ -1,0 +1,56 @@
+
+Humanitarian Management System
+│
+└── Admin
+    ├── Humanitarian Plan 1
+    │   ├── Camp 1
+    │   │   ├── Volunteers
+    │   │   └── Refugees
+    │   ├── Camp 2
+    │   │   ├── Volunteers
+    │   │   └── Refugees
+    │   └── ...
+    ├── Humanitarian Plan 2
+    │   ├── Camp 3
+    │   │   ├── Volunteers
+    │   │   └── Refugees
+    │   ├── Camp 4
+    │   │   ├── Volunteers
+    │   │   └── Refugees
+    │   └── ...
+    └── ...
+
+
+Admin
+    ├── Functions
+    │   ├── Create new humanitarian plans
+    │   │   ├── Description
+    │   │   ├── Geographical Location
+    │   │   └── Start Date
+    │   ├── End an event
+    │   │   └── Add End Date
+    │   ├── Display humanitarian plan
+    │   │   ├── Summary of Details
+    │   │   ├── Number of Refugees
+    │   │   ├── Camp Identification
+    │   │   └── Number of Volunteers
+    │   ├── Edit volunteer accounts
+    │   │   ├── Deactivate/Reactivate
+    │   │   └── Delete
+    │   └── Allocate resources to camps
+    │       ├── Food Packets
+    │       └── Medical Supplies
+    
+ Volunteer
+└── Functions
+    ├── Edit Personal Information
+    │   ├── Name
+    │   └── Phone
+    ├── Edit Camp Information
+    │   ├── Camp Identification
+    │   └── Capacity for New Refugees
+    ├── Create Refugee Profile
+    │   ├── Camp Identification
+    │   └── Medical Condition
+    └── Display Resources
+        └── Camp Resources (e.g., Food Packets)
