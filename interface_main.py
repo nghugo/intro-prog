@@ -57,8 +57,9 @@ class InterfaceMain:
 
 	def prompt_options(self):
 		"""Provides options available to the currently logged in user"""
+		users = Users()
 		if self.current_user:
-			if self.current_user.is_admin:
+			if users.users[self.current_user.username]["is_admin"]:
 				self.prompt_admin_options()
 			else:
 				self.prompt_volunteer_options()
@@ -67,7 +68,7 @@ class InterfaceMain:
 	def prompt_admin_options(self):  # TODO: implement handling for the other user_option values
 		user_option = input_until_valid(
 			# when extending this list, make sure the input message matches the is_valid validation function and the options in interface_admin_options.py
-			input_message = f"\nPlease choose an option (logged in as {'admin' if self.current_user.is_admin else 'volunteer'} {self.current_user.username}):\
+			input_message = f"\nPlease choose an option (logged in as {'admin' if users.users[self.current_user.username]["is_admin"] else 'volunteer'} {self.current_user.username}):\
 				\n[1] Log out\
 				\n[2] Add user\
 				\n[3] Delete user\
@@ -93,7 +94,8 @@ class InterfaceMain:
 		user_option = input_until_valid(
 			# when extending this list, make sure the input message matches the is_valid validation function and the options in interface_volunteer_options.py
 			# interface_volunteer_options.py currently has not currently been built
-			input_message = f"\nPlease choose an option (logged in as {'admin' if self.current_user.is_admin else 'volunteer'} {self.current_user.username}):\
+			
+			input_message = f"\nPlease choose an option (logged in as {'admin' if users.users[self.current_user.username]["is_admin"] else 'volunteer'} {self.current_user.username}):\
 				\n[1] Log out\
 				\n[2] Modify my details\
 				\n[3] List my details\
