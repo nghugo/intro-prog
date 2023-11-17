@@ -27,6 +27,8 @@ I've crossed out the above 3 User classes because
   - The login should not be handled by a `User` class directly, since a `User` object should not exist before login. We can extract out the login/logout functionalities from `InterfaceMain` into an `Auth` class. The current implementation is simple, so I haven't extracted the login/logout logic out of `InterfaceMain`.
   - The current implementation provides all other admin/volunteer functionalities in `InterfaceAdminOptions` and `InterfaceVolunteerOptions`. `InterfaceAdminOptions` and `InterfaceVolunteerOptions` handle both the logic and interface. We can refactor to separate out the logic and interface, but it means we need to correspondingly create more functions in the new class then reference them in `InterfaceAdminOptions` and `InterfaceVolunteerOptions`.
 
+Classes:
+
 1. **Class: `InterfaceMain`**
    - Provides the user interface for the user to interact with from start to end.
    - Functions:

@@ -66,6 +66,7 @@ class InterfaceMain:
 
 
 	def prompt_admin_options(self):  # TODO: implement handling for the other user_option values
+		users = Users()
 		user_option = input_until_valid(
 			# when extending this list, make sure the input message matches the is_valid validation function and the options in interface_admin_options.py
 			input_message = f"\nPlease choose an option (logged in as {'admin' if users.users[self.current_user.username]["is_admin"] else 'volunteer'} {self.current_user.username}):\
@@ -91,6 +92,7 @@ class InterfaceMain:
 
 
 	def prompt_volunteer_options(self):  # TODO: implement handling for the other user_option values
+		users = Users()
 		user_option = input_until_valid(
 			# when extending this list, make sure the input message matches the is_valid validation function and the options in interface_volunteer_options.py
 			# interface_volunteer_options.py currently has not currently been built
