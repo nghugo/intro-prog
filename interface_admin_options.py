@@ -95,11 +95,6 @@ class InterfaceAdminOptions:
             self.users.modify_user(username, "is_activated", False)
             print(f"User {username} has been deactivated.")
 
-    @staticmethod
-    def valid_inputs_of_field(field):
-        if field in {"is_admin", "is_activated"}:
-            return {"True", "False"}
-
     def prompt_modify_user(self):
         username = input_until_valid(
             input_message="\nEnter the username of the user to modify or leave empty to abort:",
