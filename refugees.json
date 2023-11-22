@@ -1,0 +1,12 @@
+{
+  "refugee1": {
+    "name": "refugee1",
+    "camp_identification": "camp1",
+    "medical_condition": "condition1"
+  },
+  "refugee2": {
+    "name": "refugee2",
+    "camp_identification": "camp1",
+    "medical_condition": "condition1"
+  }
+}

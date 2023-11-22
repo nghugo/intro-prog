@@ -1,0 +1,26 @@
+{
+  "admin": {
+    "password": "111",
+    "phone_number": "11111",
+    "is_admin": true,
+    "is_activated": true
+  },
+  "volunteer1": {
+    "password": "111",
+    "phone_number": "5028382739",
+    "is_admin": false,
+    "is_activated": true
+  },
+  "volunteer2": {
+    "password": "111",
+    "phone_number": "9027346729",
+    "is_admin": false,
+    "is_activated": true
+  },
+  "volunteer3": {
+    "password": "111",
+    "phone_number": "11111",
+    "is_admin": false,
+    "is_activated": false
+  }
+}
