@@ -39,8 +39,6 @@ class InterfaceCampOptions:
             value == input_until_valid(
                 input_message = "Please "
             )
-
-       
        
     def Delete_camp (self):
         Camp.delete_camp(identification, user)
