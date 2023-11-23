@@ -20,7 +20,7 @@ class Users:
 			finally:
 				return json_load
 
-	@staticmethod	
+	@staticmethod
 	def add_user(username, password, phone_number, is_admin, is_activated):
 		"""
 		Adds user to users.json. 
