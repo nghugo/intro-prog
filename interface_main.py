@@ -79,7 +79,7 @@ class InterfaceMain:
 				\n[6] Modify user\
 				\n[7] List all users\
 				\n[8] Create new humanitarian plan\
-				\n[9] some other command (TODO placeholder)\
+				\n[9] Edit humanitarian camps\
 				\n[10] some other command (TODO placeholder)",
 			is_valid=lambda user_input: user_input in {"1", "2", "3", "4", "5", "6", "7", "8", "9", "10"},
 			validation_message="Unrecognized input. Please choose from the above list."
@@ -90,7 +90,7 @@ class InterfaceMain:
 			self.prompt_logout()
 		else:
 			interface_admin_options.execute_option(user_option)
-		
+
 
 
 	def prompt_volunteer_options(self):  # TODO: implement handling for the other user_option values
