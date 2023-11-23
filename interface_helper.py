@@ -22,7 +22,7 @@ from datetime import datetime
 
 def is_valid_date(date_input):
     try:
-        datetime.datetime.strptime(date_input, "%d/%m/%Y")
+        datetime.strptime(date_input, "%d/%m/%Y")
         return True
     except ValueError:
         return False
