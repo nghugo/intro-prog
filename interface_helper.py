@@ -17,3 +17,13 @@ def input_until_valid(input_message, is_valid=lambda user_input: True, validatio
         else:
             print(validation_message)
     return validated_input
+
+from datetime import datetime 
+
+def is_valid_date(date_input):
+    try:
+        datetime.datetime.strptime(date_input, "%d/%m/%Y")
+        return True
+    except ValueError:
+        return False
+
