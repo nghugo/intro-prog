@@ -28,7 +28,7 @@ class InterfaceAdminOptions:
         option = input_until_valid(
 			# when extending this list, make sure the input message matches the is_valid validation function and the options in interface_admin_options.py
 			input_message = f"\nPlease choose a user management option below:\
-				\n[1] CANCEL, return to home page\
+				\n[1] CANCEL\
                 \n[2] Add user\
                 \n[3] Delete user\
                 \n[4] Activate user\
@@ -39,7 +39,7 @@ class InterfaceAdminOptions:
 			validation_message="Unrecognized input. Please choose from the above list."
 		)
         if option == "1":
-            self.back()
+            return  # option 1 is cancel, so just return
         if option == "2":
             self.interface_modify_users.prompt_add_user()
         if option == "3":
@@ -108,7 +108,7 @@ class InterfaceAdminOptions:
 			# when extending this list, make sure the input message matches the is_valid validation function and the options in interface_admin_options.py
             #                 
 			input_message = f"\nPlease choose a report to generate below:\
-				\n[1] CANCEL, return to home page\
+				\n[1] CANCEL\
                 \n[2] Specific plan (not yet implemented)\
                 \n[3] All plans (not yet implemented)\
                 \n[4] Specific camp\
@@ -117,7 +117,7 @@ class InterfaceAdminOptions:
 			validation_message="Unrecognized input. Please choose from the above list."
 		)
         if option == "1":
-            self.back()
+            return  # option 1 is cancel, so just return
         if option == "2":
             pass # TODO
         if option == "3":
@@ -164,7 +164,4 @@ class InterfaceAdminOptions:
             input("Press Enter to continue...")
 
     # END of plan options - - - - - - - - - - - - - - - - - - - - -
-
-    def back(self):  # TODO: refactor later
-        pass
             
