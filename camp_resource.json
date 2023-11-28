@@ -1,0 +1,61 @@
+
+
+ /* 
+ assume only food_packets, medical_packets, water_packets, shelter_packets, clothing_packets, first_aid_packets, baby_packets, sanitation_packets are needed
+    assume there are resources for a week
+    // food_packets 3 packets per day
+    //medical_packets 2 packets per week
+    //water_packets 2 packets per day
+    //shelter_packets 2 packets per day
+    //clothing_packets 2 packets per week
+    //first_aid_packets 1 packet per week
+    //baby_packets 1 packet per baby
+    //sanitation_packets 1 packet per day 
+    */
+
+{
+   
+
+    "camp_1": {
+        "population": 20,
+        "babies": 2,
+        "resources": {
+            "food_packets": 420,
+            "medical_packets": 40,
+            "water_packets": 280,
+            "shelter_packets": 280,
+            "clothing_packets": 40,
+            "first_aid_packets": 20,
+            "baby_packets": 5,
+            "sanitation_packets": 140,
+        }
+    },
+    
+"camp_2": {
+    "population": 50,
+    "babies": 15,
+    "resources": {
+        "food_packets": 315,  
+        "medical_packets": 30, 
+        "water_packets": 210,
+        "shelter_packets": 210,
+        "clothing_packets": 30,
+        "first_aid_packets": 15,
+        "baby_packets": 15,  
+        "sanitation_packets": 105,
+    }
+},
+"camp_3": {
+    "population": 25,
+    "babies": 0,
+    "resources": {
+        "food_packets": 525,
+        "medical_packets": 500,
+        "water_packets": 350,
+        "shelter_packets": 350,
+        "clothing_packets": 50,
+        "first_aid_packets": 25,
+        "baby_packets": 25,  
+        "sanitation_packets": 175,
+    }
+}
