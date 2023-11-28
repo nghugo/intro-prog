@@ -4,13 +4,12 @@ from interface_volunteer_options import InterfaceVolunteerOptions
 from interface_helper import input_until_valid
 
 from users import Users
-from plans import Plans
 
 class InterfaceMain:
 
 	def __init__(self, current_user = None):
 		self.current_user = current_user
-		self.terminate = False  # TODO: use this attribute to exit the program
+		self.terminate = False
 
 
 	def start(self):
@@ -76,7 +75,7 @@ class InterfaceMain:
 				\n[1] Log out\
 				\n[2] Manage users (volunteers, admins)\
 				\n[3] Create new humanitarian plan\
-				\n[4] PLACEHOLDER\
+				\n[4] TODO placeholder\
 				\n[5] Generate a report (plans, camps)",
 			is_valid=lambda user_input: user_input.isdigit() and int(user_input) > 0 and int(user_input) <= 5,
 			validation_message="Unrecognized input. Please choose from the above list."
@@ -102,9 +101,9 @@ class InterfaceMain:
 				\n[1] Log out\
 				\n[2] Modify my user account details\
 				\n[3] List my user account details\
-				\n[4] Volunteer option 1 (TODO placeholder)\
-				\n[5] Create refugee profile\
-				\n[6] Volunteer option 2 (TODO placeholder)",
+				\n[4] Create refugee profile\
+				\n[5] TODO placeholder\
+				\n[6] TODO placeholder",
 			is_valid=lambda user_input: user_input.isdigit() and int(user_input) > 0 and int(user_input) <= 6,
 			validation_message="Unrecognized input. Please choose from the above list."
 		)
