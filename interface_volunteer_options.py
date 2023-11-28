@@ -15,9 +15,9 @@ class InterfaceVolunteerOptions:
         if option == "3":
             self.list_my_details()
         if option == "4":
-            pass  # TODO
-        if option == "5":
             self.add_refugee()
+        if option == "5":
+            pass  # TODO
         if option == "6":
             pass  # TODO
 
