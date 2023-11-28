@@ -27,9 +27,8 @@ class InterfaceAdminOptions:
     def prompt_manage_users_options(self):
         option = input_until_valid(
 			# when extending this list, make sure the input message matches the is_valid validation function and the options in interface_admin_options.py
-			input_message = f"\n> You are at Homepage -> Manage Users\
-                \nPlease choose an option below:\
-				\n[1] CANCEL - Go back to home page\
+			input_message = f"\nPlease choose a user management option below:\
+				\n[1] CANCEL\
                 \n[2] Add user\
                 \n[3] Delete user\
                 \n[4] Activate user\
@@ -254,9 +253,8 @@ class InterfaceAdminOptions:
         option = input_until_valid(
 			# when extending this list, make sure the input message matches the is_valid validation function and the options in interface_admin_options.py
             #                 
-			input_message = f"\n> You are at Homepage -> Generate Reports\
-            \nPlease choose a report to generate below:\
-				\n[1] CANCEL - Go back to home page\
+			input_message = f"\nPlease choose a report to generate below:\
+				\n[1] CANCEL\
                 \n[2] Specific plan (not yet implemented)\
                 \n[3] All plans (not yet implemented)\
                 \n[4] Specific camp\

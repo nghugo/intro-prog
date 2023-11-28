@@ -72,9 +72,7 @@ class InterfaceMain:
 		users = Users()
 		option = input_until_valid(
 			# when extending this list, make sure the input message matches the is_valid validation function and the options in interface_admin_options.py
-			input_message = f"\n> You are logged in as {self.current_user.username} ({'admin' if users.users[self.current_user.username]["is_admin"] else 'volunteer'})\
-			\n> You are at Homepage\
-			\nPlease choose an option:\
+			input_message = f"\nPlease choose an option (logged in as {self.current_user.username} ({'admin' if users.users[self.current_user.username]["is_admin"] else 'volunteer'}))\
 				\n[1] Log out\
 				\n[2] Manage users (volunteers, admins)\
 				\n[3] Create new humanitarian plan\
@@ -100,9 +98,7 @@ class InterfaceMain:
 			# when extending this list, make sure the input message matches the is_valid validation function and the options in interface_volunteer_options.py
 			# interface_volunteer_options.py currently has not currently been built
 			
-			input_message = f"\n> You are logged in as {self.current_user.username} ({'admin' if users.users[self.current_user.username]["is_admin"] else 'volunteer'})\
-				\n> You are at Homepage\
-				\nPlease choose an option:\
+			input_message = f"\n\nPlease choose an option (logged in as {self.current_user.username} ({'admin' if users.users[self.current_user.username]["is_admin"] else 'volunteer'}))\
 				\n[1] Log out\
 				\n[2] Modify my user account details\
 				\n[3] List my user account details\
