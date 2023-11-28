@@ -102,9 +102,9 @@ class InterfaceVolunteerOptions:
         recorded_refugees[name] = refugee_infomation
 
         confirm = input_until_valid(
-            input_message=f"Please confirm details of the new user (y/n):\n->Name: {name}\n->Camp Identification: {camp_identification}\n->Medical condition: {medical_condition}\n[y] Yes\n[n] No (abort)",
+            input_message=f"Please confirm details of the new refugee (y/n):\n->Name: {name}\n->Camp Identification: {camp_identification}\n->Medical condition: {medical_condition}\n[y] Yes\n[n] No (abort)",
             is_valid=lambda user_input: user_input == "y" or user_input == "n",
-            validation_message="Unrecognized input. Please confirm details of the new user (y/n):\n[y] Yes\n[n] No (abort)"
+            validation_message="Unrecognized input. Please confirm details of the new refugee (y/n):\n[y] Yes\n[n] No (abort)"
         )
         if confirm == "y":
             with open("refugees.json", "w") as json_file:
