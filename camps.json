@@ -1,9 +1,9 @@
 {
     "camp2": {
-        "location": "China",
-        "capacity": "20",
+        "location": "united kingdom",
+        "capacity": "10",
         "occupancy": 0,
-        "humanitarian_plan_in": "planA",
-        "volunteer_in_charge": "volunteer1"
+        "humanitarian_plan_in": "planB",
+        "volunteer_in_charge": "volunteer2"
     }
 }

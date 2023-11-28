@@ -55,7 +55,7 @@ class InterfaceCampOptions:
         # TODO: refer volunteerlist to add more deciding criteria in is_valid
         
         confirm = input_until_valid(
-            input_message=f"Please confirm details of the new camp (y/n):\n->CampID: {camp_identification}\n->location: {Location}\n->capacity: {capacity}\n->in {humanitarian_plan_in} humanitarian plan\n->volunteer in charge: {volunteer_in_charge}\n[y] Yes\n[n] No (abort)",
+            input_message=f"Please confirm details of the new camp (y/n):\n->CampID: {camp_identification}\n->location: {Location}\n->capacity: {capacity}\n->in {humanitarian_plan_in} humanitarian plan\n->volunteer_in_charge: {volunteer_in_charge}\n[y] Yes\n[n] No (abort)",
 			is_valid=lambda user_input: user_input == "y" or user_input == "n",
 			validation_message="Unrecognized input. Please confirm details of the new camp (y/n):\n[y] Yes\n[n] No (abort)"
         )
@@ -107,10 +107,13 @@ class InterfaceCampOptions:
     def Edit_camp_information(self):
 
         camp_data = Camp.loadCampData()
+        # print(type(camp_data))  #TODO: remove
+        # print(camp_data)  #TODO: remove
+        # print(camp_data.keys())  #TODO: remove
 
         camp_identification = input_until_valid(
-                input_message="Please enter the campID you would like to change camp details",
-                is_valid = lambda user_input: user_input == "" or user_input in camp_data[camp_identification],
+                input_message="Please enter the campID you would like to change camp details, or leave empty to abort",
+                is_valid = lambda user_input: user_input == "" or user_input in camp_data,
                 validation_message= "The campID does not exist."
             )   
         
@@ -118,19 +121,19 @@ class InterfaceCampOptions:
             print("Camp modification aborted.")
         
         else:
-            if self.users.users == "admin" or self.current_user.username == camp_data[camp_identification]["volunteer in charge"]:
+            if self.users.users[self.current_user.username]["is_admin"] or self.current_user.username == camp_data[camp_identification]["volunteer_in_charge"]:
                 attribute = input_until_valid(
 			    input_message="Enter the field (camp_identification/location/capacity/humanitarian_plan_in/volunteer_in_charge) to modify:",
 			    is_valid=lambda user_input: user_input in {
-			    "camp_identification", "location", "capacity", "humanitarian_plan_in", "volunteer in charge"},
+			    "camp_identification", "location", "capacity", "humanitarian_plan_in", "volunteer_in_charge"},
 			    validation_message="Unrecognized input. Please enter a valid field (camp_identification/location/capacity/humanitarian_plan_in/volunteer_in_charge)."
             )
-                if attribute == camp_identification:
+                if attribute == "camp_identification":
                     new_value = input_until_valid(
-                input_message = f"Please enter the new value for {attribute}",
-                is_valid=lambda user_input: user_input != camp_data[camp_identification],
-                validation_message="Please enter the new campID different from current one."
-            )
+                    input_message = f"Please enter the new value for {attribute}",
+                    is_valid=lambda user_input: user_input != camp_data[camp_identification],
+                    validation_message="Please enter the new campID different from current one."
+                )
                 
                 else:
                     new_value = input_until_valid(
@@ -138,16 +141,20 @@ class InterfaceCampOptions:
                     is_valid=lambda user_input: user_input != camp_data[camp_identification][attribute],
                     validation_message=f"Please enter the different value of {attribute} from current one."
                 )
+
+                confirm = input_until_valid(
+                    input_message=f"Please confirm you want to change {attribute} from previous value:\n {camp_identification if attribute == "camp_identification" else camp_data[camp_identification][attribute]} to {new_value} \n[y] Yes\n[n] No (abort)",
+                    is_valid=lambda user_input: user_input == "y" or user_input == "n",
+                    validation_message="Unrecognized input. Please confirm the new campID (y/n):\n[y] Yes\n[n] No (abort)"
+                )
+
+                # TODO: implement actual modification on persistent data (camps.json)
                 
             else:
                 print("You are not allowed to edit camp information")
             
        
-        confirm = input_until_valid(
-            input_message=f"Please confirm you want to change {attribute} from previous value:\n {camp_data[camp_identification] if attribute == camp_identification else camp_data[camp_identification][attribute]}into {new_value} \n[y] Yes\n[n] No (abort)",
-			is_valid=lambda user_input: user_input == "y" or user_input == "n",
-			validation_message="Unrecognized input. Please confirm the new campID (y/n):\n[y] Yes\n[n] No (abort)"
-        )         
+               
             
         # if confirm == "y":
         #     # test = Camp.edit_camp_information_id(camp_identification, new_identification, self.current_user)
