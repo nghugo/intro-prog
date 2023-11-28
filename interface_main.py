@@ -24,7 +24,7 @@ class InterfaceMain:
 	def prompt_login(self):
 		"""Asks the user to log in, and checks against persisted (existing) users using methods from Users class"""
 		account_type_or_exit = input_until_valid(
-			input_message="\nEnter your account type for login (a/v) or exit (e):\n[a] Admin\n[v] Volunteer\n[e] Exit",
+			input_message="\n<login>\nEnter your account type for login (a/v) or exit (e):\n[a] Admin\n[v] Volunteer\n[e] Exit",
 			is_valid=lambda user_input: user_input in {"a", "v", "e"},
 			validation_message="Unrecognized input. Please enter account type for login (a/v) or exit (e)\n[a] Admin\n[v] Volunteer\n[e] Exit"
 		)
@@ -71,7 +71,7 @@ class InterfaceMain:
 		users = Users()
 		option = input_until_valid(
 			# when extending this list, make sure the input message matches the is_valid validation function and the options in interface_admin_options.py
-			input_message = f"\nPlease choose an option: (logged in as {self.current_user.username} ({'admin' if users.users[self.current_user.username]["is_admin"] else 'volunteer'}))\
+			input_message = f"\n<homepage>\nPlease choose an option: (logged in as {self.current_user.username} ({'admin' if users.users[self.current_user.username]["is_admin"] else 'volunteer'}))\
 				\n[1] Log out\
 				\n[2] Manage users (volunteers, admins)\
 				\n[3] Create new humanitarian plan\
@@ -97,7 +97,7 @@ class InterfaceMain:
 			# when extending this list, make sure the input message matches the is_valid validation function and the options in interface_volunteer_options.py
 			# interface_volunteer_options.py currently has not currently been built
 			
-			input_message = f"\nPlease choose an option: (logged in as {self.current_user.username} ({'admin' if users.users[self.current_user.username]["is_admin"] else 'volunteer'}))\
+			input_message = f"\n<homepage>\nPlease choose an option: (logged in as {self.current_user.username} ({'admin' if users.users[self.current_user.username]["is_admin"] else 'volunteer'}))\
 				\n[1] Log out\
 				\n[2] Modify my user account details\
 				\n[3] List my user account details\
