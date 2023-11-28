@@ -9,16 +9,16 @@ class InterfaceVolunteerOptions:
         self.users = users
         self.current_user = current_user
 
-    def execute_option(self, user_option):
-        if user_option == "2":
+    def execute_option(self, option):
+        if option == "2":
             self.prompt_modify_my_details()
-        if user_option == "3":
+        if option == "3":
             self.list_my_details()
-        if user_option == "4":
+        if option == "4":
             pass  # TODO
-        if user_option == "5":
+        if option == "5":
             self.add_refugee()
-        if user_option == "6":
+        if option == "6":
             pass  # TODO
 
     def prompt_modify_my_details(self):
@@ -68,6 +68,7 @@ class InterfaceVolunteerOptions:
             # print(field, ":", value)
             print(f'{field:16}{value}')
         print("--- End of your details ---")
+        input("Press Enter to continue...")
 
 
     def add_refugee(self):
