@@ -29,8 +29,14 @@ class InterfaceAdminOptions:
         if user_option == "8":
             self.prompt_create_plan()
         if user_option == "9":
-            self.generate_camp_report()
+            pass
+            # [9] Generate report for a specific humanitarian plan (not yet implemented)\
         if user_option == "10":
+            # [10] Generate report for all humanitarian plans (not yet implemented)\
+            pass
+        if user_option == "11":
+            self.generate_camp_report()
+        if user_option == "12":
             self.generate_overall_report()
 
     def prompt_add_user(self):
@@ -234,7 +240,8 @@ class InterfaceAdminOptions:
                 report += f"Capacity: {camp_data.get('capacity', 'N/A')}\n"
                 report += f"Occupancy: {camp_data.get('occupancy', 'N/A')}\n"
                 report += f"Humanitarian Plan: {camp_data.get('humanitarian_plan_in', 'N/A')}\n"
-                report += f"Volunteer in Charge: {', '.join(camp_data.get('volunteer_in_charge', []))}\n"
+                volunteerString = ', '.join(camp_data.get('volunteer_in_charge', []))
+                report += f"Volunteer in Charge: {volunteerString if volunteerString != "" else "Currently none"}\n"
                 print(report)
             else:
                 print(f"No data available for {camp_name}")
@@ -252,7 +259,8 @@ class InterfaceAdminOptions:
                 report += f"Capacity: {camp_data.get('capacity', 'N/A')}\n"
                 report += f"Occupancy: {camp_data.get('occupancy', 'N/A')}\n"
                 report += f"Humanitarian Plan: {camp_data.get('humanitarian_plan_in', 'N/A')}\n"
-                report += f"Volunteer in Charge: {', '.join(camp_data.get('volunteer_in_charge', []))}\n\n"
+                volunteerString = ', '.join(camp_data.get('volunteer_in_charge', []))
+                report += f"Volunteer in Charge: {volunteerString if volunteerString != "" else "Currently none"}\n\n"
             print(report)
             input("Press Enter to continue...")
 

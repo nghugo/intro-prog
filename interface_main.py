@@ -79,9 +79,11 @@ class InterfaceMain:
 				\n[6] Modify user\
 				\n[7] List all users\
 				\n[8] Create new humanitarian plan\
-				\n[9] Generate camp report\
-				\n[10] Generate Overall report",
-			is_valid=lambda user_input: user_input in {"1", "2", "3", "4", "5", "6", "7", "8", "9", "10"},
+				\n[9] Generate report for a specific humanitarian plan (not yet implemented)\
+				\n[10] Generate report for all humanitarian plans (not yet implemented)\
+				\n[11] Generate report for a specific camp\
+				\n[12] Generate report for all camps",
+			is_valid=lambda user_input: user_input.isdigit() and int(user_input) > 0 and int(user_input) <= 12,
 			validation_message="Unrecognized input. Please choose from the above list."
 		)
 		users = Users()
