@@ -46,7 +46,7 @@ class InterfaceMain:
 		):
 			if not users.users[username]["is_activated"]:
 				print(
-					"Your account has been deactivated, contact the administrator.\nYou may try another account.")
+					"\nYour account has been deactivated, contact the administrator.\nYou may try another account.")
 			else:
 				self.current_user = CurrentUser(
 					username = username,
@@ -54,9 +54,9 @@ class InterfaceMain:
 					is_admin = is_admin
 				)
 				print(
-					f"Log in successful.")
+					f"\nLogin successful.")
 		else:
-			print("The username or password you entered is incorrect. Please try again:")
+			print("\nThe username or password you entered is incorrect. Please try again:")
 
 	def prompt_options(self):
 		"""Provides options available to the currently logged in user"""
@@ -72,7 +72,7 @@ class InterfaceMain:
 		users = Users()
 		option = input_until_valid(
 			# when extending this list, make sure the input message matches the is_valid validation function and the options in interface_admin_options.py
-			input_message = f"\nPlease choose an option (logged in as {self.current_user.username} ({'admin' if users.users[self.current_user.username]["is_admin"] else 'volunteer'}))\
+			input_message = f"\nPlease choose an option: (logged in as {self.current_user.username} ({'admin' if users.users[self.current_user.username]["is_admin"] else 'volunteer'}))\
 				\n[1] Log out\
 				\n[2] Manage users (volunteers, admins)\
 				\n[3] Create new humanitarian plan\
@@ -98,7 +98,7 @@ class InterfaceMain:
 			# when extending this list, make sure the input message matches the is_valid validation function and the options in interface_volunteer_options.py
 			# interface_volunteer_options.py currently has not currently been built
 			
-			input_message = f"\n\nPlease choose an option (logged in as {self.current_user.username} ({'admin' if users.users[self.current_user.username]["is_admin"] else 'volunteer'}))\
+			input_message = f"\nPlease choose an option: (logged in as {self.current_user.username} ({'admin' if users.users[self.current_user.username]["is_admin"] else 'volunteer'}))\
 				\n[1] Log out\
 				\n[2] Modify my user account details\
 				\n[3] List my user account details\
