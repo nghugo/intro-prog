@@ -68,6 +68,7 @@ class InterfaceVolunteerOptions:
             # print(field, ":", value)
             print(f'{field:16}{value}')
         print("--- End of your details ---")
+        input("Press Enter to continue...")
 
 
     def add_refugee(self):

@@ -77,7 +77,7 @@ class InterfaceMain:
 				\n[2] Manage users (volunteers, admins)\
 				\n[3] Create new humanitarian plan\
 				\n[4] PLACEHOLDER\
-				\n[5] Generate reports",
+				\n[5] Generate a report (plans, camps)",
 			is_valid=lambda user_input: user_input.isdigit() and int(user_input) > 0 and int(user_input) <= 5,
 			validation_message="Unrecognized input. Please choose from the above list."
 		)
