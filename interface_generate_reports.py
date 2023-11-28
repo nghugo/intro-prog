@@ -9,15 +9,17 @@ class InterfaceGenerateReports:
                 camps_data = json.load(file)
             camp_data = camps_data.get(camp_name, {})
             
+            print(f"\n--- Report for {camp_name} ---")
             if camp_data:
-                report = f"\nReport for {camp_name}:\n"
+                report = ""
                 report += f"Location: {camp_data.get('location', 'N/A')}\n"
                 report += f"Capacity: {camp_data.get('capacity', 'N/A')}\n"
                 report += f"Occupancy: {camp_data.get('occupancy', 'N/A')}\n"
                 report += f"Humanitarian Plan: {camp_data.get('humanitarian_plan_in', 'N/A')}\n"
                 volunteerString = ', '.join(camp_data.get('volunteer_in_charge', []))
-                report += f"Volunteer in Charge: {volunteerString if volunteerString != "" else "Currently none"}\n"
+                report += f"Volunteer in Charge: {volunteerString if volunteerString != "" else "Currently none"}"
                 print(report)
+                print(f"--- End of report for {camp_name} ---\n")
             else:
                 print(f"\nNo data available for {camp_name}")
             input("Press Enter to continue...")
@@ -26,7 +28,8 @@ class InterfaceGenerateReports:
     def generate_overall_report():
             with open('camps.json', 'r') as file:
                 camps_data = json.load(file)
-            report = "\nOverall report for all plans:\n"
+            print("\n--- Report for all plans ---")
+            report = ""
 
             for camp_name, camp_data in camps_data.items():
                 report += f"Camp Name: {camp_name}\n"
@@ -35,6 +38,7 @@ class InterfaceGenerateReports:
                 report += f"Occupancy: {camp_data.get('occupancy', 'N/A')}\n"
                 report += f"Humanitarian Plan: {camp_data.get('humanitarian_plan_in', 'N/A')}\n"
                 volunteerString = ', '.join(camp_data.get('volunteer_in_charge', []))
-                report += f"Volunteer in Charge: {volunteerString if volunteerString != "" else "Currently none"}\n"
+                report += f"Volunteer in Charge: {volunteerString if volunteerString != "" else "Currently none"}"
             print(report)
+            print("--- End of report for all plans ---\n")
             input("Press Enter to continue...")
