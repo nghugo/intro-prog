@@ -1,4 +1,4 @@
-import json #why is this not working not a solid black colour 
+import json 
 
 import pandas as pd
 
@@ -11,34 +11,6 @@ class InterfaceAdminOptions:
         self.current_user = current_user
         # initialise self.plans
         self.plans = Plans()
-
-    def generate_camp_report(self):
-        camp_name = input("Enter the name of the camp to generate the report for: ")
-        # Replace 'camps.json' with the actual filename where camp data is stored
-        with open('camps.json', 'r') as file:
-            camps_data = json.load(file)
-        camp_data = camps_data.get(camp_name, {})
-        if not camp_data:
-            print(f"No data available for {camp_name}")
-            return
-        report = f"Report for {camp_name}:\n"
-        report += f"Refugee Count: {len(camp_data.get('refugees', []))}\n"
-        report += f"Resources: {camp_data.get('resources', 'N/A')}\n"
-        report += f"Volunteers: {len(camp_data.get('volunteers', []))}\n"
-        print(report)
-
-    def generate_overall_report(self):
-         # Replace 'camps.json' with the actual filename where camp data is stored
-        with open('camps.json', 'r') as file:
-            camps_data = json.load(file)
-        report = "Overall Report:\n"
-        for camp_name, camp_data in camps_data.items():
-            report += f"Camp Name: {camp_name}\n"
-            report += f"Refugee Count: {len(camp_data.get('refugees', []))}\n"
-            report += f"Resources: {camp_data.get('resources', 'N/A')}\n"
-            report += f"Volunteers: {len(camp_data.get('volunteers', []))}\n\n"
-        print(report)
-
 
     def execute_option(self, user_option):
 
@@ -248,3 +220,41 @@ class InterfaceAdminOptions:
                 print(f"Failed to add plan for {plan_name}")
         else:
             print(f"Aborted plan creation.")
+ 
+    def generate_camp_report(self):
+            camp_name = input("Enter the name of the camp to generate the report for: ")
+            with open('camps.json', 'r') as file:
+                camps_data = json.load(file)
+            camp_data = camps_data.get(camp_name, {})
+            
+            if camp_data:
+                report = f"Report for {camp_name}:\n"
+                report += f"Location: {camp_data.get('location', 'N/A')}\n"
+                report += f"Capacity: {camp_data.get('capacity', 'N/A')}\n"
+                report += f"Occupancy: {camp_data.get('occupancy', 'N/A')}\n"
+                report += f"Humanitarian Plan: {camp_data.get('humanitarian_plan_in', 'N/A')}\n"
+                report += f"Volunteer in Charge: {', '.join(camp_data.get('volunteer_in_charge', []))}\n"
+                print(report)
+            else:
+                print(f"No data available for {camp_name}")
+            input("Press Enter to continue...")
+
+        
+    def generate_overall_report(self):
+            with open('camps.json', 'r') as file:
+                camps_data = json.load(file)
+            report = "Overall Report:\n"
+
+            for camp_name, camp_data in camps_data.items():
+                report += f"Camp Name: {camp_name}\n"
+                report += f"Location: {camp_data.get('location', 'N/A')}\n"
+                report += f"Capacity: {camp_data.get('capacity', 'N/A')}\n"
+                report += f"Occupancy: {camp_data.get('occupancy', 'N/A')}\n"
+                report += f"Humanitarian Plan: {camp_data.get('humanitarian_plan_in', 'N/A')}\n"
+                report += f"Volunteer in Charge: {', '.join(camp_data.get('volunteer_in_charge', []))}\n\n"
+            print(report)
+            input("Press Enter to continue...")
+
+
+
+            
