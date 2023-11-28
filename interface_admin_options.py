@@ -4,7 +4,7 @@ from interface_helper import input_until_valid, is_valid_date
 from interface_camp_options import InterfaceCampOptions
 from plans import Plans
 from users import Users
-
+from camp_modified import Camp
 
 class InterfaceAdminOptions:
 	def __init__(self, users, current_user):
@@ -12,7 +12,8 @@ class InterfaceAdminOptions:
 		self.current_user = current_user
 		# initialise self.plans
 		self.plans = Plans()
-
+        
+	
 	def execute_option(self, user_option):
 
 		if user_option == "2":
@@ -224,17 +225,18 @@ class InterfaceAdminOptions:
 
 	def prompt_camp_options(self):
 		"""bring up a menu for camp functions """
-		user = Users()
+		users = Users()
+		# camp_identification = Camp()
 		user_option = input_until_valid(
-			input_message = f"""\nPlease choose an option below to operate camps:\
+			input_message = f"\nPlease choose an option below to operate camps:\
 				\n[1] add camp\
 				\n[2] delete camp\
 				\n[3] edit camp information\
 				\n[4] edit volunteers: add in/remove from a specific camp\
-				\n[5] get volunteer list in a specific camp"""
+				\n[5] get volunteer list in a specific camp",
 			is_valid=lambda user_input: user_input in {"1", "2", "3", "4", "5"},
 			validation_message="Unrecognized input. Please choose from the above list."
 		)
-		users = Users()
-		interface_camp_options = InterfaceCampOptions(users)
-		interface_camp_options.camp_management(user_option)
+		
+		interface_camp_options = InterfaceCampOptions(users, self.current_user)
+		interface_camp_options.excute_option(user_option)

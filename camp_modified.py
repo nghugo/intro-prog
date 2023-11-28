@@ -18,6 +18,9 @@ class Camp:
     """
 
 
+    
+    
+    
     #I am not sure since it seems we can do either object creation or handling the data directively using static method
     def __init__(self,camp_identification,location,capacity,humanitarian_plan_in,volunteer_in_charge):
         camp_data = Camp.loadCampData()
@@ -42,14 +45,13 @@ class Camp:
             return camp_data
 
     @staticmethod
-    def validateId(identification, camp_data):
+    def validateId(camp_identification, camp_data):
         """validate the camp_identification"""
-        if identification in camp_data:
+        if camp_identification in camp_data:
             print('already exist. please create a new identification of the camp')
             return None
         else:
-            return identification
-            # print('Add a new camp successfully') 
+            return camp_identification
 
     def dumpCampData(self):
         """write the new data of the new object into camps.json"""
@@ -68,6 +70,7 @@ class Camp:
     @staticmethod
     def delete_camp(camp_identification, user):
         data = Camp.loadCampData()
+        # TODO: volunteer does not have this function initially. need to decide the account?
         if user == "admin":
              if camp_identification not in data:
                 return False
@@ -157,9 +160,9 @@ class Camp:
 
 
 
-Camp.delete_camp('camp1', 'admin')
-camp = Camp('camp1','China',30,"planA",[])
-print(Camp.edit_camp_information('camp1','capacity',20,'admin'))
+# Camp.delete_camp('camp1', 'admin')
+# camp = Camp('camp1','China',30,"planA",[])
+# print(Camp.edit_camp_information('camp1','capacity',20,'admin'))
 
 
 
