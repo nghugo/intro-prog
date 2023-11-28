@@ -1,7 +1,6 @@
-import json 
-
 from interface_helper import input_until_valid, is_valid_date
 from interface_modify_users import InterfaceModifyUsers
+from interface_generate_reports import InterfaceGenerateReports
 from plans import Plans
 
 class InterfaceAdminOptions:
@@ -9,22 +8,21 @@ class InterfaceAdminOptions:
         self.users = users
         self.current_user = current_user
         self.interface_modify_users = InterfaceModifyUsers(self.users, self.current_user)
+        self.interface_generate_reports = InterfaceGenerateReports()
 
     def execute_option(self, option):
         # option 1 is log out, which is handled at interface_main.py
         if option == "2":
-            self.prompt_manage_users_options()
+            self.execute_manage_users_options()
         if option == "3":
             self.prompt_create_plan()
         if option == "4":
             pass  # PLACEHOLDER
         if option == "5":
-            self.prompt_generate_reports_options()
+            self.execute_generate_reports_options()
          
 
-    # START of user options - - - - - - - - - - - - - - - - - - - - -
-
-    def prompt_manage_users_options(self):
+    def execute_manage_users_options(self):
         option = input_until_valid(
 			# when extending this list, make sure the input message matches the is_valid validation function and the options in interface_admin_options.py
 			input_message = f"\nPlease choose a user management option below:\
@@ -52,11 +50,6 @@ class InterfaceAdminOptions:
             self.interface_modify_users.prompt_modify_user()
         if option == "7":
             self.interface_modify_users.list_users()
-
-
-
-    
-    # END of user options - - - - - - - - - - - - - - - - - - - - -
 
     
     def prompt_create_plan(self):
@@ -99,11 +92,9 @@ class InterfaceAdminOptions:
                 print(f"Failed to add plan for {plan_name}")
         else:
             print(f"Aborted plan creation.")
- 
 
-    # START of generate report options - - - - - - - - - - - - - - - - - - - - -
 
-    def prompt_generate_reports_options(self):
+    def execute_generate_reports_options(self):
         option = input_until_valid(
 			# when extending this list, make sure the input message matches the is_valid validation function and the options in interface_admin_options.py
             #                 
@@ -123,45 +114,8 @@ class InterfaceAdminOptions:
         if option == "3":
             pass # TODO
         if option == "4":
-            self.generate_camp_report()
+            self.interface_generate_reports.generate_camp_report()
         if option == "5":
-            self.generate_overall_report()
+            self.interface_generate_reports.generate_overall_report()
 
-
-    def generate_camp_report(self):
-            camp_name = input("Enter the name of the camp to generate the report for: ")
-            with open('camps.json', 'r') as file:
-                camps_data = json.load(file)
-            camp_data = camps_data.get(camp_name, {})
-            
-            if camp_data:
-                report = f"Report for {camp_name}:\n"
-                report += f"Location: {camp_data.get('location', 'N/A')}\n"
-                report += f"Capacity: {camp_data.get('capacity', 'N/A')}\n"
-                report += f"Occupancy: {camp_data.get('occupancy', 'N/A')}\n"
-                report += f"Humanitarian Plan: {camp_data.get('humanitarian_plan_in', 'N/A')}\n"
-                volunteerString = ', '.join(camp_data.get('volunteer_in_charge', []))
-                report += f"Volunteer in Charge: {volunteerString if volunteerString != "" else "Currently none"}\n"
-                print(report)
-            else:
-                print(f"No data available for {camp_name}")
-            input("Press Enter to continue...")
-        
-    def generate_overall_report(self):
-            with open('camps.json', 'r') as file:
-                camps_data = json.load(file)
-            report = "Overall report for all plans:\n"
-
-            for camp_name, camp_data in camps_data.items():
-                report += f"Camp Name: {camp_name}\n"
-                report += f"Location: {camp_data.get('location', 'N/A')}\n"
-                report += f"Capacity: {camp_data.get('capacity', 'N/A')}\n"
-                report += f"Occupancy: {camp_data.get('occupancy', 'N/A')}\n"
-                report += f"Humanitarian Plan: {camp_data.get('humanitarian_plan_in', 'N/A')}\n"
-                volunteerString = ', '.join(camp_data.get('volunteer_in_charge', []))
-                report += f"Volunteer in Charge: {volunteerString if volunteerString != "" else "Currently none"}\n\n"
-            print(report)
-            input("Press Enter to continue...")
-
-    # END of plan options - - - - - - - - - - - - - - - - - - - - -
             
