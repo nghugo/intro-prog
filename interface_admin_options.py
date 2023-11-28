@@ -12,32 +12,48 @@ class InterfaceAdminOptions:
         # initialise self.plans
         self.plans = Plans()
 
-    def execute_option(self, user_option):
-
-        if user_option == "2":
-            self.prompt_add_user()
-        if user_option == "3":
-            self.prompt_delete_user()
-        if user_option == "4":
-            self.prompt_activate_user()
-        if user_option == "5":
-            self.prompt_deactivate_user()
-        if user_option == "6":
-            self.prompt_modify_user()
-        if user_option == "7":
-            self.list_users()
-        if user_option == "8":
+    def execute_option(self, option):
+        # option 1 is log out, which is handled at interface_main.py
+        if option == "2":
+            self.prompt_manage_users_options()
+        if option == "3":
             self.prompt_create_plan()
-        if user_option == "9":
-            pass
-            # [9] Generate report for a specific humanitarian plan (not yet implemented)\
-        if user_option == "10":
-            # [10] Generate report for all humanitarian plans (not yet implemented)\
-            pass
-        if user_option == "11":
-            self.generate_camp_report()
-        if user_option == "12":
-            self.generate_overall_report()
+        if option == "4":
+            pass  # PLACEHOLDER
+        if option == "5":
+            self.prompt_generate_reports_options()
+         
+
+    # START of user options - - - - - - - - - - - - - - - - - - - - -
+
+    def prompt_manage_users_options(self):
+        option = input_until_valid(
+			# when extending this list, make sure the input message matches the is_valid validation function and the options in interface_admin_options.py
+			input_message = f"\nPlease choose an option (logged in as {'admin' if self.users.users[self.current_user.username]["is_admin"] else 'volunteer'} {self.current_user.username}):\
+				\n[1] Go back to home page\
+                \n[2] Add user\
+                \n[3] Delete user\
+                \n[4] Activate user\
+                \n[5] Deactivate user\
+                \n[6] Modify user\
+                \n[7] List all users",
+			is_valid=lambda user_input: user_input.isdigit() and int(user_input) > 0 and int(user_input) <= 7,
+			validation_message="Unrecognized input. Please choose from the above list."
+		)
+        if option == "1":
+            self.back()
+        if option == "2":
+            self.prompt_add_user()
+        if option == "3":
+            self.prompt_delete_user()
+        if option == "4":
+            self.prompt_activate_user()
+        if option == "5":
+            self.prompt_deactivate_user()
+        if option == "6":
+            self.prompt_modify_user()
+        if option == "7":
+            self.list_users()
 
     def prompt_add_user(self):
         username = input_until_valid(
@@ -187,7 +203,10 @@ class InterfaceAdminOptions:
         print(users_df)
         print("--- End of users list ---")
         input("Press Enter to continue...")
-        
+    
+    # END of user options - - - - - - - - - - - - - - - - - - - - -
+
+    
     def prompt_create_plan(self):
         plan_name = input_until_valid(
             input_message = "\nEnter plan name. This should be the name of the emergency occuring (E.g. Ukraine War):",
@@ -228,6 +247,33 @@ class InterfaceAdminOptions:
         else:
             print(f"Aborted plan creation.")
  
+
+    # START of generate report options - - - - - - - - - - - - - - - - - - - - -
+
+    def prompt_generate_reports_options(self):
+        option = input_until_valid(
+			# when extending this list, make sure the input message matches the is_valid validation function and the options in interface_admin_options.py
+			input_message = f"\nPlease choose an option (logged in as {'admin' if self.users.users[self.current_user.username]["is_admin"] else 'volunteer'} {self.current_user.username}):\
+				\n[1] Go back to home page\
+                \n[2] Generate report for a humanitarian plan (not yet implemented)\
+                \n[3] Generate report for all humanitarian plans (not yet implemented)\
+                \n[4] Generate report for a camp\
+                \n[5] Generate report for all camps",
+			is_valid=lambda user_input: user_input.isdigit() and int(user_input) > 0 and int(user_input) <= 5,
+			validation_message="Unrecognized input. Please choose from the above list."
+		)
+        if option == "1":
+            self.back()
+        if option == "2":
+            pass # TODO
+        if option == "3":
+            pass # TODO
+        if option == "4":
+            self.generate_camp_report()
+        if option == "5":
+            self.generate_overall_report()
+
+
     def generate_camp_report(self):
             camp_name = input("Enter the name of the camp to generate the report for: ")
             with open('camps.json', 'r') as file:
@@ -246,12 +292,11 @@ class InterfaceAdminOptions:
             else:
                 print(f"No data available for {camp_name}")
             input("Press Enter to continue...")
-
         
     def generate_overall_report(self):
             with open('camps.json', 'r') as file:
                 camps_data = json.load(file)
-            report = "Overall Report:\n"
+            report = "Overall report for all plans:\n"
 
             for camp_name, camp_data in camps_data.items():
                 report += f"Camp Name: {camp_name}\n"
@@ -264,6 +309,8 @@ class InterfaceAdminOptions:
             print(report)
             input("Press Enter to continue...")
 
+    # END of plan options - - - - - - - - - - - - - - - - - - - - -
 
-
+    def back(self):  # TODO: refactor later
+        pass
             

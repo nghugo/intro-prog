@@ -66,57 +66,52 @@ class InterfaceMain:
 				self.prompt_volunteer_options()
 
 
-	def prompt_admin_options(self):  # TODO: implement handling for the other user_option values
+	def prompt_admin_options(self):  # TODO: implement handling for the other option values
 		users = Users()
-		user_option = input_until_valid(
+		option = input_until_valid(
 			# when extending this list, make sure the input message matches the is_valid validation function and the options in interface_admin_options.py
 			input_message = f"\nPlease choose an option (logged in as {'admin' if users.users[self.current_user.username]["is_admin"] else 'volunteer'} {self.current_user.username}):\
 				\n[1] Log out\
-				\n[2] Add user\
-				\n[3] Delete user\
-				\n[4] Activate user\
-				\n[5] Deactivate user\
-				\n[6] Modify user\
-				\n[7] List all users\
-				\n[8] Create new humanitarian plan\
-				\n[9] Generate report for a specific humanitarian plan (not yet implemented)\
-				\n[10] Generate report for all humanitarian plans (not yet implemented)\
-				\n[11] Generate report for a specific camp\
-				\n[12] Generate report for all camps",
-			is_valid=lambda user_input: user_input.isdigit() and int(user_input) > 0 and int(user_input) <= 12,
+				\n[2] Manage users (volunteers, admins)\
+				\n[3] Create new humanitarian plan\
+				\n[4] PLACEHOLDER\
+				\n[5] Generate reports",
+			is_valid=lambda user_input: user_input.isdigit() and int(user_input) > 0 and int(user_input) <= 5,
 			validation_message="Unrecognized input. Please choose from the above list."
 		)
+
+
 		users = Users()
 		interface_admin_options = InterfaceAdminOptions(users, self.current_user)
-		if user_option == "1":
+		if option == "1":
 			self.prompt_logout()
 		else:
-			interface_admin_options.execute_option(user_option)
+			interface_admin_options.execute_option(option)
 		
  
 
-	def prompt_volunteer_options(self):  # TODO: implement handling for the other user_option values
+	def prompt_volunteer_options(self):  # TODO: implement handling for the other option values
 		users = Users()
-		user_option = input_until_valid(
+		option = input_until_valid(
 			# when extending this list, make sure the input message matches the is_valid validation function and the options in interface_volunteer_options.py
 			# interface_volunteer_options.py currently has not currently been built
 			
 			input_message = f"\nPlease choose an option (logged in as {'admin' if users.users[self.current_user.username]["is_admin"] else 'volunteer'} {self.current_user.username}):\
 				\n[1] Log out\
-				\n[2] Modify my details\
-				\n[3] List my details\
+				\n[2] Modify my user account details\
+				\n[3] List my user account details\
 				\n[4] Volunteer option 1 (TODO placeholder)\
 				\n[5] Create refugee profile\
 				\n[6] Volunteer option 2 (TODO placeholder)",
-			is_valid=lambda user_input: user_input in {"1", "2", "3", "4", "5", "6"},
+			is_valid=lambda user_input: user_input.isdigit() and int(user_input) > 0 and int(user_input) <= 6,
 			validation_message="Unrecognized input. Please choose from the above list."
 		)
 		users = Users()
 		interface_volunteer_options = InterfaceVolunteerOptions(users, self.current_user)
-		if user_option == "1":
+		if option == "1":
 			self.prompt_logout()
 		else:
-			interface_volunteer_options.execute_option(user_option)
+			interface_volunteer_options.execute_option(option)
 	
 	def prompt_logout(self):
 		print("\nAre you sure you want to log out?")
