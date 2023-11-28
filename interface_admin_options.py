@@ -9,8 +9,6 @@ class InterfaceAdminOptions:
     def __init__(self, users, current_user):
         self.users = users
         self.current_user = current_user
-        # initialise self.plans
-        self.plans = Plans()
 
     def execute_option(self, option):
         # option 1 is log out, which is handled at interface_main.py
@@ -239,7 +237,8 @@ class InterfaceAdminOptions:
             validation_message="Unrecognized input. Please confirm details of the new user (y/n):\n[y] Yes\n[n] No (abort)"
             )
         if confirm == "y":
-            success = self.plans.add_plan(
+            plans = Plans()
+            success = plans.add_plan(
                 plan_name=plan_name, description=description, location=location, start_date=start_date)
             if success:
                 print(f"Plan for {plan_name} successfully added.")
