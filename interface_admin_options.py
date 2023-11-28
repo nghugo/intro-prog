@@ -29,8 +29,9 @@ class InterfaceAdminOptions:
     def prompt_manage_users_options(self):
         option = input_until_valid(
 			# when extending this list, make sure the input message matches the is_valid validation function and the options in interface_admin_options.py
-			input_message = f"\nPlease choose an option (logged in as {'admin' if self.users.users[self.current_user.username]["is_admin"] else 'volunteer'} {self.current_user.username}):\
-				\n[1] Go back to home page\
+			input_message = f"\n> You are at Homepage -> Manage Users\
+                \nPlease choose an option below:\
+				\n[1] CANCEL - Go back to home page\
                 \n[2] Add user\
                 \n[3] Delete user\
                 \n[4] Activate user\
@@ -253,12 +254,14 @@ class InterfaceAdminOptions:
     def prompt_generate_reports_options(self):
         option = input_until_valid(
 			# when extending this list, make sure the input message matches the is_valid validation function and the options in interface_admin_options.py
-			input_message = f"\nPlease choose an option (logged in as {'admin' if self.users.users[self.current_user.username]["is_admin"] else 'volunteer'} {self.current_user.username}):\
-				\n[1] Go back to home page\
-                \n[2] Generate report for a humanitarian plan (not yet implemented)\
-                \n[3] Generate report for all humanitarian plans (not yet implemented)\
-                \n[4] Generate report for a camp\
-                \n[5] Generate report for all camps",
+            #                 
+			input_message = f"\n> You are at Homepage -> Generate Reports\
+            \nPlease choose a report to generate below:\
+				\n[1] CANCEL - Go back to home page\
+                \n[2] Specific plan (not yet implemented)\
+                \n[3] All plans (not yet implemented)\
+                \n[4] Specific camp\
+                \n[5] All camps",
 			is_valid=lambda user_input: user_input.isdigit() and int(user_input) > 0 and int(user_input) <= 5,
 			validation_message="Unrecognized input. Please choose from the above list."
 		)
