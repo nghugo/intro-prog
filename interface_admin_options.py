@@ -180,7 +180,8 @@ class InterfaceAdminOptions:
         users_df = pd.DataFrame.from_dict(self.users.users).transpose()
         print(users_df)
         print("--- End of users list ---")
-
+        input("Press Enter to continue...")
+        
     def prompt_create_plan(self):
         plan_name = input_until_valid(
             input_message = "\nEnter plan name. This should be the name of the emergency occuring (E.g. Ukraine War):",
