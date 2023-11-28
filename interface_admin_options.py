@@ -1,3 +1,5 @@
+import json #why is this not working not a solid black colour 
+
 import pandas as pd
 
 from interface_helper import input_until_valid, is_valid_date
@@ -9,6 +11,34 @@ class InterfaceAdminOptions:
         self.current_user = current_user
         # initialise self.plans
         self.plans = Plans()
+
+    def generate_camp_report(self):
+        camp_name = input("Enter the name of the camp to generate the report for: ")
+        # Replace 'camps.json' with the actual filename where camp data is stored
+        with open('camps.json', 'r') as file:
+            camps_data = json.load(file)
+        camp_data = camps_data.get(camp_name, {})
+        if not camp_data:
+            print(f"No data available for {camp_name}")
+            return
+        report = f"Report for {camp_name}:\n"
+        report += f"Refugee Count: {len(camp_data.get('refugees', []))}\n"
+        report += f"Resources: {camp_data.get('resources', 'N/A')}\n"
+        report += f"Volunteers: {len(camp_data.get('volunteers', []))}\n"
+        print(report)
+
+    def generate_overall_report(self):
+         # Replace 'camps.json' with the actual filename where camp data is stored
+        with open('camps.json', 'r') as file:
+            camps_data = json.load(file)
+        report = "Overall Report:\n"
+        for camp_name, camp_data in camps_data.items():
+            report += f"Camp Name: {camp_name}\n"
+            report += f"Refugee Count: {len(camp_data.get('refugees', []))}\n"
+            report += f"Resources: {camp_data.get('resources', 'N/A')}\n"
+            report += f"Volunteers: {len(camp_data.get('volunteers', []))}\n\n"
+        print(report)
+
 
     def execute_option(self, user_option):
 
@@ -27,9 +57,9 @@ class InterfaceAdminOptions:
         if user_option == "8":
             self.prompt_create_plan()
         if user_option == "9":
-            pass  # TODO: implement
+            self.generate_camp_report()
         if user_option == "10":
-            pass  # TODO: implement
+            self.generate_overall_report()
 
     def prompt_add_user(self):
         username = input_until_valid(
