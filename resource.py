@@ -1,5 +1,11 @@
  
+# what need to do next in interface_volunteer_options.py
+# 1. Initialize a CampResources instance within the InterfaceVolunteerOptions class.
+# 2. Add methods in InterfaceVolunteerOptions for viewing and allocating resources or could move display resources into InterfaceVolunteerOptions as well
+# 3. Update the execute_option method to include new options for resource managemen
+
 #resources stored in camp_resources.json  
+
 # assume a standard for needed resource per person
 #assume only food_packets, medical_packets, water_packets, shelter_packets, clothing_packets, first_aid_packets, baby_packets, sanitation_packets are needed
 #     assume there are resources for a week
@@ -11,6 +17,8 @@
 #     //first_aid_packets 1 packet per week
 #     //baby_packets 1 packet per baby
 #     //sanitation_packets 1 packet per day 
+
+
 
 import json
 
@@ -52,7 +60,3 @@ class CampResources:
             json.dump(self.resources,file,indent=4)
         return True
 
-# what need to do next in interface_volunteer_options.py
-# 1. Initialize a CampResources instance within the InterfaceVolunteerOptions class.
-# 2. Add methods in InterfaceVolunteerOptions for viewing and allocating resources.
-# 3. Update the execute_option method to include new options for resource managemen
