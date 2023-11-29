@@ -1,8 +1,12 @@
+import pandas as pd
+
 from interface_helper import input_until_valid, is_valid_date
+from plans import Plans
+from users import Users
+from interface_camp_options import InterfaceCampOptions
 from interface_modify_users import InterfaceModifyUsers
 from interface_generate_reports import InterfaceGenerateReports
 from plans import Plans
-import pandas as pd
 
 class InterfaceAdminOptions:
 	def __init__(self, users, current_user):
@@ -23,6 +27,8 @@ class InterfaceAdminOptions:
 			self.prompt_list_plans()  # PLACEHOLDER, TODO: need to change print of interface_main
 		if option == "5":
 			self.execute_generate_reports_options()
+		if option == "6":
+			self.prompt_camp_options()
 			
 	def execute_manage_users_options(self):
 		option = input_until_valid(
@@ -95,6 +101,22 @@ class InterfaceAdminOptions:
 		else:
 			print(f"Aborted plan creation.")
 
+	def prompt_camp_options(self):
+		"""bring up a menu for camp functions """
+		users = Users()
+		# camp_identification = Camp()
+		user_option = input_until_valid(
+			input_message = f"\nPlease choose an operation on camps below:\
+				\n[1] add camp\
+				\n[2] delete camp\
+				\n[3] edit camp information\
+				\n[4] edit volunteers: add in/remove from a specific camp",
+			is_valid=lambda user_input: user_input in {"1", "2", "3", "4"},
+			validation_message="Unrecognized input. Please choose from the above list."
+		)
+		
+		interface_camp_options = InterfaceCampOptions(users, self.current_user)
+		interface_camp_options.excute_option(user_option)
 	def prompt_list_plans(self):
 		print("--- Plans are as follows ---")
 		# create pandas dataframe from dictionary (self.plans.plans dict in .json file)
