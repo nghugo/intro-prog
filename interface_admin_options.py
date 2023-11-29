@@ -2,6 +2,7 @@ from interface_helper import input_until_valid, is_valid_date
 from interface_modify_users import InterfaceModifyUsers
 from interface_generate_reports import InterfaceGenerateReports
 from plans import Plans
+import pandas as pd
 
 class InterfaceAdminOptions:
     def __init__(self, users, current_user):
@@ -9,6 +10,8 @@ class InterfaceAdminOptions:
         self.current_user = current_user
         self.interface_modify_users = InterfaceModifyUsers(self.users, self.current_user)
         self.interface_generate_reports = InterfaceGenerateReports()
+        # initialise self.plans
+        self.plans = Plans()
 
     def execute_option(self, option):
         # option 1 is log out, which is handled at interface_main.py
@@ -17,11 +20,10 @@ class InterfaceAdminOptions:
         if option == "3":
             self.prompt_create_plan()
         if option == "4":
-            self.prompt_list_plans  # PLACEHOLDER, TODO: need to change print of interface_main
+            self.prompt_list_plans()  # PLACEHOLDER, TODO: need to change print of interface_main
         if option == "5":
             self.execute_generate_reports_options()
-         
-
+            
     def execute_manage_users_options(self):
         option = input_until_valid(
 			# when extending this list, make sure the input message matches the is_valid validation function and the options in interface_admin_options.py
