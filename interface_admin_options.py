@@ -2,6 +2,7 @@ from interface_helper import input_until_valid, is_valid_date
 from interface_modify_users import InterfaceModifyUsers
 from interface_generate_reports import InterfaceGenerateReports
 from plans import Plans
+import pandas as pd
 
 class InterfaceAdminOptions:
     def __init__(self, users, current_user):
@@ -9,6 +10,8 @@ class InterfaceAdminOptions:
         self.current_user = current_user
         self.interface_modify_users = InterfaceModifyUsers(self.users, self.current_user)
         self.interface_generate_reports = InterfaceGenerateReports()
+        # initialise self.plans
+        self.plans = Plans()
 
     def execute_option(self, option):
         # option 1 is log out, which is handled at interface_main.py
@@ -17,11 +20,10 @@ class InterfaceAdminOptions:
         if option == "3":
             self.prompt_create_plan()
         if option == "4":
-            pass  # PLACEHOLDER
+            self.prompt_list_plans()  # PLACEHOLDER, TODO: need to change print of interface_main
         if option == "5":
             self.execute_generate_reports_options()
-         
-
+            
     def execute_manage_users_options(self):
         option = input_until_valid(
 			# when extending this list, make sure the input message matches the is_valid validation function and the options in interface_admin_options.py
@@ -93,29 +95,9 @@ class InterfaceAdminOptions:
         else:
             print(f"Aborted plan creation.")
 
-
-    def execute_generate_reports_options(self):
-        option = input_until_valid(
-			# when extending this list, make sure the input message matches the is_valid validation function and the options in interface_admin_options.py
-            #                 
-			input_message = f"\n<homepage/report>\nPlease choose a report to generate below:\
-				\n[1] CANCEL (return to homepage)\
-                \n[2] Specific plan (not yet implemented)\
-                \n[3] All plans (not yet implemented)\
-                \n[4] Specific camp\
-                \n[5] All camps",
-			is_valid=lambda user_input: user_input.isdigit() and int(user_input) > 0 and int(user_input) <= 5,
-			validation_message="Unrecognized input. Please choose from the above list."
-		)
-        if option == "1":
-            return  # option 1 is cancel, so just return
-        if option == "2":
-            pass # TODO
-        if option == "3":
-            pass # TODO
-        if option == "4":
-            self.interface_generate_reports.generate_camp_report()
-        if option == "5":
-            self.interface_generate_reports.generate_overall_report()
-
-            
+    def prompt_list_plans(self):
+        print("--- Plans are as follows ---")
+        # create pandas dataframe from dictionary (self.plans.plans dict in .json file)
+        plans_df = pd.DataFrame.from_dict(self.plans.plans).transpose()
+        print(plans_df)
+        print("--- End of plans list ---")    
