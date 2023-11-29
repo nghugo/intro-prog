@@ -1,6 +1,6 @@
 import pandas as pd
 
-from interface_helper import input_until_valid, is_valid_date,is_validate_password
+from interface_helper import input_until_valid, is_valid_date,is_validate_password, is_validate_email
 from plans import Plans
 
 class InterfaceAdminOptions:
@@ -43,7 +43,7 @@ class InterfaceAdminOptions:
         # password = input_until_valid("Enter the password for the new user:")
         password=is_validate_password("Enter the password for the new user(Notice: Password must contain contain at least one digit, upcase letter, special symbol and length should be at least 8 characters long):")
 
-
+        email=is_validate_email("Enter the email for the new user:")
 
 
 
@@ -78,7 +78,7 @@ class InterfaceAdminOptions:
         )
         if confirm == "y":
             success = self.users.add_user(
-                username=username, password=password, phone_number=phone_number, is_admin=is_admin == "y", is_activated=is_activated == "y")
+                username=username, password=password, email=email, phone_number=phone_number, is_admin=is_admin == "y", is_activated=is_activated == "y")
             if success:
                 print(f"Successfully added user {username}")
             else:
