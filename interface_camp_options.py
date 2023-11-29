@@ -10,7 +10,7 @@ class InterfaceCampOptions:
         self.current_user = current_user
 
 
-    def excute_option(self, option):
+    def execute_option(self, option):
         if option == "1":
             return  # CANCEL
         if option == "2":

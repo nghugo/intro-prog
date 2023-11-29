@@ -117,13 +117,14 @@ class InterfaceAdminOptions:
 		)
 		
 		interface_camp_options = InterfaceCampOptions(users, self.current_user)
-		interface_camp_options.excute_option(option)
+		interface_camp_options.execute_option(option)
 	def prompt_list_plans(self):
 		print("--- Plans are as follows ---")
 		# create pandas dataframe from dictionary (self.plans.plans dict in .json file)
 		plans_df = pd.DataFrame.from_dict(self.plans.plans).transpose()
 		print(plans_df)
 		print("--- End of plans list ---")
+		input("Press Enter to continue...")
 	
 	def execute_generate_reports_options(self):
 		option = input_until_valid(
