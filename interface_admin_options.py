@@ -228,7 +228,7 @@ class InterfaceAdminOptions:
 		users = Users()
 		# camp_identification = Camp()
 		user_option = input_until_valid(
-			input_message = f"\nPlease choose an option below to operate camps:\
+			input_message = f"\nPlease choose an operation on camps below:\
 				\n[1] add camp\
 				\n[2] delete camp\
 				\n[3] edit camp information\

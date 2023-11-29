@@ -23,18 +23,14 @@ class InterfaceCampOptions:
 
     def add_camp(self):
         camp_data = Camp.loadCampData()
-
         camp_identification = input_until_valid(
         input_message = "Please enter the new CampID",
-        is_valid = lambda user_input: user_input == "" or Camp.validateId(user_input, camp_data) != None,
-        validation_message = "This campID already exists. Please re-enter!"
-    )   
-        
-        if camp_identification == "":
-            print ("aborted camp addition")        
-        
-        Location = input_until_valid(
-            input_message = "Enter the country this camp locates in",
+        is_valid = lambda user_input: user_input != "" and user_input not in camp_data,
+        validation_message = "CampID cannot be empty or this campID already exists."
+    )
+    
+        location = input_until_valid(
+            input_message = "Enter the country this camp is located in",
             is_valid = lambda user_input: user_input != "" and type(user_input) == str,
             validation_message = "This cannot be empty. Please enter the camp location"
         )
@@ -51,25 +47,22 @@ class InterfaceCampOptions:
             validation_message="This cannot be empty. Please enter the name of the humanitarian plan"
         )
 
-        volunteers_in_charge = input_until_valid(
-            input_message="Enter the volunteer name who charges this camp",
-            is_valid=lambda user_input: user_input!="",
-            validation_message="volunteer does not exist or volunteer is in other camps! Please retry."
-        )
-# TODO: refer volunteerlist to add more deciding criteria in is_valid
-
-        volunteer_in_charge = []
-        volunteer_in_charge.append(volunteers_in_charge)
-        
+        # NOTE: commented out (remove this field) because we do not need to enforce that a camp has a volunteer upfront
+        # volunteer_in_charge = input_until_valid(
+        #     input_message="Enter the volunteer name who charges this camp",
+        #     is_valid=lambda user_input: user_input!="",
+        #     validation_message="volunteer does not exist or volunteer is in other camps! Please retry."
+        # )
+        # TODO: refer volunteerlist to add more deciding criteria in is_valid
         
         confirm = input_until_valid(
-            input_message=f"Please confirm details of the new camp (y/n):\n->CampID: {camp_identification}\n->location: {Location}\n->capacity: {capacity}\n->in {humanitarian_plan_in} humanitarian plan\n->volunteer_in_charge: {volunteer_in_charge}\n[y] Yes\n[n] No (abort)",
+            input_message=f"Please confirm details of the new camp (y/n):\n->CampID: {camp_identification}\n->location: {location}\n->capacity: {capacity}\n->in {humanitarian_plan_in} humanitarian plan\n[y] Yes\n[n] No (abort)",
 			is_valid=lambda user_input: user_input == "y" or user_input == "n",
 			validation_message="Unrecognized input. Please confirm details of the new camp (y/n):\n[y] Yes\n[n] No (abort)"
         )
         if confirm == "y":
-            success = Camp(
-				camp_identification, Location , capacity, humanitarian_plan_in, volunteer_in_charge)
+            success = Camp.addCamp(
+				camp_identification, location , capacity, humanitarian_plan_in)
             if success:
                 print(f"Successfully added {camp_identification}")
             else:

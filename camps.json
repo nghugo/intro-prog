@@ -1,1 +1,9 @@
-{"camp1": {"location": "uk", "capacity": "100", "occupancy": 0, "humanitarian_plan_in": "planA", "volunteer_in_charge": ["volunteer1", "volunteer2", "volunteer3"]}}
+{
+    "camp2": {
+        "location": "united kingdom",
+        "capacity": "10",
+        "occupancy": 0,
+        "humanitarian_plan_in": "planB",
+        "volunteer_in_charge": "volunteer2"
+    }
+}
