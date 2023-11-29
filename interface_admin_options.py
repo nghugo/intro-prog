@@ -27,6 +27,8 @@ class InterfaceAdminOptions:
 			self.prompt_list_plans()  # PLACEHOLDER, TODO: need to change print of interface_main
 		if option == "5":
 			self.execute_generate_reports_options()
+		if option == "6":
+			self.prompt_camp_options()
 			
 	def execute_manage_users_options(self):
 		option = input_until_valid(

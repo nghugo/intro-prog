@@ -1,7 +1,7 @@
 import json
 
 class InterfaceGenerateReports:
-
+    
     @staticmethod
     def generate_camp_report():
             camp_name = input("\nEnter the name of the camp to generate the report for: ")

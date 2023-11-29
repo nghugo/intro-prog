@@ -10,7 +10,7 @@ class InterfaceCampOptions:
         self.current_user = current_user
 
 
-    def excute_option (self, user_option):
+    def excute_option(self, user_option):
         if user_option == "1":
             self.add_camp()
         if user_option == "2":
