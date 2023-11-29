@@ -33,7 +33,7 @@ class InterfaceAdminOptions:
 	def execute_manage_users_options(self):
 		option = input_until_valid(
 			# when extending this list, make sure the input message matches the is_valid validation function and the options in interface_admin_options.py
-			input_message = f"\n<homepage/user-management>\nPlease choose a user management option below:\
+			input_message = f"\n<homepage/manage-users>\nPlease choose a user management option below:\
 				\n[1] CANCEL (return to homepage)\
 				\n[2] Add user\
 				\n[3] Delete user\
