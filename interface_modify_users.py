@@ -1,6 +1,6 @@
 import pandas as pd
 
-from interface_helper import input_until_valid,is_validate_password,is_validate_email
+from interface_helper import input_until_valid, is_validate_email
 
 class InterfaceModifyUsers:
     def __init__(self, users, current_user):

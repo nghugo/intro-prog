@@ -1,8 +1,7 @@
 import pandas as pd
 import json
 
-from interface_helper import input_until_valid
-
+from interface_helper import input_until_valid, is_validate_email
 
 class InterfaceVolunteerOptions:
     def __init__(self, users, current_user):
@@ -23,10 +22,10 @@ class InterfaceVolunteerOptions:
 
     def prompt_modify_my_details(self):
         field = input_until_valid(
-            input_message="Enter the field (username/password/phone_number) to modify:",
+            input_message="Enter the field (username/password/email/phone_number) to modify:",
             is_valid=lambda user_input: user_input in {
-                "username", "password", "phone_number"},
-            validation_message="Unrecognized input. Please enter a valid field (username/password/phone_number)."
+                "username", "password", "email", "phone_number"},
+            validation_message="Unrecognized input. Please enter a valid field (username/password/email/phone_number)."
         )
         if field == "username":
             value = input_until_valid(
@@ -41,6 +40,8 @@ class InterfaceVolunteerOptions:
                     user_input.isnumeric() and len(user_input) >= 5),
                 validation_message=f"Unrecognized input. Please enter the new phone number (5+ digits or leave empty)"
             )
+        elif field == "email":
+            value=is_validate_email("Enter the new email (format: xxx@yyy.zzz with no spaces):")
         else:  # field == "password"
             value = input_until_valid(f"Enter the new value for the {field} field:")
 
