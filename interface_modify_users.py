@@ -1,6 +1,6 @@
 import pandas as pd
 
-from interface_helper import input_until_valid
+from interface_helper import input_until_valid,is_validate_password,is_validate_email
 
 class InterfaceModifyUsers:
     def __init__(self, users, current_user):
@@ -13,7 +13,8 @@ class InterfaceModifyUsers:
             is_valid=lambda user_input: user_input != "" and user_input not in self.users.users,
             validation_message="Username cannot be empty or is already taken. Please enter a different username for the new user"
         )
-        password = input_until_valid("Enter the password for the new user:")
+        password = is_validate_password("Enter the password for the new user\n(Notice:Password must contain at least one digit, uppercase letter, one special symbol and length is at least 8 characters):")
+        email=is_validate_email("Enter the email for the new user:")
         phone_number = input_until_valid(
             input_message=f"Enter the new phone number (5+ digits or leave empty)",
             is_valid=lambda user_input: (user_input == "") or (
@@ -38,7 +39,7 @@ class InterfaceModifyUsers:
         )
         if confirm == "y":
             success = self.users.add_user(
-                username=username, password=password, phone_number=phone_number, is_admin=is_admin == "y", is_activated=is_activated == "y")
+                username=username, password=password, email=email,phone_number=phone_number, is_admin=is_admin == "y", is_activated=is_activated == "y")
             if success:
                 print(f"Successfully added user {username}")
             else:

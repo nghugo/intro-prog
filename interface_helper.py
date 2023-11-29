@@ -27,3 +27,83 @@ def is_valid_date(date_input):
     except ValueError:
         return False
 
+
+def is_validate_password(input_message: str) -> str:
+    """
+    Validate user's password.
+
+    Parameters:
+    ----------
+    input_message: str
+        The prompt message for the user to input the password.
+
+    Return: str
+        The validated password.
+    """
+    special_symbols = [
+        "!",
+        "@",
+        "#",
+        "$",
+        "%",
+        "^",
+        "&",
+        "*",
+        "(",
+        ")",
+        "-",
+        "_",
+        "+",
+        "=",
+        "~",
+        "`",
+        ";",
+        ":",
+        "'",
+        '"',
+        ",",
+        ".",
+        "<",
+        ">",
+        "/",
+        "?",
+    ]
+
+    while True:
+        password = input(input_message)
+        if len(password) < 8:
+            print("\nPassword must be at least 8 characters long.\n")
+        elif not any(char.isdigit() for char in password):
+            print("\nPassword must contain at least one digit.\n")
+        elif not any(char.isupper() for char in password):
+            print("\nPassword must contain at least one uppercase letter.\n")
+        elif not any(char in special_symbols for char in password):
+            print("\nPassword must contain at least one special symbol.\n")
+        else:
+            return password
+        
+def is_validate_email(input_message: str) -> str:
+    """
+    Validate user email format.
+
+    Parameters:
+    ----------
+    :param email_prompt: str
+    :return: str
+    """
+    error_email_message = "Invalid email address.\n"
+
+    while True:
+        email = (
+            input(input_message).strip().lower()
+        )  
+        if "@" not in email: 
+            print(f"\n{error_email_message}")
+        elif email[-4:] not in [
+            ".com",
+            ".net",
+            ".org",
+        ]:
+            print(f"\n{error_email_message}")
+        else:
+            return email
