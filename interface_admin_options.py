@@ -41,7 +41,7 @@ class InterfaceAdminOptions:
         )
 
         # password = input_until_valid("Enter the password for the new user:")
-        password=is_validate_password("Enter the password for the new user(Notice: Password must contain contain at least one digit, upcase letter, special symbol and length should be at least 8 characters long):")
+        password=is_validate_password("Enter the password for the new user\n(Notice: Password must contain contain at least one digit, upcase letter, special symbol and length should be at least 8 characters long):")
 
         email=is_validate_email("Enter the email for the new user:")
 
