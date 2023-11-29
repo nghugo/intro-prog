@@ -10,21 +10,23 @@ class InterfaceCampOptions:
         self.current_user = current_user
 
 
-    def excute_option(self, user_option):
-        if user_option == "1":
+    def execute_option(self, option):
+        if option == "1":
+            return  # CANCEL
+        if option == "2":
             self.add_camp()
-        if user_option == "2":
+        if option == "3":
             self.delete_camp()
-        if user_option == "3":
+        if option == "4":
             self.Edit_camp_information()
-        if user_option == "4":
+        if option == "5":
             self.Edit_volunteer()
         
 
     def add_camp(self):
         camp_data = Camp.loadCampData()
 
-        print(f"Existing camps are: {", ".join(list(camp_data.keys()))}")
+        print(f"Existing camp(s): {", ".join(list(camp_data.keys())) if camp_data else "None found"}")
 
         camp_identification = input_until_valid(
         input_message = "Please enter the new CampID",
@@ -85,12 +87,12 @@ class InterfaceCampOptions:
             user != "admin"
 
         camp_data = Camp.loadCampData()
-        print(f"Existing camps are: {", ".join(list(camp_data.keys()))}")
+        print(f"Existing camp(s): {", ".join(list(camp_data.keys())) if camp_data else "None found"}")
 
         camp_identification = input_until_valid(
-            input_message= "Please enter the campID you would like to delete",
+            input_message= "Please enter the campID you would like to delete, or leave empty to abort:",
             is_valid=lambda user_input: user_input =="" or user_input in camp_data,
-            validation_message="CampID not exists in camp data."
+            validation_message="CampID does not exist in camp data."
         )
         if camp_identification == "":
             print("Camp deletion aborted.")
@@ -114,10 +116,10 @@ class InterfaceCampOptions:
     def Edit_camp_information(self):
         camp_data = Camp.loadCampData()
         
-        print(f"Existing camps are: {", ".join(list(camp_data.keys()))}")
+        print(f"Existing camp(s): {", ".join(list(camp_data.keys())) if camp_data else "None found"}")
 
         camp_identification = input_until_valid(
-                input_message="Please enter the campID you would like to change camp details, or leave empty to abort",
+                input_message="Please enter the campID of the camp you would like to change camp details of, or leave empty to abort",
                 is_valid = lambda user_input: user_input == "" or user_input in camp_data,
                 validation_message= "The campID does not exist. Please re-enter!"
             )   
@@ -163,7 +165,7 @@ class InterfaceCampOptions:
                         test = Camp.edit_camp_information(camp_identification=camp_identification, attribute=attribute, new_value=new_value, user = self.current_user.username)
                     
                     if test:
-                       print(f"you've changed the {attribute} successfully!")
+                       print(f"You've changed the {attribute} successfully!")
                     
                     else:
                         print(f'Failed to change {attribute}')
@@ -179,10 +181,10 @@ class InterfaceCampOptions:
 
         if self.users.users[self.current_user.username]["is_admin"]:
           
-            print(f"Existing camps are: {", ".join(list(camp_data.keys()))}")
+            print(f"Existing camp(s): {", ".join(list(camp_data.keys())) if camp_data else "None found"}")
 
             camp_identification = input_until_valid(
-                input_message="Please enter the campID you would like to amend the volunteers in it:",
+                input_message="Please enter the campID of the camp you would like to amend the volunteers in:",
                 is_valid=lambda user_input: user_input =="" or user_input in camp_data,
                 validation_message="The campID you entered does not exist! Please re-enter!"
             )
@@ -228,7 +230,7 @@ class InterfaceCampOptions:
                         print(f"Failed to {method} {volunteer}!")
                 
                 else:
-                    print(f"aborted to {method} volunteer")
+                    print(f"Aborted {method} volunteer operation")
         else:
             print("You are not allowed to edit volunteer list.")
 

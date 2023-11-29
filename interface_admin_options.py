@@ -24,11 +24,11 @@ class InterfaceAdminOptions:
 		if option == "3":
 			self.prompt_create_plan()
 		if option == "4":
-			self.prompt_list_plans()  # PLACEHOLDER, TODO: need to change print of interface_main
+			self.prompt_list_plans()
 		if option == "5":
 			self.execute_generate_reports_options()
 		if option == "6":
-			self.prompt_camp_options()
+			self.execute_camp_options()
 			
 	def execute_manage_users_options(self):
 		option = input_until_valid(
@@ -101,28 +101,30 @@ class InterfaceAdminOptions:
 		else:
 			print(f"Aborted plan creation.")
 
-	def prompt_camp_options(self):
+	def execute_camp_options(self):
 		"""bring up a menu for camp functions """
 		users = Users()
 		# camp_identification = Camp()
-		user_option = input_until_valid(
-			input_message = f"\nPlease choose an operation on camps below:\
-				\n[1] add camp\
-				\n[2] delete camp\
-				\n[3] edit camp information\
-				\n[4] edit volunteers: add in/remove from a specific camp",
-			is_valid=lambda user_input: user_input in {"1", "2", "3", "4"},
+		option = input_until_valid(
+			input_message = f"\n<homepage/manage-camps>\nPlease choose an operation on camps below:\
+				\n[1] CANCEL\
+				\n[2] Add camp\
+				\n[3] Delete camp\
+				\n[4] Edit camp information\
+				\n[5] Edit volunteers: add in/remove from a specific camp",
+			is_valid=lambda user_input: user_input.isdigit() and int(user_input) > 0 and int(user_input) <= 5,
 			validation_message="Unrecognized input. Please choose from the above list."
 		)
 		
 		interface_camp_options = InterfaceCampOptions(users, self.current_user)
-		interface_camp_options.excute_option(user_option)
+		interface_camp_options.execute_option(option)
 	def prompt_list_plans(self):
 		print("--- Plans are as follows ---")
 		# create pandas dataframe from dictionary (self.plans.plans dict in .json file)
 		plans_df = pd.DataFrame.from_dict(self.plans.plans).transpose()
 		print(plans_df)
 		print("--- End of plans list ---")
+		input("Press Enter to continue...")
 	
 	def execute_generate_reports_options(self):
 		option = input_until_valid(

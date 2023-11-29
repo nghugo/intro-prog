@@ -13,10 +13,15 @@ class InterfaceModifyUsers:
             is_valid=lambda user_input: user_input != "" and user_input not in self.users.users,
             validation_message="Username cannot be empty or is already taken. Please enter a different username for the new user"
         )
-        password = is_validate_password("Enter the password for the new user\n(Notice:Password must contain at least one digit, uppercase letter, one special symbol and length is at least 8 characters):")
-        email=is_validate_email("Enter the email for the new user:")
+        password = input_until_valid(
+            input_message="Enter the password for the new user:",
+            is_valid=lambda user_input: user_input != "",
+            validation_message="Password cannot be empty"
+            )
+        email=is_validate_email("Enter the email for the new user (format: xxx@yyy.zzz with no spaces):")
+        
         phone_number = input_until_valid(
-            input_message=f"Enter the new phone number (5+ digits or leave empty)",
+            input_message=f"Enter the new phone number (5+ digits or leave empty):",
             is_valid=lambda user_input: (user_input == "") or (
                 user_input.isnumeric() and len(user_input) >= 5),
             validation_message=f"Unrecognized input. Please enter the new phone number (5+ digits or leave empty)"
@@ -32,14 +37,20 @@ class InterfaceModifyUsers:
             validation_message="Unrecognized input. Please specify if the new user is activated (t/f):\n[t] True\n[f] False"
         )
         confirm = input_until_valid(
-            input_message=f"Please confirm details of the new user (y/n):\n->Username: {username}\n->Password: {password}\n->Is Admin: {
-                "yes" if is_admin else "no"}\n->phone_number: {phone_number}\n->Is Activated: {"yes" if is_activated else "no"}\n[y] Yes\n[n] No (abort)",
+            input_message=f"Please confirm details of the new user (y/n):\
+                \n->Username: {username}\
+                \n->Password: {password}\
+                \n->Email: {email}\
+                \n->phone_number: {phone_number}\
+                \n->Is Admin: {"yes" if is_admin == "t" else "no"}\
+                \n->Is Activated: {"yes" if is_activated == "t" else "no"}\
+                \n[y] Yes\n[n] No (abort)",
             is_valid=lambda user_input: user_input == "y" or user_input == "n",
             validation_message="Unrecognized input. Please confirm details of the new user (y/n):\n[y] Yes\n[n] No (abort)"
         )
         if confirm == "y":
             success = self.users.add_user(
-                username=username, password=password, email=email,phone_number=phone_number, is_admin=is_admin == "y", is_activated=is_activated == "y")
+                username=username, password=password, email=email,phone_number=phone_number, is_admin=is_admin == "t", is_activated=is_activated == "f")
             if success:
                 print(f"Successfully added user {username}")
             else:
@@ -86,10 +97,10 @@ class InterfaceModifyUsers:
             return  # early termination
 
         field = input_until_valid(
-            input_message="Enter the field (username/password/phone_number/is_admin/is_activated) to modify:",
+            input_message="Enter the field (username/password/email/phone_number/is_admin/is_activated) to modify:",
             is_valid=lambda user_input: user_input in {
-                "username", "password", "phone_number", "is_admin", "is_activated"},
-            validation_message="Unrecognized input. Please enter a valid field (username/password/phone_number/is_admin/is_activated)."
+                "username", "password", "email", "phone_number", "is_admin", "is_activated"},
+            validation_message="Unrecognized input. Please enter a valid field (username/password/email/phone_number/is_admin/is_activated)."
         )
         if field in {"is_admin", "is_activated"}:
             if username == self.current_user.username:
@@ -104,6 +115,8 @@ class InterfaceModifyUsers:
                 validation_message=f"Unrecognized input. Please specify the new value for the {field} field (t/f):\n[t] True\n[f] False"
             )
             value = True if value == "t" else False
+        elif field == "email":
+            value=is_validate_email("Enter the new email (format: xxx@yyy.zzz with no spaces):")
         elif field == "phone_number":
             value = input_until_valid(
                 input_message=f"Specify the new phone number (5+ digits or leave empty)",

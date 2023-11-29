@@ -21,7 +21,7 @@ class Users:
 				return json_load
 
 	@staticmethod
-	def add_user(username, password, phone_number, is_admin, is_activated):
+	def add_user(username, password, email, phone_number, is_admin, is_activated):
 		"""
 		Adds user to users.json. 
 		Halts and returns False if username already exists.
@@ -36,6 +36,7 @@ class Users:
 		data[username] = {
 			"password": password,
 			"phone_number": phone_number,
+			"email": email,
 			"is_admin": is_admin,
 			"is_activated": is_activated,
 		}
