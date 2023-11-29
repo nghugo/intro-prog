@@ -23,6 +23,9 @@ class InterfaceCampOptions:
 
     def add_camp(self):
         camp_data = Camp.loadCampData()
+
+        print(f"Existing camps are: {", ".join(list(camp_data.keys()))}")
+
         camp_identification = input_until_valid(
         input_message = "Please enter the new CampID",
         is_valid = lambda user_input: user_input != "" and user_input not in camp_data,
@@ -82,6 +85,8 @@ class InterfaceCampOptions:
             user != "admin"
 
         camp_data = Camp.loadCampData()
+        print(f"Existing camps are: {", ".join(list(camp_data.keys()))}")
+
         camp_identification = input_until_valid(
             input_message= "Please enter the campID you would like to delete",
             is_valid=lambda user_input: user_input =="" or user_input in camp_data,
@@ -109,7 +114,7 @@ class InterfaceCampOptions:
     def Edit_camp_information(self):
         camp_data = Camp.loadCampData()
         
-        print(f"camps already exist: {camp_data.keys()}")
+        print(f"Existing camps are: {", ".join(list(camp_data.keys()))}")
 
         camp_identification = input_until_valid(
                 input_message="Please enter the campID you would like to change camp details, or leave empty to abort",
@@ -133,7 +138,7 @@ class InterfaceCampOptions:
                     
                     new_value = input_until_valid(
                     input_message = f"Please enter the new value for {attribute}",
-                    is_valid=lambda user_input: user_input != camp_data,
+                    is_valid=lambda user_input: user_input not in list(camp_data.keys()),
                     validation_message="Please enter the new campID different from current one."
                 )
                 
@@ -173,6 +178,9 @@ class InterfaceCampOptions:
         camp_data = Camp.loadCampData()
 
         if self.users.users[self.current_user.username]["is_admin"]:
+          
+            print(f"Existing camps are: {", ".join(list(camp_data.keys()))}")
+
             camp_identification = input_until_valid(
                 input_message="Please enter the campID you would like to amend the volunteers in it:",
                 is_valid=lambda user_input: user_input =="" or user_input in camp_data,
