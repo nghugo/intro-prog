@@ -84,7 +84,7 @@ class InterfaceCampOptions:
         camp_data = Camp.loadCampData()
         camp_identification = input_until_valid(
             input_message= "Please enter the campID you would like to delete",
-            is_valid=lambda user_input: user_input =="" or Camp.validateId(user_input, camp_data) == None,
+            is_valid=lambda user_input: user_input =="" or user_input in camp_data,
             validation_message="CampID not exists in camp data."
         )
         if camp_identification == "":
@@ -108,6 +108,8 @@ class InterfaceCampOptions:
 
     def Edit_camp_information(self):
         camp_data = Camp.loadCampData()
+        
+        print(f"camps already exist: {camp_data.keys()}")
 
         camp_identification = input_until_valid(
                 input_message="Please enter the campID you would like to change camp details, or leave empty to abort",
@@ -126,7 +128,9 @@ class InterfaceCampOptions:
 			    "camp_identification", "location", "capacity", "humanitarian_plan_in", "volunteer_in_charge"},
 			    validation_message="Unrecognized input. Please enter a valid field (camp_identification/location/capacity/humanitarian_plan_in/volunteer_in_charge)."
             )
+
                 if attribute == "camp_identification":
+                    
                     new_value = input_until_valid(
                     input_message = f"Please enter the new value for {attribute}",
                     is_valid=lambda user_input: user_input != camp_data,
@@ -134,6 +138,7 @@ class InterfaceCampOptions:
                 )
                 
                 else:
+                    print(f"\ncurrent {attribute} value: {camp_data[camp_identification][attribute]}\n")
                     new_value = input_until_valid(
                     input_message=f"Enter the new value for the {attribute}:",
                     is_valid=lambda user_input: user_input != camp_data[camp_identification][attribute],
@@ -170,7 +175,7 @@ class InterfaceCampOptions:
         if self.users.users[self.current_user.username]["is_admin"]:
             camp_identification = input_until_valid(
                 input_message="Please enter the campID you would like to amend the volunteers in it:",
-                is_valid=lambda user_input: user_input =="" or Camp.validateId(user_input, camp_data) == None,
+                is_valid=lambda user_input: user_input =="" or user_input in camp_data,
                 validation_message="The campID you entered does not exist! Please re-enter!"
             )
             # TODO: should add print camp data function here to show volunteers in the camp after entering the campID
@@ -220,11 +225,6 @@ class InterfaceCampOptions:
             print("You are not allowed to edit volunteer list.")
 
 
-# testing error1 -- data saving:
-# login as admin: 
-# [9] edit humanitarian plan 
-# [1] add camp: if we creat camp1, showing 'already exist' and 'sucessfully created a new camp' at the same time; while creating other campID such as 'camp2' or 'camp3' is fine.
-# besides, if we create another new camp after creating one, the new one will overwrite the existing one. And in each run, previous data in camp.json will be lost. There might be some problem in saving our camp data into camp.json.
 
 
         
