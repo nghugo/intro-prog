@@ -232,9 +232,8 @@ class InterfaceAdminOptions:
 				\n[1] add camp\
 				\n[2] delete camp\
 				\n[3] edit camp information\
-				\n[4] edit volunteers: add in/remove from a specific camp\
-				\n[5] get volunteer list in a specific camp",
-			is_valid=lambda user_input: user_input in {"1", "2", "3", "4", "5"},
+				\n[4] edit volunteers: add in/remove from a specific camp",
+			is_valid=lambda user_input: user_input in {"1", "2", "3", "4"},
 			validation_message="Unrecognized input. Please choose from the above list."
 		)
 		

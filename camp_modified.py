@@ -48,7 +48,8 @@ class Camp:
     def validateId(camp_identification, camp_data):
         """validate the camp_identification"""
         if camp_identification in camp_data:
-            print('already exist. please create a new identification of the camp')
+            # print('already exist. please create a new identification of the camp') 
+            # TODO: delete this print sentence
             return None
         else:
             return camp_identification
@@ -92,7 +93,7 @@ class Camp:
         users = Users.load_users()
         camp_data = Camp.loadCampData()
         if user in users and (user == 'admin' or user in camp_data[camp_identification]["volunteer_in_charge"]):
-            camp_data[camp_identification] = new_identification
+            camp_data[new_identification] = camp_data.pop(camp_identification)
             with open('camps.json','w') as file:
                 json.dump(camp_data,file)
             return True
