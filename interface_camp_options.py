@@ -26,7 +26,7 @@ class InterfaceCampOptions:
     def add_camp(self):
         camp_data = Camp.loadCampData()
 
-        print(f"Existing camps are: {", ".join(list(camp_data.keys()))}")
+        print(f"Existing camp(s): {", ".join(list(camp_data.keys())) if camp_data else "None found"}")
 
         camp_identification = input_until_valid(
         input_message = "Please enter the new CampID",
@@ -87,12 +87,12 @@ class InterfaceCampOptions:
             user != "admin"
 
         camp_data = Camp.loadCampData()
-        print(f"Existing camps are: {", ".join(list(camp_data.keys()))}")
+        print(f"Existing camp(s): {", ".join(list(camp_data.keys())) if camp_data else "None found"}")
 
         camp_identification = input_until_valid(
-            input_message= "Please enter the campID you would like to delete",
+            input_message= "Please enter the campID you would like to delete, or leave empty to abort:",
             is_valid=lambda user_input: user_input =="" or user_input in camp_data,
-            validation_message="CampID not exists in camp data."
+            validation_message="CampID does not exist in camp data."
         )
         if camp_identification == "":
             print("Camp deletion aborted.")
@@ -116,10 +116,10 @@ class InterfaceCampOptions:
     def Edit_camp_information(self):
         camp_data = Camp.loadCampData()
         
-        print(f"Existing camps are: {", ".join(list(camp_data.keys()))}")
+        print(f"Existing camp(s): {", ".join(list(camp_data.keys())) if camp_data else "None found"}")
 
         camp_identification = input_until_valid(
-                input_message="Please enter the campID you would like to change camp details, or leave empty to abort",
+                input_message="Please enter the campID of the camp you would like to change camp details of, or leave empty to abort",
                 is_valid = lambda user_input: user_input == "" or user_input in camp_data,
                 validation_message= "The campID does not exist. Please re-enter!"
             )   
@@ -181,10 +181,10 @@ class InterfaceCampOptions:
 
         if self.users.users[self.current_user.username]["is_admin"]:
           
-            print(f"Existing camps are: {", ".join(list(camp_data.keys()))}")
+            print(f"Existing camp(s): {", ".join(list(camp_data.keys())) if camp_data else "None found"}")
 
             camp_identification = input_until_valid(
-                input_message="Please enter the campID you would like to amend the volunteers in it:",
+                input_message="Please enter the campID of the camp you would like to amend the volunteers in:",
                 is_valid=lambda user_input: user_input =="" or user_input in camp_data,
                 validation_message="The campID you entered does not exist! Please re-enter!"
             )

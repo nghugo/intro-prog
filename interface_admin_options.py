@@ -112,7 +112,7 @@ class InterfaceAdminOptions:
 				\n[3] Delete camp\
 				\n[4] Edit camp information\
 				\n[5] Edit volunteers: add in/remove from a specific camp",
-			is_valid=lambda user_input: user_input in {"1", "2", "3", "4"},
+			is_valid=lambda user_input: user_input.isdigit() and int(user_input) > 0 and int(user_input) <= 5,
 			validation_message="Unrecognized input. Please choose from the above list."
 		)
 		
