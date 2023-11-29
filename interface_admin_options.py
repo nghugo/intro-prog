@@ -17,7 +17,7 @@ class InterfaceAdminOptions:
         if option == "3":
             self.prompt_create_plan()
         if option == "4":
-            pass  # PLACEHOLDER
+            self.prompt_list_plans  # PLACEHOLDER, TODO: need to change print of interface_main
         if option == "5":
             self.execute_generate_reports_options()
          
@@ -92,3 +92,10 @@ class InterfaceAdminOptions:
                 print(f"Failed to add plan for {plan_name}")
         else:
             print(f"Aborted plan creation.")
+
+    def prompt_list_plans(self):
+        print("--- Plans are as follows ---")
+        # create pandas dataframe from dictionary (self.plans.plans dict in .json file)
+        plans_df = pd.DataFrame.from_dict(self.plans.plans).transpose()
+        print(plans_df)
+        print("--- End of plans list ---")    
