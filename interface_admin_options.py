@@ -24,7 +24,7 @@ class InterfaceAdminOptions:
 		if option == "3":
 			self.prompt_create_plan()
 		if option == "4":
-			self.prompt_list_plans()  # PLACEHOLDER, TODO: need to change print of interface_main
+			self.prompt_list_plans()
 		if option == "5":
 			self.execute_generate_reports_options()
 		if option == "6":

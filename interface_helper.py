@@ -1,3 +1,6 @@
+from datetime import datetime
+
+
 def input_until_valid(input_message, is_valid=lambda user_input: True, validation_message=""):
     """
     Loops through input() until a valid input is provided.
@@ -18,7 +21,6 @@ def input_until_valid(input_message, is_valid=lambda user_input: True, validatio
             print(validation_message)
     return validated_input
 
-from datetime import datetime 
 
 def is_valid_date(date_input):
     try:
@@ -81,7 +83,8 @@ def is_validate_password(input_message: str) -> str:
             print("\nPassword must contain at least one special symbol.\n")
         else:
             return password
-        
+
+
 def is_validate_email(input_message: str) -> str:
     """
     Validate user email format.
@@ -91,19 +94,18 @@ def is_validate_email(input_message: str) -> str:
     :param email_prompt: str
     :return: str
     """
-    error_email_message = "Invalid email address.\n"
+    error_email_message = "Invalid email address. Email must be in xxx@yyy.zzz format with no spaces.\n"
 
     while True:
         email = (
             input(input_message).strip().lower()
-        )  
-        if "@" not in email: 
-            print(f"\n{error_email_message}")
-        elif email[-4:] not in [
-            ".com",
-            ".net",
-            ".org",
-        ]:
+        )
+        
+        if " " in email or "@" not in email:
             print(f"\n{error_email_message}")
         else:
-            return email
+            _, domain = email.split('@', 1)
+            if '.' not in domain[1:]:
+                print(f"\n{error_email_message}")
+            else:
+                return email
