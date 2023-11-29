@@ -1,6 +1,6 @@
 import pandas as pd
 
-from interface_helper import input_until_valid, is_valid_date
+from interface_helper import input_until_valid, is_valid_date,is_validate_password
 from plans import Plans
 
 class InterfaceAdminOptions:
@@ -31,19 +31,35 @@ class InterfaceAdminOptions:
         if user_option == "10":
             pass  # TODO: implement
 
+    
+
     def prompt_add_user(self):
         username = input_until_valid(
             input_message="\nEnter the username for the new user:",
             is_valid=lambda user_input: user_input != "" and user_input not in self.users.users,
             validation_message="Username cannot be empty or is already taken. Please enter a different username for the new user"
         )
-        password = input_until_valid("Enter the password for the new user:")
+
+        # password = input_until_valid("Enter the password for the new user:")
+        password=is_validate_password("Enter the password for the new user(Notice: Password must contain contain at least one digit, upcase letter, special symbol and length should be at least 8 characters long):")
+
+
+
+
+
         phone_number = input_until_valid(
             input_message=f"Enter the new phone number (5+ digits or leave empty)",
             is_valid=lambda user_input: (user_input == "") or (
                 user_input.isnumeric() and len(user_input) >= 5),
             validation_message=f"Unrecognized input. Please enter the new phone number (5+ digits or leave empty)"
         )
+        
+
+
+
+
+
+
         is_admin = input_until_valid(
             input_message="Specify if the new user is an admin (t/f):\n[t] True\n[f] False",
             is_valid=lambda user_input: user_input == "t" or user_input == "f",
