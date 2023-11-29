@@ -74,7 +74,7 @@ class Plans:
 
 		# reject if username does not match that of an existing user
 		# also reject if field is not already defined in plans.json (prevents typo)
-		if plan_namee not in data or (field != "plan_name" and field not in data[plan_name]):
+		if plan_name not in data or (field != "plan_name" and field not in data[plan_name]):
 			return False
 
 		if field != "plan_name":

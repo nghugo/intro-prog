@@ -27,7 +27,7 @@ class InterfaceAdminOptions:
         if user_option == "8":
             self.prompt_create_plan()
         if user_option == "9":
-            pass  # TODO: implement
+            self.prompt_list_plans()
         if user_option == "10":
             pass  # TODO: implement
 
@@ -218,3 +218,10 @@ class InterfaceAdminOptions:
                 print(f"Failed to add plan for {plan_name}")
         else:
             print(f"Aborted plan creation.")
+
+    def prompt_list_plans(self):
+        print("--- Plans are as follows ---")
+        # create pandas dataframe from dictionary (self.plans.plans dict in .json file)
+        plans_df = pd.DataFrame.from_dict(self.plans.plans).transpose()
+        print(plans_df)
+        print("--- End of plans list ---")    
