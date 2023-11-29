@@ -10,14 +10,16 @@ class InterfaceCampOptions:
         self.current_user = current_user
 
 
-    def excute_option(self, user_option):
-        if user_option == "1":
+    def excute_option(self, option):
+        if option == "1":
+            return  # CANCEL
+        if option == "2":
             self.add_camp()
-        if user_option == "2":
+        if option == "3":
             self.delete_camp()
-        if user_option == "3":
+        if option == "4":
             self.Edit_camp_information()
-        if user_option == "4":
+        if option == "5":
             self.Edit_volunteer()
         
 
@@ -163,7 +165,7 @@ class InterfaceCampOptions:
                         test = Camp.edit_camp_information(camp_identification=camp_identification, attribute=attribute, new_value=new_value, user = self.current_user.username)
                     
                     if test:
-                       print(f"you've changed the {attribute} successfully!")
+                       print(f"You've changed the {attribute} successfully!")
                     
                     else:
                         print(f'Failed to change {attribute}')
@@ -228,7 +230,7 @@ class InterfaceCampOptions:
                         print(f"Failed to {method} {volunteer}!")
                 
                 else:
-                    print(f"aborted to {method} volunteer")
+                    print(f"Aborted {method} volunteer operation")
         else:
             print("You are not allowed to edit volunteer list.")
 
