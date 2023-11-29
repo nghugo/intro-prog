@@ -94,7 +94,7 @@ def is_validate_email(input_message: str) -> str:
     :param email_prompt: str
     :return: str
     """
-    error_email_message = "Invalid email address. Email must be in xxx@yyy.zzz format with no spaces.\n"
+    error_email_message = "Invalid email address. Email must be in xxx@yyy.zzz format with no spaces."
 
     while True:
         email = (
@@ -102,10 +102,10 @@ def is_validate_email(input_message: str) -> str:
         )
         
         if " " in email or "@" not in email:
-            print(f"\n{error_email_message}")
+            print(f"{error_email_message}")
         else:
             _, domain = email.split('@', 1)
             if '.' not in domain[1:]:
-                print(f"\n{error_email_message}")
+                print(f"{error_email_message}")
             else:
                 return email
