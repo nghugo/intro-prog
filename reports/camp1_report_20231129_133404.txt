@@ -1,0 +1,5 @@
+Location: China
+Capacity: 20
+Occupancy: 0
+Humanitarian Plan: planA
+Volunteer in Charge: Currently none

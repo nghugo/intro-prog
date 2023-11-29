@@ -1,6 +1,6 @@
 import json
-
 import os
+import datetime
 
 class InterfaceGenerateReports:
 
@@ -22,12 +22,17 @@ class InterfaceGenerateReports:
                 report += f"Volunteer in Charge: {volunteerString if volunteerString != "" else "Currently none"}"
                 print(report)
                 print(f"--- End of report for {camp_name} ---\n")
+                
                 save_report = input("Do you want to save this overall report as a text file? (y/n): ").lower()
                 if save_report == 'y':
-                     file_name = "overall_camps_report.txt"
-                     with open(file_name, 'w') as file:
+                    reports_dir = "reports"
+                    if not os.path.exists(reports_dir):
+                        os.makedirs(reports_dir)
+                    timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
+                    file_name = os.path.join(reports_dir, f"{camp_name}_report_{timestamp}.txt")
+                    with open(file_name, 'w') as file:
                           file.write(report)
-                     print(f"Report for {camp_name} has been saved to {file_name}")
+                    print(f"Report for {camp_name} has been saved to {file_name}")
                 else:
                      print("Report not saved.")
             else:
