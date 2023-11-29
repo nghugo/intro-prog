@@ -28,7 +28,7 @@ class InterfaceGenerateReports:
     def generate_overall_report():
             with open('camps.json', 'r') as file:
                 camps_data = json.load(file)
-            print("\n--- Report for all plans ---")
+            print("\n--- Report for all camps in all plans ---")
             report = ""
 
             for camp_name, camp_data in camps_data.items():
@@ -40,5 +40,5 @@ class InterfaceGenerateReports:
                 volunteerString = ', '.join(camp_data.get('volunteer_in_charge', []))
                 report += f"Volunteer in Charge: {volunteerString if volunteerString != "" else "Currently none"}"
             print(report)
-            print("--- End of report for all plans ---\n")
+            print("--- End of report all camps in all plans ---\n")
             input("Press Enter to continue...")
