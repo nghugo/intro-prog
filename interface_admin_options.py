@@ -228,11 +228,11 @@ class InterfaceAdminOptions:
 		users = Users()
 		# camp_identification = Camp()
 		user_option = input_until_valid(
-			input_message = f"\nPlease choose an option below to operate camps:\
+			input_message = f"\nPlease choose an operation on camps below:\
 				\n[1] add camp\
 				\n[2] delete camp\
 				\n[3] edit camp information\
-				\n[4] edit volunteers: add in/remove from a specific camp\
+				\n[4] edit volunteers: add to/remove from a specific camp\
 				\n[5] get volunteer list in a specific camp",
 			is_valid=lambda user_input: user_input in {"1", "2", "3", "4", "5"},
 			validation_message="Unrecognized input. Please choose from the above list."

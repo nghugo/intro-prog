@@ -24,7 +24,7 @@ class Users:
 	def add_user(username, password, phone_number, is_admin, is_activated):
 		"""
 		Adds user to users.json. 
-		Halts and returns False if username is already existing.
+		Halts and returns False if username already exists.
 		Otherwise, returns True indicating success.
 		"""
 		with open("users.json", "r") as json_file:
