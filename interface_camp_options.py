@@ -186,13 +186,15 @@ class InterfaceCampOptions:
 
             else:
                 volunteer_list = Camp.get_volunteer_list(camp_identification)
-                print(f"existing volunteers in {camp_identification}:{volunteer_list}\n")
+                
                 method = input_until_valid(
                 input_message= "Please enter the changing method to volunteers: add/remove:",
                 is_valid=lambda user_input: user_input == "add" or user_input == "remove",
                 validation_message=f"Please select from add/remove to edit volunteers in {camp_identification}. Please re-enter!"
                 )
                 
+                print(f"\nexisting volunteers in {camp_identification}:{volunteer_list}\n")
+
                 if method == "add":
                     volunteer = input_until_valid(
                         input_message= f"please enter the volunteer you want to {method} into volunteer list",
