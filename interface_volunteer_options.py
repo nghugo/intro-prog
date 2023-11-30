@@ -1,4 +1,4 @@
-from interface_helper import input_until_valid, is_validate_email
+from interface_helper import input_until_valid, input_until_valid_email
 
 from interface_manage_refugees import InterfaceManageRefugees
 
@@ -42,7 +42,7 @@ class InterfaceVolunteerOptions:
 				validation_message=f"Unrecognized input. Please enter the new phone number (5+ digits or leave empty)"
 			)
 		elif field == "email":
-			value=is_validate_email("Enter the new email (format: xxx@yyy.zzz with no spaces):")
+			value=input_until_valid_email("Enter the new email (format: xxx@yyy.zzz with no spaces):")
 		else:  # field == "password"
 			value = input_until_valid(f"Enter the new value for the {field} field:")
 

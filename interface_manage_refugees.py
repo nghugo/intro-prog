@@ -1,6 +1,6 @@
 import json
 
-from interface_helper import input_until_valid
+from interface_helper import input_until_valid, input_until_valid_name
 
 class InterfaceManageRefugees:
 	
@@ -43,10 +43,9 @@ class InterfaceManageRefugees:
 			is_valid=lambda user_input: user_input.strip() != "" and user_input not in existing_ids,
 			validation_message="Refugee id already exists or cannot be empty. Please try another id."
 		)
-		name = input_until_valid(
+		name = input_until_valid_name(
 			input_message="Enter the name of the refugee/ representitive of the family:",
-			is_valid=lambda user_input: user_input.strip() != "",
-			validation_message="Name cannot be empty. Please enter a valid name."
+			validation_message="Name can only contain letters. Please enter a valid name."
 		)
 		number_of_members = int(input_until_valid(
 			input_message="Enter the number of members in the refugee family:",
@@ -67,7 +66,7 @@ class InterfaceManageRefugees:
 			input_message=f"Please confirm details of the new refugee (y/n):\
 				\n->Refugee ID: {refugee_id}\
 				\n->Name: {name}\
-				\n->Number of family members: {name}\
+				\n->Number of family members: {number_of_members}\
 				\n->Camp identification: {camp_identification}\
 				\n->Medical condition: {medical_condition}\
 				\n[y] Yes\
@@ -99,8 +98,5 @@ class InterfaceManageRefugees:
 		except FileNotFoundError:
 			return {}
 
-	# TODO: handle same refugee names -> currently overwrites
-	# solution: require unique id for refugee
-		# name, condition, etc inside
+	# TODO: allow to leave refugee id empty -> auto generate
 	# TODO: print display all refugees of a camp
-	# 

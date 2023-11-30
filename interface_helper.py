@@ -30,7 +30,24 @@ def is_valid_date(date_input):
         return False
 
 
-def is_validate_password(input_message: str) -> str:
+def is_valid_name(name_input):
+    if (not isinstance(name_input, str) 
+        or not name_input.replace(" ", "").isalpha()
+        or name_input.strip() == ""):
+        return False
+    return True
+
+
+def input_until_valid_name(input_message, validation_message):
+    name = input_until_valid(
+        input_message = input_message,
+        is_valid = is_valid_name,
+        validation_message = validation_message
+    )
+    return name.title()  
+
+
+def input_until_valid_password(input_message: str) -> str:
     """
     Validate user's password.
 
@@ -42,34 +59,8 @@ def is_validate_password(input_message: str) -> str:
     Return: str
         The validated password.
     """
-    special_symbols = [
-        "!",
-        "@",
-        "#",
-        "$",
-        "%",
-        "^",
-        "&",
-        "*",
-        "(",
-        ")",
-        "-",
-        "_",
-        "+",
-        "=",
-        "~",
-        "`",
-        ";",
-        ":",
-        "'",
-        '"',
-        ",",
-        ".",
-        "<",
-        ">",
-        "/",
-        "?",
-    ]
+    special_symbols = {"!", "@", "#", "$", "%", "^", "&", "*",
+                       "(", ")", "-", "_", "+", "=", "~", "`", ";", ":", "'", '"', ",", ".", "<", ">", "/", "?", }
 
     while True:
         password = input(input_message)
@@ -85,7 +76,7 @@ def is_validate_password(input_message: str) -> str:
             return password
 
 
-def is_validate_email(input_message: str) -> str:
+def input_until_valid_email(input_message: str) -> str:
     """
     Validate user email format.
 
@@ -100,7 +91,7 @@ def is_validate_email(input_message: str) -> str:
         email = (
             input(input_message).strip().lower()
         )
-        
+
         if " " in email or "@" not in email:
             print(f"{error_email_message}")
         else:

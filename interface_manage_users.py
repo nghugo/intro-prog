@@ -1,6 +1,6 @@
 import pandas as pd
 
-from interface_helper import input_until_valid, is_validate_email
+from interface_helper import input_until_valid, input_until_valid_email
 
 class InterfaceManageUsers:
     def __init__(self, users, current_user):
@@ -18,7 +18,7 @@ class InterfaceManageUsers:
             is_valid=lambda user_input: user_input != "",
             validation_message="Password cannot be empty"
             )
-        email=is_validate_email("Enter the email for the new user (format: xxx@yyy.zzz with no spaces):")
+        email=input_until_valid_email("Enter the email for the new user (format: xxx@yyy.zzz with no spaces):")
         
         phone_number = input_until_valid(
             input_message=f"Enter the new phone number (5+ digits or leave empty):",
@@ -116,7 +116,7 @@ class InterfaceManageUsers:
             )
             value = True if value == "t" else False
         elif field == "email":
-            value=is_validate_email("Enter the new email (format: xxx@yyy.zzz with no spaces):")
+            value=input_until_valid_email("Enter the new email (format: xxx@yyy.zzz with no spaces):")
         elif field == "phone_number":
             value = input_until_valid(
                 input_message=f"Specify the new phone number (5+ digits or leave empty)",
