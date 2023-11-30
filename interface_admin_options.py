@@ -4,7 +4,7 @@ from interface_helper import input_until_valid, is_valid_date
 from plans import Plans
 from users import Users
 from interface_camp_options import InterfaceCampOptions
-from interface_modify_users import InterfaceModifyUsers
+from interface_manage_users import InterfaceManageUsers
 from interface_generate_reports import InterfaceGenerateReports
 from plans import Plans
 
@@ -12,7 +12,7 @@ class InterfaceAdminOptions:
 	def __init__(self, users, current_user):
 		self.users = users
 		self.current_user = current_user
-		self.interface_modify_users = InterfaceModifyUsers(self.users, self.current_user)
+		self.interface_manage_users = InterfaceManageUsers(self.users, self.current_user)
 		self.interface_generate_reports = InterfaceGenerateReports()
 		# initialise self.plans
 		self.plans = Plans()
@@ -34,7 +34,7 @@ class InterfaceAdminOptions:
 		option = input_until_valid(
 			# when extending this list, make sure the input message matches the is_valid validation function and the options in interface_admin_options.py
 			input_message = f"\n<homepage/manage-users>\nPlease choose a user management option below:\
-				\n[1] CANCEL (return to homepage)\
+				\n[1] CANCEL\
 				\n[2] Add user\
 				\n[3] Delete user\
 				\n[4] Activate user\
@@ -47,17 +47,17 @@ class InterfaceAdminOptions:
 		if option == "1":
 			return  # option 1 is cancel, so just return
 		if option == "2":
-			self.interface_modify_users.prompt_add_user()
+			self.interface_manage_users.prompt_add_user()
 		if option == "3":
-			self.interface_modify_users.prompt_delete_user()
+			self.interface_manage_users.prompt_delete_user()
 		if option == "4":
-			self.interface_modify_users.prompt_activate_user()
+			self.interface_manage_users.prompt_activate_user()
 		if option == "5":
-			self.interface_modify_users.prompt_deactivate_user()
+			self.interface_manage_users.prompt_deactivate_user()
 		if option == "6":
-			self.interface_modify_users.prompt_modify_user()
+			self.interface_manage_users.prompt_modify_user()
 		if option == "7":
-			self.interface_modify_users.list_users()
+			self.interface_manage_users.list_users()
 
 	
 	def prompt_create_plan(self):
@@ -131,7 +131,7 @@ class InterfaceAdminOptions:
 			# when extending this list, make sure the input message matches the is_valid validation function and the options in interface_admin_options.py
 			#                 
 			input_message = f"\n<homepage/report>\nPlease choose a report to generate below:\
-				\n[1] CANCEL (return to homepage)\
+				\n[1] CANCEL\
 				\n[2] Specific plan (not yet implemented)\
 				\n[3] All plans (not yet implemented)\
 				\n[4] Specific camp\

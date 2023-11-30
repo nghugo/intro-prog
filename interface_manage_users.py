@@ -1,8 +1,8 @@
 import pandas as pd
 
-from interface_helper import input_until_valid, is_validate_email
+from interface_helper import input_until_valid, input_until_valid_email
 
-class InterfaceModifyUsers:
+class InterfaceManageUsers:
     def __init__(self, users, current_user):
         self.users = users
         self.current_user = current_user
@@ -18,12 +18,12 @@ class InterfaceModifyUsers:
             is_valid=lambda user_input: user_input != "",
             validation_message="Password cannot be empty"
             )
-        email=is_validate_email("Enter the email for the new user (format: xxx@yyy.zzz with no spaces):")
+        email=input_until_valid_email("Enter the email for the new user (format: xxx@yyy.zzz with no spaces):")
         
         phone_number = input_until_valid(
             input_message=f"Enter the new phone number (5+ digits or leave empty):",
             is_valid=lambda user_input: (user_input == "") or (
-                user_input.isnumeric() and len(user_input) >= 5),
+                user_input.isdigit() and len(user_input) >= 5),
             validation_message=f"Unrecognized input. Please enter the new phone number (5+ digits or leave empty)"
         )
         is_admin = input_until_valid(
@@ -116,12 +116,12 @@ class InterfaceModifyUsers:
             )
             value = True if value == "t" else False
         elif field == "email":
-            value=is_validate_email("Enter the new email (format: xxx@yyy.zzz with no spaces):")
+            value=input_until_valid_email("Enter the new email (format: xxx@yyy.zzz with no spaces):")
         elif field == "phone_number":
             value = input_until_valid(
                 input_message=f"Specify the new phone number (5+ digits or leave empty)",
                 is_valid=lambda user_input: (user_input == "") or (
-                    user_input.isnumeric() and len(user_input) >= 5),
+                    user_input.isdigit() and len(user_input) >= 5),
                 validation_message=f"Unrecognized input. Please specify the new phone number (5+ digits or leave empty)"
             )
         else:
