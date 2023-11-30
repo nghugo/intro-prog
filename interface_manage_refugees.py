@@ -1,4 +1,5 @@
 import json
+import uuid
 
 from interface_helper import input_until_valid, input_until_valid_name
 
@@ -34,15 +35,14 @@ class InterfaceManageRefugees:
 			pass
 	
 	def prompt_add_refugee(self):
-		# TODO: add unique identifier (family names can be the same)
-		# TODO: add validation for name (capitalize, no special symbols, etc in interface_helper)
-
 		existing_ids = self.load_refugees().keys()
 		refugee_id = input_until_valid(
-			input_message="Enter a unique id to identify this refugee:",
-			is_valid=lambda user_input: user_input.strip() != "" and user_input not in existing_ids,
-			validation_message="Refugee id already exists or cannot be empty. Please try another id."
+			input_message="Enter a unique id to identify this refugee, or leave empty to auto-generate:",
+			is_valid=lambda user_input: user_input == "" or user_input not in existing_ids,
+			validation_message="Refugee id already exists. Please try another id."
 		)
+		if refugee_id == "":
+			refugee_id = uuid.uuid4().hex
 		name = input_until_valid_name(
 			input_message="Enter the name of the refugee/ representitive of the family:",
 			validation_message="Name can only contain letters. Please enter a valid name."
@@ -85,7 +85,7 @@ class InterfaceManageRefugees:
 			recorded_refugees[refugee_id] = refugee_infomation
 			with open("refugees.json", "w") as json_file:
 				json.dump(recorded_refugees, json_file, indent=2)
-			print(f"Refugee family {name} ({refugee_id}) has been added successfully.")
+			print(f"Refugee {name} ({refugee_id}) has been added successfully.")
 		else:
 			print(f"Aborted refugee addition.")
 	
@@ -98,5 +98,5 @@ class InterfaceManageRefugees:
 		except FileNotFoundError:
 			return {}
 
-	# TODO: allow to leave refugee id empty -> auto generate
-	# TODO: print display all refugees of a camp
+	# TODO: method: remove refugee from camp
+	# TODO: method: print all refugees of a camp

@@ -16,5 +16,11 @@
     "number_of_members": 3,
     "camp_identification": "camp2",
     "medical_condition": "broken bones"
+  },
+  "f2db20d5525c49c2adaca68b15795f36": {
+    "name": "Hugo",
+    "number_of_members": 2,
+    "camp_identification": "camp1",
+    "medical_condition": "hungry"
   }
 }
