@@ -1,4 +1,3 @@
-import pandas as pd
 import json
 
 from interface_helper import input_until_valid, is_validate_email

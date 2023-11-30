@@ -1,9 +1,8 @@
-import pandas as pd
+import json
+
 from camp_modified import Camp
 from interface_helper import input_until_valid
-from current_user import CurrentUser
-import json
-from users import Users
+
 class InterfaceCampOptions:
     def __init__(self, users, current_user):
         self.users = users
