@@ -2,7 +2,7 @@ import pandas as pd
 
 from interface_helper import input_until_valid, is_validate_email
 
-class InterfaceModifyUsers:
+class InterfaceManageUsers:
     def __init__(self, users, current_user):
         self.users = users
         self.current_user = current_user
@@ -23,7 +23,7 @@ class InterfaceModifyUsers:
         phone_number = input_until_valid(
             input_message=f"Enter the new phone number (5+ digits or leave empty):",
             is_valid=lambda user_input: (user_input == "") or (
-                user_input.isnumeric() and len(user_input) >= 5),
+                user_input.isdigit() and len(user_input) >= 5),
             validation_message=f"Unrecognized input. Please enter the new phone number (5+ digits or leave empty)"
         )
         is_admin = input_until_valid(
@@ -121,7 +121,7 @@ class InterfaceModifyUsers:
             value = input_until_valid(
                 input_message=f"Specify the new phone number (5+ digits or leave empty)",
                 is_valid=lambda user_input: (user_input == "") or (
-                    user_input.isnumeric() and len(user_input) >= 5),
+                    user_input.isdigit() and len(user_input) >= 5),
                 validation_message=f"Unrecognized input. Please specify the new phone number (5+ digits or leave empty)"
             )
         else:

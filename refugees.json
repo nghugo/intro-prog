@@ -1,12 +1,20 @@
 {
   "refugee1": {
-    "name": "refugee1",
+    "name": "John Doe",
+    "number_of_members": 1,
     "camp_identification": "camp1",
-    "medical_condition": "condition1"
+    "medical_condition": "food starved"
   },
   "refugee2": {
-    "name": "refugee2",
+    "name": "Jane Smith",
+    "number_of_members": 3,
     "camp_identification": "camp1",
-    "medical_condition": "condition1"
+    "medical_condition": "healthy"
+  },
+  "refugee3": {
+    "name": "Saul Goodman",
+    "number_of_members": 3,
+    "camp_identification": "camp2",
+    "medical_condition": "broken bones"
   }
 }

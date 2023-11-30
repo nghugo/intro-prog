@@ -29,9 +29,23 @@ dummy_users = {
         "is_admin": False,
         "is_activated": False,
     },
+    "a": {
+        "password": "a",
+        "phone_number" : "11111",
+        "email":"a@a",
+        "is_admin": True,
+        "is_activated": True,
+    },  # for quick testing
+    "v": {
+        "password": "v",
+        "phone_number" : "11111",
+        "email":"v@v",
+        "is_admin": False,
+        "is_activated": True,
+    },  # for quick testing
 }
 
-def overwrite_users_json(dummyUsers):
+def overwrite_users_json(dummyUsers): 
     with open("users.json", "w") as json_file:
         json.dump(dummyUsers, json_file)
 
