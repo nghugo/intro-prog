@@ -17,9 +17,9 @@ class InterfaceCamp:
 		option = input_until_valid(
 			input_message = f"\n<homepage/manage-camps>\nPlease choose an operation on camps below:\
 				\n[1] CANCEL\
-				\n[2] Add camp\
-				\n[3] Delete camp\
-				\n[4] Edit camp information\
+				\n[2] Add a camp\
+				\n[3] Delete a camp\
+				\n[4] Edit details of a camp\
 				\n[5] Edit volunteers: add in/remove from a camp\
 				\n[6] List all camps\
 				\n[7] Display details of a camp (TODO)",
@@ -29,11 +29,11 @@ class InterfaceCamp:
 		if option == "1":
 			return  # CANCEL
 		if option == "2":
-			self.add_camp()
+			self.prompt_add_camp()
 		if option == "3":
-			self.delete_camp()
+			self.prompt_delete_camp()
 		if option == "4":
-			self.edit_camp_information()
+			self.edit_camp_details()
 		if option == "5":
 			self.edit_volunteer()
 		if option == "6":
@@ -48,7 +48,7 @@ class InterfaceCamp:
 		option = input_until_valid(
 			input_message = f"\n<homepage/manage-camps>\nPlease choose an operation on camps below:\
 				\n[1] CANCEL\
-				\n[2] Edit camp information\
+				\n[2] Edit details of a camp\
 				\n[3] List all camps I have access to\
 				\n[4] TODO\
 				\n[5] TODO",
@@ -58,7 +58,7 @@ class InterfaceCamp:
 		if option == "1":
 			return  # CANCEL
 		if option == "2":
-			self.edit_camp_information()
+			self.edit_camp_details()
 		if option == "3":
 			self.prompt_list_all_camps_with_access_rights()
 		if option == "4":
@@ -67,15 +67,15 @@ class InterfaceCamp:
 			pass
 		
 
-	def add_camp(self):
+	def prompt_add_camp(self):
 		camp_data = Camp.loadCampData()
 
-		print(f"Existing camp(s): {", ".join(list(camp_data.keys())) if camp_data else "None found"}")
+		self.print_existing_or_accessible_camps()
 
 		camp_id = input_until_valid(
-		input_message = "Please enter the new CampID",
+		input_message = "Please enter the new camp_id",
 		is_valid = lambda user_input: user_input != "" and user_input not in camp_data,
-		validation_message = "CampID cannot be empty or this campID already exists."
+		validation_message = "This camp_id already exists or cannot be empty."
 	)
 	
 		location = input_until_valid(
@@ -86,8 +86,8 @@ class InterfaceCamp:
 
 		capacity = input_until_valid(
 			input_message = "Enter the camp capacity",
-			is_valid=lambda user_input: user_input != "" and type(user_input) == str,
-			validation_message="This cannot be empty! Please enter the integer as camp capacity!"
+			is_valid=lambda user_input: user_input.isdigit() and int(user_input) >= 1,
+			validation_message="Camp capacity must be a positive integer. Please re-enter."
 		)
 		
 		humanitarian_plan_in = input_until_valid(
@@ -95,8 +95,15 @@ class InterfaceCamp:
 			is_valid = lambda user_input: user_input != "" and type(user_input) == str,
 			validation_message="This cannot be empty. Please enter the name of the humanitarian plan"
 		)		
+
 		confirm = input_until_valid(
-			input_message=f"Please confirm details of the new camp (y/n):\n->CampID: {camp_id}\n->location: {location}\n->capacity: {capacity}\n->in {humanitarian_plan_in} humanitarian plan\n[y] Yes\n[n] No (abort)",
+			input_message=f"Please confirm details of the new camp (y/n):\
+				\n->Camp ID: {camp_id}\
+				\n->Location: {location}\
+				\n->Capacity: {capacity}\
+				\n->Associated humanitarian plan: {humanitarian_plan_in}\
+				\n[y] Yes\
+				\n[n] No (abort)",
 			is_valid=lambda user_input: user_input == "y" or user_input == "n",
 			validation_message="Unrecognized input. Please confirm details of the new camp (y/n):\n[y] Yes\n[n] No (abort)"
 		)
@@ -111,52 +118,43 @@ class InterfaceCamp:
 			print(f"Aborted camp addition.")
 
 
-	def delete_camp(self):
-		with open("users.json", "r") as json_file:
-			data = json.load(json_file)
-
-		username = self.current_user.username
-		if data[username]['is_admin']:
-			user = "admin"
-		else:
-			user != "admin"
+	def prompt_delete_camp(self):
 
 		camp_data = Camp.loadCampData()
-		print(f"Existing camp(s): {", ".join(list(camp_data.keys())) if camp_data else "None found"}")
+		self.print_existing_or_accessible_camps()
 
 		camp_id = input_until_valid(
-			input_message= "Please enter the campID you would like to delete, or leave empty to abort:",
+			input_message= "Please enter the camp_id you would like to delete, or leave empty to abort:",
 			is_valid=lambda user_input: user_input =="" or user_input in camp_data,
-			validation_message="CampID does not exist in camp data."
+			validation_message="camp_id does not exist in camp data."
 		)
+		
 		if camp_id == "":
 			print("Camp deletion aborted.")
+			return
 
-		else:
-			confirm = input_until_valid(
-			input_message=f"Please confirm you want to delete this camp (y/n):\n->CampID: {camp_id}\n[y] Yes\n[n] No (abort)",
+		confirm = input_until_valid(
+			input_message=f"Please confirm you want to delete this camp (y/n):\n->camp_id: {camp_id}\n[y] Yes\n[n] No (abort)",
 			is_valid=lambda user_input: user_input == "y" or user_input == "n",
 			validation_message="Unrecognized input. Please confirm to delete the camp (y/n):\n[y] Yes\n[n] No (abort)"
 		)
-			if confirm == "y":
-				test = Camp.delete_camp(camp_id = camp_id, user = self.current_user.username)
-				if test: 
-					print(f'Successfully delete {camp_id}')
-				else: 
-					print(f'Failed to delete {camp_id} as {camp_id} not in camp list')
-			else:
-				print(f"Aborted delete this camp.")
+		if confirm == "n":
+			print("Camp deletion aborted.")
+			return
+		
+		test = Camp.delete_camp(camp_id = camp_id, current_user = self.current_user)
+		print(f"Successfully deleted {camp_id}" if test else f"Failed to delete {camp_id}")
 
 
-	def edit_camp_information(self):
+	def edit_camp_details(self):
 		camp_data = Camp.loadCampData()
 		
-		print(f"Existing camp(s): {", ".join(list(camp_data.keys())) if camp_data else "None found"}")
+		self.print_existing_or_accessible_camps()
 
 		camp_id = input_until_valid(
-				input_message="Please enter the campID of the camp you would like to change camp details of, or leave empty to abort",
+				input_message="Please enter the camp_id of the camp you would like to change camp details of, or leave empty to abort",
 				is_valid = lambda user_input: user_input == "" or user_input in camp_data,
-				validation_message= "The campID does not exist. Please re-enter!"
+				validation_message= "The camp_id does not exist. Please re-enter!"
 			)   
 		
 		if camp_id == "":
@@ -173,11 +171,10 @@ class InterfaceCamp:
 			)
 
 				if attribute == "camp_id":
-					
 					new_value = input_until_valid(
 					input_message = f"Please enter the new value for {attribute}",
 					is_valid=lambda user_input: user_input not in list(camp_data.keys()),
-					validation_message="Please enter the new campID different from current one."
+					validation_message=f"This camp_id is alerady taken. Please enter another camp_id."
 				)
 				
 				else:
@@ -196,9 +193,9 @@ class InterfaceCamp:
 
 				if confirm == "y":
 					if attribute == "camp_id":
-						test = Camp.edit_camp_information_id(camp_id = camp_id, new_identification = new_value, user = self.current_user.username)
+						test = Camp.edit_camp_details_id(camp_id = camp_id, new_identification = new_value, user = self.current_user.username)
 					else:
-						test = Camp.edit_camp_information(camp_id=camp_id, attribute=attribute, new_value=new_value, user = self.current_user.username)
+						test = Camp.edit_camp_details(camp_id=camp_id, attribute=attribute, new_value=new_value, user = self.current_user.username)
 					
 					if test:
 						print(f"You've changed the {attribute} successfully!")
@@ -214,14 +211,14 @@ class InterfaceCamp:
 		camp_data = Camp.loadCampData()
 		users = Users.load_users()
 		if users[self.current_user.username]["is_admin"]:
-			print(f"Existing camp(s): {", ".join(list(camp_data.keys())) if camp_data else "None found"}")
+			self.print_existing_or_accessible_camps()
 
 			camp_id = input_until_valid(
-				input_message="Please enter the campID of the camp you would like to amend the volunteers in:",
+				input_message="Please enter the camp_id of the camp you would like to amend the volunteers in:",
 				is_valid=lambda user_input: user_input =="" or user_input in camp_data,
-				validation_message="The campID you entered does not exist! Please re-enter!"
+				validation_message="The camp_id you entered does not exist! Please re-enter!"
 			)
-			# TODO: should add print camp data function here to show volunteers in the camp after entering the campID
+			# TODO: should add print camp data function here to show volunteers in the camp after entering the camp_id
 			if camp_id =="":
 				print("abort volunteers change")
 			else:
@@ -288,7 +285,18 @@ class InterfaceCamp:
 	
 	def prompt_camp_details(self):
 		pass
+	
+	def print_existing_or_accessible_camps(self):
+		
+		users = Users.load_users()
+		is_admin =  users[self.current_user.username]["is_admin"]
+		filtered_camps = self.load_camps_with_access_rights()
 
+		message_key = "Existing camp(s):" if is_admin else "Camp(s) you have access to:"
+		message_value = ", ".join(list(filtered_camps.keys())) if filtered_camps else "None found"
+		print(f"{message_key} {message_value}")
+
+	
 
 		
 	

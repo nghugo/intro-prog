@@ -65,23 +65,22 @@ class Camp:
 
 	#edit camp with either id or other attributtes
 	@staticmethod
-	def delete_camp(camp_id, user):
+	def delete_camp(camp_id, current_user):
 		# TODO: make sure delete_camp does not appear on volunteer's list of options
-		data = Camp.loadCampData()
-		if user == "admin":
-			if camp_id not in data:
-				return False
-			else:
-				data.pop(camp_id)
-				with open('camps.json','w') as file:
-					json.dump(data,file,indent=2)
-				return True
-		else:
+		users = Users.load_users()
+		if not users[current_user.username]['is_admin']:
 			return False
+		data = Camp.loadCampData()
+		if camp_id not in data:
+			return False
+		data.pop(camp_id)
+		with open('camps.json','w') as file:
+			json.dump(data,file,indent=2)
+		return True
 
 
 	@staticmethod
-	def edit_camp_information_id(camp_id, new_identification, user):
+	def edit_camp_details_id(camp_id, new_identification, user):
 		# TODO: data validation either here or in admin/volunteer interface
 		"""edit the camp_id
 		user require to be admin or volunteer in charge.
@@ -97,13 +96,18 @@ class Camp:
 			return False
 
 	@staticmethod
-	def edit_camp_information(camp_id, attribute, new_value, user):
+	def edit_camp_details(camp_id, attribute, new_value, user):
 		# TODO: data validation of id,attribute, new_attributes
 		"""edit the camp information
 				user require to be admin or volunteer in charge.
 				:return: boolean value. True if edited, False if not accessible"""
 		users = Users.load_users()
 		camp_data = Camp.loadCampData()
+
+		print("*** DEBUG ***")
+		print(f'camp_data[camp_id]["volunteers_in_charge"]: {camp_data[camp_id]["volunteers_in_charge"]}')
+		print("*** DEBUG END ***")
+
 		if user in users and (user == 'admin' or user in camp_data[camp_id]["volunteers_in_charge"]):
 			camp_data[camp_id][attribute] = new_value
 			with open('camps.json', 'w') as file:
@@ -159,7 +163,7 @@ class Camp:
 
 # Camp.delete_camp('camp1', 'admin')
 # camp = Camp('camp1','China',30,"planA",[])
-# print(Camp.edit_camp_information('camp1','capacity',20,'admin'))
+# print(Camp.edit_camp_details('camp1','capacity',20,'admin'))
 
 
 
