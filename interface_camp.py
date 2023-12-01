@@ -9,7 +9,7 @@ class InterfaceCamp:
 		self.current_user = current_user
 
 
-	def show_admin_options(self):
+	def prompt_admin_options(self):
 		"""bring up an admin menu for camp functions """
 		# camp_identification = Camp()
 		option = input_until_valid(

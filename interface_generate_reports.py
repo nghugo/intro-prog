@@ -4,7 +4,7 @@ from interface_helper import input_until_valid
 
 class InterfaceGenerateReports:
 
-	def show_admin_options(self):
+	def prompt_admin_options(self):
 		option = input_until_valid(
 			# when extending this list, make sure the input message matches the is_valid validation function and the options in interface_admin_options.py
 			#                 
