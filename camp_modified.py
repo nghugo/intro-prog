@@ -97,7 +97,7 @@ class Camp:
 			return False
 
 	@staticmethod
-	def edit_camp_informationid(camp_id, attribute, new_value, user):
+	def edit_camp_information(camp_id, attribute, new_value, user):
 		# TODO: data validation of id,attribute, new_attributes
 		"""edit the camp information
 				user require to be admin or volunteer in charge.
@@ -159,7 +159,7 @@ class Camp:
 
 # Camp.delete_camp('camp1', 'admin')
 # camp = Camp('camp1','China',30,"planA",[])
-# print(Camp.edit_camp_informationid('camp1','capacity',20,'admin'))
+# print(Camp.edit_camp_information('camp1','capacity',20,'admin'))
 
 
 

@@ -20,9 +20,9 @@ class InterfaceCamp:
 				\n[2] Add camp\
 				\n[3] Delete camp\
 				\n[4] Edit camp information\
-				\n[5] Edit volunteers: add in/remove from a specific camp\
+				\n[5] Edit volunteers: add in/remove from a camp\
 				\n[6] List all camps\
-				\n[7] Display details of a specific camp (TODO)",
+				\n[7] Display details of a camp (TODO)",
 			is_valid=lambda user_input: user_input.isdigit() and int(user_input) > 0 and int(user_input) <= 7,
 			validation_message="Unrecognized input. Please choose from the above list."
 		)
@@ -33,7 +33,7 @@ class InterfaceCamp:
 		if option == "3":
 			self.delete_camp()
 		if option == "4":
-			self.edit_camp_informationid()
+			self.edit_camp_information()
 		if option == "5":
 			self.edit_volunteer()
 		if option == "6":
@@ -49,7 +49,7 @@ class InterfaceCamp:
 			input_message = f"\n<homepage/manage-camps>\nPlease choose an operation on camps below:\
 				\n[1] CANCEL\
 				\n[2] Edit camp information\
-				\n[3] TODO\
+				\n[3] List all camps I have access to\
 				\n[4] TODO\
 				\n[5] TODO",
 			is_valid=lambda user_input: user_input.isdigit() and int(user_input) > 0 and int(user_input) <= 5,
@@ -58,9 +58,9 @@ class InterfaceCamp:
 		if option == "1":
 			return  # CANCEL
 		if option == "2":
-			self.edit_camp_informationid()
+			self.edit_camp_information()
 		if option == "3":
-			pass
+			self.prompt_list_all_camps_with_access_rights()
 		if option == "4":
 			pass
 		if option == "5":
@@ -148,7 +148,7 @@ class InterfaceCamp:
 				print(f"Aborted delete this camp.")
 
 
-	def edit_camp_informationid(self):
+	def edit_camp_information(self):
 		camp_data = Camp.loadCampData()
 		
 		print(f"Existing camp(s): {", ".join(list(camp_data.keys())) if camp_data else "None found"}")
@@ -198,7 +198,7 @@ class InterfaceCamp:
 					if attribute == "camp_id":
 						test = Camp.edit_camp_information_id(camp_id = camp_id, new_identification = new_value, user = self.current_user.username)
 					else:
-						test = Camp.edit_camp_informationid(camp_id=camp_id, attribute=attribute, new_value=new_value, user = self.current_user.username)
+						test = Camp.edit_camp_information(camp_id=camp_id, attribute=attribute, new_value=new_value, user = self.current_user.username)
 					
 					if test:
 						print(f"You've changed the {attribute} successfully!")
@@ -270,7 +270,7 @@ class InterfaceCamp:
 				users = Users.load_users()
 				for camp_id, camp_values in camps.items():
 					if (users[self.current_user.username]["is_admin"]
-		 				or camp_values["volunteers_in_charge"] == self.current_user.username):
+		 				or self.current_user.username in camp_values["volunteers_in_charge"]):
 						filtered_camps[camp_id] = camp_values
 				return filtered_camps
 		except FileNotFoundError:
