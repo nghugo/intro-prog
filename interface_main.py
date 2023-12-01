@@ -62,12 +62,22 @@ class InterfaceMain:
 		
 		if self.current_user:
 			if users.users[self.current_user.username]["is_admin"]:
-				interface_admin_options = InterfaceAdminOptions(users, self.current_user)
+				interface_admin_options = InterfaceAdminOptions(users, self.current_user, self)
 				interface_admin_options.prompt_admin_options()
 			else:
-				interface_volunteer_options = InterfaceVolunteerOptions(users, self.current_user)
+				interface_volunteer_options = InterfaceVolunteerOptions(users, self.current_user, self)
 				interface_volunteer_options.prompt_volunteer_options() 
-			
+	
+	def prompt_logout(self):
+		print("\nAre you sure you want to log out?")
+		user_input = input_until_valid(
+			input_message="Please confirm your logout (y/n):\n[y] Yes\n[n] No",
+			is_valid=lambda user_input: user_input == "y" or user_input == "n",
+			validation_message="Unrecognized input. Please confirm your logout (y/n):\n[y] Yes\n[n] No"
+		)
+		if user_input == "y":
+			print(f"Goodbye {self.current_user.username}! You are now logged out.")
+			self.current_user = None
 	
 	def prompt_exit(self):
 		print("\nAre you sure you want to exit?")

@@ -4,9 +4,10 @@ from interface_volunteer_user_details import InterfaceVolunteerUserDetails
 from interface_helper import input_until_valid
 
 class InterfaceVolunteerOptions:
-	def __init__(self, users, current_user):
+	def __init__(self, users, current_user, main_self):
 		self.users = users
 		self.current_user = current_user
+		self.main_self = main_self
 		self.interface_manage_refugees = InterfaceManageRefugees()
 		self.interface_volunteer_user_details = InterfaceVolunteerUserDetails(self.users, self.current_user)
 
@@ -26,7 +27,7 @@ class InterfaceVolunteerOptions:
 			validation_message="Unrecognized input. Please choose from the above list."
 		)
 		if option == "1":
-			self.prompt_logout()
+			self.main_self.prompt_logout()
 		if option == "2":
 			self.interface_volunteer_user_details.prompt_modify_my_details()
 		if option == "3":
@@ -38,14 +39,4 @@ class InterfaceVolunteerOptions:
 		if option == "6":
 			pass  # TODO
 
-	def prompt_logout(self):
-		print("\nAre you sure you want to log out?")
-		user_input = input_until_valid(
-			input_message="Please confirm your logout (y/n):\n[y] Yes\n[n] No",
-			is_valid=lambda user_input: user_input == "y" or user_input == "n",
-			validation_message="Unrecognized input. Please confirm your logout (y/n):\n[y] Yes\n[n] No"
-		)
-		if user_input == "y":
-			print(f"Goodbye {self.current_user.username}! You are now logged out.")
-			self.current_user = None
 	
