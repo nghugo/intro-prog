@@ -89,8 +89,8 @@ class InterfaceManageRefugees:
 		else:
 			print(f"Aborted refugee addition.")
 	
-	
-	def load_refugees(self):
+	@staticmethod
+	def load_refugees():
 		try:
 			with open("refugees.json", "r") as json_file:
 				json_load = json.load(json_file)
