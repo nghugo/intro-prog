@@ -22,23 +22,10 @@ class Camp:
 		# camp_identification
 		# location
 		# capacity
-		# occupancy
+		# occupancy (determined by linear scan, not by setting a number)
 		# humanitarian_plan_in
 		# volunteer_in_charge
-	
-	# NOTE: (consider deleting the constructor) we do not need to set object attributes, since we are using the class entirely as static methods
-	# #I am not sure since it seems we can do either object creation or handling the data directively using static method
-	# def __init__(self,camp_identification,location,capacity,humanitarian_plan_in,volunteer_in_charge):
-	# 	camp_data = Camp.loadCampData()
-	# 	self.camp_identification = Camp.validateId(camp_identification,camp_data)
-	# 	self.location = location
-	# 	self.capacity = capacity
-	# 	self.occupancy = 0
-	# 	self.humanitarian_plan_in = humanitarian_plan_in
-	# 	self.volunteer_in_charge = volunteer_in_charge
-	# 	# # add camp
-	# 	# if self.camp_identification != None:
-	# 	#    self.dumpCampData()
+
 
 	@staticmethod
 	def loadCampData():
@@ -72,32 +59,9 @@ class Camp:
 		}
 
 		with open("camps.json", "w") as json_file:
-			json.dump(data, json_file)
+			json.dump(data, json_file, indent=2)
 		return True
-
-	# NOTE: (consider deleting this method) commented out since we should not print unless we are in the interface, and we don't need a method for a simple key check
-	# @staticmethod
-	# def validateId(camp_identification, camp_data):
-	# 	"""validate the camp_identification"""
-	# 	if camp_identification in camp_data:
-	# 		print('already exist. please create a new identification of the camp')
-	# 		return None
-	# 	else:
-	# 		return camp_identification
-
-	# NOTE: (consider deleting this method) commented out since this completely overwrites camps.json -> do we want this feature?
-	# def dumpCampData(self):
-	# 	"""write the new data of the new object into camps.json"""
-	# 	json_data = {}
-	# 	data = self.__dict__.copy()
-	# 	data.pop("camp_identification")
-	# 	json_data[self.camp_identification] = data
-
-	# 	with open('camps.json','w') as file:
-	# 		json.dump(json_data,file,indent=4)
-	# 	return True
-
-
+	
 
 	#edit camp with either id or other attributtes
 	@staticmethod
@@ -110,7 +74,7 @@ class Camp:
 			else:
 				data.pop(camp_identification)
 				with open('camps.json','w') as file:
-					json.dump(data,file,indent=4)
+					json.dump(data,file,indent=2)
 				return True
 		else:
 			return False
@@ -127,7 +91,7 @@ class Camp:
 		if user in users and (user == 'admin' or user in camp_data[camp_identification]["volunteer_in_charge"]):
 			camp_data[new_identification] = camp_data.pop(camp_identification)
 			with open('camps.json','w') as file:
-				json.dump(camp_data,file)
+				json.dump(camp_data, file, indent=2)
 			return True
 		else:
 			return False
@@ -143,7 +107,7 @@ class Camp:
 		if user in users and (user == 'admin' or user in camp_data[camp_identification]["volunteer_in_charge"]):
 			camp_data[camp_identification][attribute] = new_value
 			with open('camps.json', 'w') as file:
-				json.dump(camp_data, file)
+				json.dump(camp_data, file, indent=2)
 			return True
 		else:
 			return False
@@ -161,7 +125,7 @@ class Camp:
 				volunteer_list.append(volunteer)
 				camp_data[camp_identification]["volunteer_in_charge"] = volunteer_list
 				with open('camps.json', 'w') as file:
-					json.dump(camp_data, file)
+					json.dump(camp_data, file, indent=2)
 					return True
 			else:
 				return False
@@ -171,7 +135,7 @@ class Camp:
 				volunteer_list.remove(volunteer)
 				camp_data[camp_identification]["volunteer_in_charge"] = volunteer_list
 				with open('camps.json', 'w') as file:
-					json.dump(camp_data, file)
+					json.dump(camp_data, file, indent=2)
 				return True
 			else:
 				return False

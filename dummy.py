@@ -112,6 +112,6 @@ dummy_refugees = {
 
 def overwrite_json(object, file): 
     with open(file, "w") as json_file:
-        json.dump(object, json_file)
+        json.dump(object, json_file, indent=2)
 
 # overwrite_json(dummy_users)

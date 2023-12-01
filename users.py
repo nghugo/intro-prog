@@ -39,7 +39,7 @@ class Users:
 			"is_activated": is_activated,
 		}
 		with open("users.json", "w") as json_file:
-			json.dump(data, json_file)
+			json.dump(data, json_file, indent=2)
 		return True
 
 	@staticmethod
@@ -57,7 +57,7 @@ class Users:
 		
 		del data[username]
 		with open("users.json", "w") as json_file:
-			json.dump(data, json_file)
+			json.dump(data, json_file, indent=2)
 		return True
 		
 
@@ -84,7 +84,7 @@ class Users:
 		# 	data[new_value] = data.pop(username)
 
 		with open("users.json", "w") as json_file:
-			json.dump(data, json_file)
+			json.dump(data, json_file, indent=2)
 		return True
 	
 	
