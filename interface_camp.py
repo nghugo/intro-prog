@@ -17,29 +17,26 @@ class InterfaceCamp:
 		option = input_until_valid(
 			input_message = f"\n<homepage/manage-camps>\nPlease choose an operation on camps below:\
 				\n[1] CANCEL\
-				\n[2] Add a camp\
-				\n[3] Delete a camp\
-				\n[4] Edit details of a camp\
-				\n[5] Edit volunteers: add in/remove from a camp\
-				\n[6] List all camps\
-				\n[7] Display details of a camp (TODO)",
-			is_valid=lambda user_input: user_input.isdigit() and int(user_input) > 0 and int(user_input) <= 7,
+				\n[2] List all camps\
+				\n[3] Add a camp\
+				\n[4] Delete a camp\
+				\n[5] Edit details of a camp\
+				\n[6] Edit volunteers: add in/remove from a camp",
+			is_valid=lambda user_input: user_input.isdigit() and int(user_input) > 0 and int(user_input) <= 6,
 			validation_message="Unrecognized input. Please choose from the above list."
 		)
 		if option == "1":
 			return  # CANCEL
 		if option == "2":
-			self.prompt_add_camp()
-		if option == "3":
-			self.prompt_delete_camp()
-		if option == "4":
-			self.edit_camp_details()
-		if option == "5":
-			self.edit_volunteer()
-		if option == "6":
 			self.prompt_list_all_camps_with_access_rights()
-		if option == "7":
-			self.prompt_camp_details()  # TODO: unfinished
+		if option == "3":
+			self.prompt_add_camp()
+		if option == "4":
+			self.prompt_delete_camp()
+		if option == "5":
+			self.edit_camp_details()
+		if option == "6":
+			self.edit_volunteer()
 
 
 	def prompt_volunteer_options(self):
@@ -154,7 +151,7 @@ class InterfaceCamp:
 		camp_id = input_until_valid(
 			input_message="Please enter the camp_id of the camp you would like to change camp details of, or leave empty to abort",
 			is_valid = lambda user_input: user_input == "" or user_input in filtered_camps,
-			validation_message= "You do not have access to this camp_id, or it does not exist. Please re-enter."
+			validation_message= "You do not have access to this camp_id, or it does not exist. Please re-enter or leave empty to abort."
 		)   
 		
 		if camp_id == "":
@@ -235,7 +232,7 @@ class InterfaceCamp:
 				method = input_until_valid(
 				input_message= "Please enter the changing method to volunteers: add/remove:",
 				is_valid=lambda user_input: user_input == "add" or user_input == "remove",
-				validation_message=f"Please select from add/remove to edit volunteers in {camp_id}. Please re-enter!"
+				validation_message=f"Please select from add/remove to edit volunteers in {camp_id}. Please re-enter."
 				)				
 				print(f"\nexisting volunteers in {camp_id}:{volunteer_list}\n")
 				if method == "add":
@@ -248,7 +245,7 @@ class InterfaceCamp:
 					volunteer = input_until_valid(
 						input_message=f"Please enter the volunteer you want to {method} from volunteer list",
 						is_valid=lambda user_input: user_input in camp_data[camp_id]["volunteers_in_charge"],
-						validation_message="The volunteer you entered is not in the volunteer list. Please re-enter!"
+						validation_message="The volunteer you entered is not in the volunteer list. Please re-enter."
 					)
 				confirm = input_until_valid(
 					input_message=f"Please confirm you want to {method} the {volunteer} \n[y] Yes\n[n] No (abort)",
