@@ -9,7 +9,6 @@ class InterfaceManageUsers:
 
 	def prompt_admin_options(self):
 		option = input_until_valid(
-			
 			input_message = f"\n<homepage/manage-users>\nPlease choose a user management option below:\
 				\n[1] CANCEL\
 				\n[2] Add user\
@@ -38,11 +37,16 @@ class InterfaceManageUsers:
 
 	def prompt_add_user(self):
 		users = Users.load_users()
+		self.print_all_users()
 		username = input_until_valid(
-			input_message="\nEnter the username for the new user (username CANNOT be changed):",
-			is_valid=lambda user_input: user_input != "" and user_input not in users,
-			validation_message="Username cannot be empty or is already taken. Please enter a different username for the new user (username CANNOT be changed)"
+			input_message="Enter the username for the new user (username CANNOT be changed), or leave empty to abort:",
+			is_valid=lambda user_input: user_input == "" or user_input not in users,
+			validation_message="Username is already taken. Please enter a different username for the new user (username CANNOT be changed). Leave empty to abort:"
 		)
+		if username == "":
+			print("User creation aborted.")
+			return  # early termination
+
 		password = input_until_valid(
 			input_message="Enter the password for the new user:",
 			is_valid=lambda user_input: user_input != "",
@@ -100,9 +104,10 @@ class InterfaceManageUsers:
 			print(f"Aborted user addition.")
 
 	def prompt_activate_user(self):
+		self.print_all_users()
 		users = Users.load_users()
 		username = input_until_valid(
-			input_message="\nEnter the username of the user to activate or leave empty to abort:",
+			input_message="Enter the username of the user to activate or leave empty to abort:",
 			is_valid=lambda user_input: user_input in users or user_input == "",
 			validation_message="Username not found. Please enter an existing username or leave empty to abort."
 		)
@@ -113,9 +118,10 @@ class InterfaceManageUsers:
 			print(f"User {username} has been activated.")
 
 	def prompt_deactivate_user(self):
+		self.print_all_users()
 		users = Users.load_users()
 		username = input_until_valid(
-			input_message="\nEnter the username of the user to deactivate or leave empty to abort:",
+			input_message="Enter the username of the user to deactivate or leave empty to abort:",
 			is_valid=lambda user_input: user_input in users or user_input == "",
 			validation_message="Username not found. Please enter an existing username or leave empty to abort."
 		)
@@ -130,8 +136,9 @@ class InterfaceManageUsers:
 
 	def prompt_modify_user(self):
 		users = Users.load_users()
+		self.print_all_users()
 		username = input_until_valid(
-			input_message="\nEnter the username of the user to modify or leave empty to abort:",
+			input_message="Enter the username of the user to modify or leave empty to abort:",
 			is_valid=lambda user_input: user_input in users or user_input == "",
 			validation_message="Username not found. Please enter an existing username or leave empty to abort."
 		)
@@ -190,6 +197,7 @@ class InterfaceManageUsers:
 
 	def prompt_delete_user(self):
 		users = Users.load_users()
+		self.print_all_users()
 		username = input_until_valid(
 			input_message="\nEnter the username of the user to delete or leave empty to abort:",
 			is_valid=lambda user_input: user_input in users or user_input == "",
@@ -204,7 +212,8 @@ class InterfaceManageUsers:
 			Users.delete_user(username)
 			print(f"User {username} has been deleted.")
 
-	def list_users(self):
+	@staticmethod
+	def list_users():
 		users = Users.load_users()
 		print("--- Users are as follows ---")
 		# use pandas for pretty print
@@ -212,3 +221,8 @@ class InterfaceManageUsers:
 		print(users_df)
 		print("--- End of users list ---")
 		input("Press Enter to continue...")
+	
+	@staticmethod
+	def print_all_users():
+		users = Users.load_users()
+		print(f"\nList of existing usernames: {", ".join(users.keys()) if users else 'None found'}")
