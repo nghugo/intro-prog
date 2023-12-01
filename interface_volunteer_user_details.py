@@ -40,11 +40,9 @@ class InterfaceVolunteerUserDetails:
 		)
 		if confirm == "y":
 			# modify persistent store and reload current_user if username matches
-			users.modify_user(self.current_user.username, field, value)
+			Users.modify_user(self.current_user.username, field, value)
 			if field == "username":
 				self.current_user.set_username(value)
-			elif field == "password":
-				self.current_user.set_password(value)
 
 			print("Successfully modified user.")
 		else:

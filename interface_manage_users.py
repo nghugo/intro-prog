@@ -79,7 +79,7 @@ class InterfaceManageUsers:
 			validation_message="Unrecognized input. Please confirm details of the new user (y/n):\n[y] Yes\n[n] No (abort)"
 		)
 		if confirm == "y":
-			success = users.add_user(
+			success = Users.add_user(
 				username=username, password=password, email=email,phone_number=phone_number, is_admin=is_admin == "t", is_activated=is_activated == "f")
 			if success:
 				print(f"Successfully added user {username}")
@@ -98,7 +98,7 @@ class InterfaceManageUsers:
 		if username == "":
 			print("User activation aborted.")
 		else:
-			users.modify_user(username, "is_activated", True)
+			Users.modify_user(username, "is_activated", True)
 			print(f"User {username} has been activated.")
 
 	def prompt_deactivate_user(self):
@@ -114,7 +114,7 @@ class InterfaceManageUsers:
 			print(
 				"You are not allowed to deactivate your own account. User deactivation aborted.")
 		else:
-			users.modify_user(username, "is_activated", False)
+			Users.modify_user(username, "is_activated", False)
 			print(f"User {username} has been deactivated.")
 
 	def prompt_modify_user(self):
@@ -168,12 +168,13 @@ class InterfaceManageUsers:
 		)
 		if confirm == "y":
 			# modify persistent store and reload current_user if username matches
-			users.modify_user(username, field, value)
-			if username == self.current_user.username:
-				if field == "username":
-					self.current_user.set_username(value)
-				elif field == "password":
-					self.current_user.set_password(value)
+			Users.modify_user(username, field, value)
+			
+			print(f"field == 'username'{field == 'username'}")  # TODO: remove DEBUG
+			print(f"username == self.current_user.username {username == self.current_user.username}")  # TODO: remove DEBUG
+
+			if field == "username" and username == self.current_user.username:  # if modify username as admin, update current_user instance
+				self.current_user.set_username(value)
 
 			print("Successfully modified user.")
 		else:
@@ -192,7 +193,7 @@ class InterfaceManageUsers:
 			print(
 				"You are not allowed to delete your own account. User deletion aborted.")
 		else:
-			users.delete_user(username)
+			Users.delete_user(username)
 			print(f"User {username} has been deleted.")
 
 	def list_users(self):
