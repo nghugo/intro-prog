@@ -38,7 +38,7 @@ class Camp:
 			return camp_data
 		
 	@staticmethod
-	def addCamp(camp_id, location, capacity, humanitarian_plan_in, volunteers_in_charge = None, occupancy = 0):
+	def addCamp(camp_id, location, capacity, humanitarian_plan_in, volunteers_in_charge = None):
 		"""
 		Adds a camp to camps.json. 
 		Halts and returns False if camp_id already exists.
@@ -53,7 +53,6 @@ class Camp:
 		data[camp_id] = {
 			"location": location,
 			"capacity": capacity,
-			"occupancy": occupancy,
 			"humanitarian_plan_in": humanitarian_plan_in,
 			"volunteers_in_charge": volunteers_in_charge if volunteers_in_charge != None else [],
 		}
