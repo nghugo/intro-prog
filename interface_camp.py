@@ -1,3 +1,5 @@
+import pandas as pd
+
 import json
 
 from camp_modified import Camp
@@ -18,8 +20,10 @@ class InterfaceCamp:
 				\n[2] Add camp\
 				\n[3] Delete camp\
 				\n[4] Edit camp information\
-				\n[5] Edit volunteers: add in/remove from a specific camp",
-			is_valid=lambda user_input: user_input.isdigit() and int(user_input) > 0 and int(user_input) <= 5,
+				\n[5] Edit volunteers: add in/remove from a specific camp\
+				\n[6] List all camps\
+				\n[7] Display details of a specific camp (TODO)",
+			is_valid=lambda user_input: user_input.isdigit() and int(user_input) > 0 and int(user_input) <= 7,
 			validation_message="Unrecognized input. Please choose from the above list."
 		)
 		if option == "1":
@@ -29,10 +33,14 @@ class InterfaceCamp:
 		if option == "3":
 			self.delete_camp()
 		if option == "4":
-			self.Edit_camp_information()
+			self.edit_camp_informationid()
 		if option == "5":
-			self.Edit_volunteer()
-	
+			self.edit_volunteer()
+		if option == "6":
+			self.prompt_list_all_camps_with_access_rights()
+		if option == "7":
+			self.prompt_camp_details()  # TODO: unfinished
+
 
 	def prompt_volunteer_options(self):
 		"""bring up a volunteer menu for camp functions """
@@ -50,7 +58,7 @@ class InterfaceCamp:
 		if option == "1":
 			return  # CANCEL
 		if option == "2":
-			self.Edit_camp_information()
+			self.edit_camp_informationid()
 		if option == "3":
 			pass
 		if option == "4":
@@ -140,7 +148,7 @@ class InterfaceCamp:
 				print(f"Aborted delete this camp.")
 
 
-	def Edit_camp_information(self):
+	def edit_camp_informationid(self):
 		camp_data = Camp.loadCampData()
 		
 		print(f"Existing camp(s): {", ".join(list(camp_data.keys())) if camp_data else "None found"}")
@@ -190,7 +198,7 @@ class InterfaceCamp:
 					if attribute == "camp_id":
 						test = Camp.edit_camp_information_id(camp_id = camp_id, new_identification = new_value, user = self.current_user.username)
 					else:
-						test = Camp.edit_camp_information(camp_id=camp_id, attribute=attribute, new_value=new_value, user = self.current_user.username)
+						test = Camp.edit_camp_informationid(camp_id=camp_id, attribute=attribute, new_value=new_value, user = self.current_user.username)
 					
 					if test:
 						print(f"You've changed the {attribute} successfully!")
@@ -202,14 +210,10 @@ class InterfaceCamp:
 			else:
 				print("You are not allowed to edit camp information")
 			
-	def Edit_volunteer(self):
-
+	def edit_volunteer(self):
 		camp_data = Camp.loadCampData()
-
 		users = Users.load_users()
-
 		if users[self.current_user.username]["is_admin"]:
-		  
 			print(f"Existing camp(s): {", ".join(list(camp_data.keys())) if camp_data else "None found"}")
 
 			camp_id = input_until_valid(
@@ -220,18 +224,14 @@ class InterfaceCamp:
 			# TODO: should add print camp data function here to show volunteers in the camp after entering the campID
 			if camp_id =="":
 				print("abort volunteers change")
-
 			else:
 				volunteer_list = Camp.get_volunteer_list(camp_id)
-				
 				method = input_until_valid(
 				input_message= "Please enter the changing method to volunteers: add/remove:",
 				is_valid=lambda user_input: user_input == "add" or user_input == "remove",
 				validation_message=f"Please select from add/remove to edit volunteers in {camp_id}. Please re-enter!"
-				)
-				
+				)				
 				print(f"\nexisting volunteers in {camp_id}:{volunteer_list}\n")
-
 				if method == "add":
 					volunteer = input_until_valid(
 						input_message= f"please enter the volunteer you want to {method} into volunteer list",
@@ -244,20 +244,17 @@ class InterfaceCamp:
 						is_valid=lambda user_input: user_input in camp_data[camp_id]["volunteers_in_charge"],
 						validation_message="The volunteer you entered is not in the volunteer list. Please re-enter!"
 					)
-   
 				confirm = input_until_valid(
 					input_message=f"Please confirm you want to {method} the {volunteer} \n[y] Yes\n[n] No (abort)",
 					is_valid=lambda user_input: user_input == "y" or user_input == "n",
 					validation_message="Unrecognized input. Please confirm (y/n):\n[y] Yes\n[n] No (abort)"
 				)
-
 				if confirm == "y":
 					test = Camp.edit_volunteer(camp_id=camp_id, volunteer=volunteer, user = self.current_user.username, method = method)
 					if test:
 						print(f"You have {method} {volunteer} successfully!")
 					else:
 						print(f"Failed to {method} {volunteer}!")
-				
 				else:
 					print(f"Aborted {method} volunteer operation")
 		else:
@@ -267,11 +264,11 @@ class InterfaceCamp:
 		""" If admin, always allow access
 		If volunteer, only allow access if username is in volunteers_in_charge"""
 		try:
-			with open("camp.json", "r") as camp_json:
+			with open("camps.json", "r") as camp_json:
 				filtered_camps = {}
 				camps = json.load(camp_json)
 				users = Users.load_users()
-				for camp_id, camp_values in camps:
+				for camp_id, camp_values in camps.items():
 					if (users[self.current_user.username]["is_admin"]
 		 				or camp_values["volunteers_in_charge"] == self.current_user.username):
 						filtered_camps[camp_id] = camp_values
@@ -279,6 +276,18 @@ class InterfaceCamp:
 		except FileNotFoundError:
 			return {}
 
+	def prompt_list_all_camps_with_access_rights(self):
+		users = Users.load_users()
+		user_is_admin = users[self.current_user.username]["is_admin"]
+		filtered_camps = self.load_camps_with_access_rights()
+		print("--- Camps are as follows ---" if user_is_admin else "--- Camps you have access to are as follows ---")
+		filtered_camps_df = pd.DataFrame.from_dict(filtered_camps).transpose()  # use pandas for pretty print
+		print(filtered_camps_df)
+		print("--- End of camps list ---")
+		input("Press Enter to continue...")
+	
+	def prompt_camp_details(self):
+		pass
 
 
 		
