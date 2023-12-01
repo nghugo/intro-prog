@@ -13,10 +13,10 @@ class InterfaceManageUsers:
 			input_message = f"\n<homepage/manage-users>\nPlease choose a user management option below:\
 				\n[1] CANCEL\
 				\n[2] Add user\
-				\n[3] Delete user\
-				\n[4] Activate user\
-				\n[5] Deactivate user\
-				\n[6] Modify user\
+				\n[3] Edit user\
+				\n[4] Delete user\
+				\n[5] Activate user\
+				\n[6] Deactivate user\
 				\n[7] List all users",
 			is_valid=lambda user_input: user_input.isdigit() and int(user_input) > 0 and int(user_input) <= 7,
 			validation_message="Unrecognized input. Please choose from the above list."
@@ -26,22 +26,22 @@ class InterfaceManageUsers:
 		if option == "2":
 			self.prompt_add_user()
 		if option == "3":
-			self.prompt_delete_user()
-		if option == "4":
-			self.prompt_activate_user()
-		if option == "5":
-			self.prompt_deactivate_user()
-		if option == "6":
 			self.prompt_modify_user()
+		if option == "4":
+			self.prompt_delete_user()
+		if option == "5":
+			self.prompt_activate_user()
+		if option == "6":
+			self.prompt_deactivate_user()
 		if option == "7":
 			self.list_users()
 
 	def prompt_add_user(self):
 		users = Users.load_users()
 		username = input_until_valid(
-			input_message="\nEnter the username for the new user:",
+			input_message="\nEnter the username for the new user (username CANNOT be changed):",
 			is_valid=lambda user_input: user_input != "" and user_input not in users,
-			validation_message="Username cannot be empty or is already taken. Please enter a different username for the new user"
+			validation_message="Username cannot be empty or is already taken. Please enter a different username for the new user (username CANNOT be changed)"
 		)
 		password = input_until_valid(
 			input_message="Enter the password for the new user:",
@@ -68,7 +68,7 @@ class InterfaceManageUsers:
 		)
 		confirm = input_until_valid(
 			input_message=f"Please confirm details of the new user (y/n):\
-				\n->Username: {username}\
+				\n->Username: {username} (please note: username CANNOT be changed)\
 				\n->Password: {password}\
 				\n->Email: {email}\
 				\n->phone_number: {phone_number}\
@@ -130,10 +130,10 @@ class InterfaceManageUsers:
 			return  # early termination
 
 		field = input_until_valid(
-			input_message="Enter the field (username/password/email/phone_number/is_admin/is_activated) to modify:",
+			input_message="Enter the field (password/email/phone_number/is_admin/is_activated) to modify:",
 			is_valid=lambda user_input: user_input in {
-				"username", "password", "email", "phone_number", "is_admin", "is_activated"},
-			validation_message="Unrecognized input. Please enter a valid field (username/password/email/phone_number/is_admin/is_activated)."
+				"password", "email", "phone_number", "is_admin", "is_activated"},
+			validation_message="Unrecognized input. Please enter a valid field (password/email/phone_number/is_admin/is_activated)."
 		)
 		if field in {"is_admin", "is_activated"}:
 			if username == self.current_user.username:
@@ -169,13 +169,6 @@ class InterfaceManageUsers:
 		if confirm == "y":
 			# modify persistent store and reload current_user if username matches
 			Users.modify_user(username, field, value)
-			
-			print(f"field == 'username'{field == 'username'}")  # TODO: remove DEBUG
-			print(f"username == self.current_user.username {username == self.current_user.username}")  # TODO: remove DEBUG
-
-			if field == "username" and username == self.current_user.username:  # if modify username as admin, update current_user instance
-				self.current_user.set_username(value)
-
 			print("Successfully modified user.")
 		else:
 			print("User modification aborted.")

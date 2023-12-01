@@ -108,7 +108,7 @@ def input_until_valid_email(input_email: str) -> str:
 	"""
 
 	email = input_until_valid(
-		input_email = input_email,
+		input_message = input_email,
 		is_valid = is_valid_email,
 		validation_message = "Invalid email address. Email must be in xxx@yyy.zzz format with no spaces."
 	)

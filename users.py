@@ -78,8 +78,10 @@ class Users:
 
 		if field != "username":
 			data[username][field] = new_value
-		else:  # changing username needs to be handled differently than other fields, as they are on different levels
-			data[new_value] = data.pop(username)
+		
+		# NOTE: removed ability to change username, as it needs to be kept unchanged for authentication
+		# else:  # changing username needs to be handled differently than other fields, as they are on different levels
+		# 	data[new_value] = data.pop(username)
 
 		with open("users.json", "w") as json_file:
 			json.dump(data, json_file)
