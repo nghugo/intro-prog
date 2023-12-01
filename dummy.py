@@ -89,25 +89,25 @@ dummy_plans = {
 
 dummy_refugees = {
   "refugee1": {
-    "name": "John Doe",
+    "fullname": "John Doe",
     "number_of_members": 1,
     "camp_identification": "camp1",
     "medical_condition": "food starved"
   },
   "refugee2": {
-    "name": "Jane Smith",
+    "fullname": "Jane Smith",
     "number_of_members": 3,
     "camp_identification": "camp1",
     "medical_condition": "healthy"
   },
   "refugee3": {
-    "name": "Saul Goodman",
+    "fullname": "Saul Goodman",
     "number_of_members": 3,
     "camp_identification": "camp2",
     "medical_condition": "broken bones"
   },
   "f2db20d5525c49c2adaca68b15795f36": {
-    "name": "Hugo",
+    "fullname": "Hugo",
     "number_of_members": 2,
     "camp_identification": "camp1",
     "medical_condition": "hungry"
