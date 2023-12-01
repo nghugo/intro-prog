@@ -7,6 +7,22 @@ class InterfaceVolunteerUserDetails:
 	def __init__(self, current_user):
 		self.current_user = current_user
 
+	def prompt_manage_my_details_options(self):
+		option = input_until_valid(			
+			input_message = f"\n<homepage/manage-own-account>\nPlease choose an option to manage your user account:\
+				\n[1] CANCEL\
+				\n[2] List my details\
+				\n[3] Edit my details",
+			is_valid=lambda user_input: user_input.isdigit() and int(user_input) > 0 and int(user_input) <= 3,
+			validation_message="Unrecognized input. Please choose from the above list."
+		)
+		if option == "1":
+			return # CANCEL
+		if option == "2":
+			self.list_my_details()
+		if option == "3":
+			self.prompt_modify_my_details()
+
 	def prompt_modify_my_details(self):
 		users = Users.load_users()
 		field = input_until_valid(

@@ -207,7 +207,7 @@ class InterfaceManageUsers:
 	def list_users(self):
 		users = Users.load_users()
 		print("--- Users are as follows ---")
-		# using pandas just for pretty print
+		# use pandas for pretty print
 		users_df = pd.DataFrame.from_dict(users).transpose()
 		print(users_df)
 		print("--- End of users list ---")

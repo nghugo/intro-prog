@@ -42,7 +42,7 @@ class InterfaceGenerateReports:
 				report += f"Capacity: {camp_data.get('capacity', 'N/A')}\n"
 				report += f"Occupancy: {camp_data.get('occupancy', 'N/A')}\n"
 				report += f"Humanitarian Plan: {camp_data.get('humanitarian_plan_in', 'N/A')}\n"
-				volunteerString = ', '.join(camp_data.get('volunteer_in_charge', []))
+				volunteerString = ', '.join(camp_data.get('volunteers_in_charge', []))
 				report += f"Volunteer in Charge: {volunteerString if volunteerString != "" else "Currently none"}"
 				print(report)
 				print(f"--- End of report for {camp_name} ---\n")
@@ -63,7 +63,7 @@ class InterfaceGenerateReports:
 				report += f"Capacity: {camp_data.get('capacity', 'N/A')}\n"
 				report += f"Occupancy: {camp_data.get('occupancy', 'N/A')}\n"
 				report += f"Humanitarian Plan: {camp_data.get('humanitarian_plan_in', 'N/A')}\n"
-				volunteerString = ', '.join(camp_data.get('volunteer_in_charge', []))
+				volunteerString = ', '.join(camp_data.get('volunteers_in_charge', []))
 				report += f"Volunteer in Charge: {volunteerString if volunteerString != "" else "Currently none"}"
 			print(report)
 			print("--- End of report for all plans ---\n")

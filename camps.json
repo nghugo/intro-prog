@@ -3,7 +3,7 @@
     "location": "China",
     "capacity": 20,
     "humanitarian_plan_in": "planA",
-    "volunteer_in_charge": [
+    "volunteers_in_charge": [
       "volunteer1",
       "v"
     ]
@@ -12,7 +12,7 @@
     "location": "Ukraine",
     "capacity": 224,
     "humanitarian_plan_in": "planB",
-    "volunteer_in_charge": [
+    "volunteers_in_charge": [
       "volunteer1",
       "volunteer2",
       "v"
