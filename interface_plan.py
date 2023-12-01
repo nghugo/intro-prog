@@ -13,8 +13,8 @@ class InterfacePlan:
 			# when extending this list, make sure the input message matches the is_valid validation function and the options in interface_admin_options.py
 			input_message = f"\n<homepage/manage-plans>\nPlease choose a plan management option below:\
 				\n[1] CANCEL\
-				\n[2] Create plan\
-				\n[3] List plans\
+				\n[2] Create new humanitarian plan\
+				\n[3] Display details of all plans\
 				\n[4] TODO\
 				\n[5] TODO\
 				\n[6] TODO\

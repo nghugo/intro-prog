@@ -72,4 +72,14 @@ class InterfaceVolunteerOptions:
 		print("--- End of your details ---")
 		input("Press Enter to continue...")
 
+	def prompt_logout(self):
+		print("\nAre you sure you want to log out?")
+		user_input = input_until_valid(
+			input_message="Please confirm your logout (y/n):\n[y] Yes\n[n] No",
+			is_valid=lambda user_input: user_input == "y" or user_input == "n",
+			validation_message="Unrecognized input. Please confirm your logout (y/n):\n[y] Yes\n[n] No"
+		)
+		if user_input == "y":
+			print(f"Goodbye {self.current_user.username}! You are now logged out.")
+			self.current_user = None
 	

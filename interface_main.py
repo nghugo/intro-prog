@@ -11,7 +11,6 @@ class InterfaceMain:
 		self.current_user = current_user
 		self.terminate = False
 
-
 	def start(self):
 		"""Starts the user interface and immediately prompts login. Any application logic stems from login."""
 		print("\nWelcome to the humanitarian management system.")
@@ -60,36 +59,12 @@ class InterfaceMain:
 	def prompt_options(self):
 		"""Provides options available to the currently logged in user"""
 		users = Users()
+		interface_admin_options = InterfaceAdminOptions(self.current_user)
 		if self.current_user:
 			if users.users[self.current_user.username]["is_admin"]:
-				self.prompt_admin_options()
+				interface_admin_options.show_admin_options()
 			else:
-				self.prompt_volunteer_options()
-
-
-	def prompt_admin_options(self):  # TODO: implement handling for the other option values
-		users = Users()
-		option = input_until_valid(
-			# when extending this list, make sure the input message matches the is_valid validation function and the options in interface_admin_options.py
-			input_message = f"\n<homepage>\nPlease choose an option: (logged in as {self.current_user.username} ({'admin' if users.users[self.current_user.username]["is_admin"] else 'volunteer'}))\
-				\n[1] Log out\
-				\n[2] Manage users (volunteers, admins)\
-				\n[3] Create new humanitarian plan\
-				\n[4] Display details of all plans\
-				\n[5] Generate a report (plans, camps)\
-				\n[6] Manage camps"
-				,
-			is_valid=lambda user_input: user_input.isdigit() and int(user_input) > 0 and int(user_input) <= 6,
-			validation_message="Unrecognized input. Please choose from the above list."
-		)
-		users = Users()
-		interface_admin_options = InterfaceAdminOptions(users, self.current_user)
-		if option == "1":
-			self.prompt_logout()
-		else:
-			interface_admin_options.show_options(option)
-		
- 
+				self.prompt_volunteer_options() 
 
 	def prompt_volunteer_options(self):  # TODO: implement handling for the other option values
 		users = Users()
@@ -113,19 +88,6 @@ class InterfaceMain:
 			self.prompt_logout()
 		else:
 			interface_volunteer_options.show_options(option)
-	
-	def prompt_logout(self):
-		print("\nAre you sure you want to log out?")
-		
-		user_input = input_until_valid(
-			input_message="Please confirm your logout (y/n):\n[y] Yes\n[n] No",
-			is_valid=lambda user_input: user_input == "y" or user_input == "n",
-			validation_message="Unrecognized input. Please confirm your logout (y/n):\n[y] Yes\n[n] No"
-		)
-
-		if user_input == "y":
-			print(f"Goodbye {self.current_user.username}! You are now logged out.")
-			self.current_user = None
 			
 	
 	def prompt_exit(self):
