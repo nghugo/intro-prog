@@ -40,7 +40,7 @@ class Plans:
             "start_date" : start_date
 		}
 		with open("plans.json", "w") as json_file:
-			json.dump(data, json_file)
+			json.dump(data, json_file, indent=2)
 		return True
 
 	@staticmethod
@@ -58,7 +58,7 @@ class Plans:
 		
 		del data[plan_name]
 		with open("plans.json", "w") as json_file:
-			json.dump(data, json_file)
+			json.dump(data, json_file, indent=2)
 		return True
 		
 
@@ -83,7 +83,7 @@ class Plans:
 			data[new_value] = data.pop(plan_name)
 
 		with open("plans.json", "w") as json_file:
-			json.dump(data, json_file)
+			json.dump(data, json_file, indent=2)
 		return True
 	
 	

@@ -19,7 +19,7 @@ class Users:
 				return json_load
 
 	@staticmethod
-	def add_user(username, password, email, phone_number, is_admin, is_activated):
+	def add_user(username, password, fullname, email, phone_number, is_admin, is_activated):
 		"""
 		Adds user to users.json. 
 		Halts and returns False if username already exists.
@@ -33,13 +33,14 @@ class Users:
 		
 		data[username] = {
 			"password": password,
+			"fullname": fullname,
 			"phone_number": phone_number,
 			"email": email,
 			"is_admin": is_admin,
 			"is_activated": is_activated,
 		}
 		with open("users.json", "w") as json_file:
-			json.dump(data, json_file)
+			json.dump(data, json_file, indent=2)
 		return True
 
 	@staticmethod
@@ -57,7 +58,7 @@ class Users:
 		
 		del data[username]
 		with open("users.json", "w") as json_file:
-			json.dump(data, json_file)
+			json.dump(data, json_file, indent=2)
 		return True
 		
 
@@ -78,11 +79,13 @@ class Users:
 
 		if field != "username":
 			data[username][field] = new_value
-		else:  # changing username needs to be handled differently than other fields, as they are on different levels
-			data[new_value] = data.pop(username)
+		
+		# NOTE: removed ability to change username, as it needs to be kept unchanged for authentication
+		# else:  # changing username needs to be handled differently than other fields, as they are on different levels
+		# 	data[new_value] = data.pop(username)
 
 		with open("users.json", "w") as json_file:
-			json.dump(data, json_file)
+			json.dump(data, json_file, indent=2)
 		return True
 	
 	

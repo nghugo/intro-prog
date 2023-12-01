@@ -46,11 +46,7 @@ class InterfaceMain:
 				print(
 					"\nYour account has been deactivated, contact the administrator.\nYou may try another account.")
 			else:
-				self.current_user = CurrentUser(
-					username = username,
-					password = password,
-					is_admin = is_admin
-				)
+				self.current_user = CurrentUser(username)
 				print(
 					f"\nLogin successful.")
 		else:
@@ -69,6 +65,7 @@ class InterfaceMain:
 				interface_volunteer_options.prompt_volunteer_options() 
 	
 	def prompt_logout(self):
+		users = Users.load_users()
 		print("\nAre you sure you want to log out?")
 		user_input = input_until_valid(
 			input_message="Please confirm your logout (y/n):\n[y] Yes\n[n] No",
@@ -76,7 +73,7 @@ class InterfaceMain:
 			validation_message="Unrecognized input. Please confirm your logout (y/n):\n[y] Yes\n[n] No"
 		)
 		if user_input == "y":
-			print(f"Goodbye {self.current_user.username}! You are now logged out.")
+			print(f"Goodbye {users[self.current_user.username]["fullname"]}! You are now logged out.")
 			self.current_user = None
 	
 	def prompt_exit(self):

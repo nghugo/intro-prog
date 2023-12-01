@@ -1,5 +1,6 @@
 {
   "admin": {
+    "fullname": "Homer Simpsons",
     "password": "111",
     "phone_number": "11111",
     "email": "admin@mail.com",
@@ -7,6 +8,7 @@
     "is_activated": true
   },
   "volunteer1": {
+    "fullname": "Asdb",
     "password": "111",
     "phone_number": "5028382739",
     "email": "volunteer1@mail.com",
@@ -14,6 +16,7 @@
     "is_activated": true
   },
   "volunteer2": {
+    "fullname": "Peter Griffin",
     "password": "111",
     "phone_number": "9027346729",
     "email": "volunteer2@mail.com",
@@ -21,6 +24,7 @@
     "is_activated": true
   },
   "volunteer3": {
+    "fullname": "Brian Griffin",
     "password": "111",
     "phone_number": "11111",
     "email": "volunteer3@mail.com",
@@ -28,16 +32,18 @@
     "is_activated": false
   },
   "a": {
+    "fullname": "Gus Fring",
     "password": "a",
     "phone_number": "11111",
-    "email": "a@a",
+    "email": "a@a.a",
     "is_admin": true,
     "is_activated": true
   },
   "v": {
+    "fullname": "Hank Schrader",
     "password": "v",
     "phone_number": "11111",
-    "email": "v@v",
+    "email": "v@v.v",
     "is_admin": false,
     "is_activated": true
   }

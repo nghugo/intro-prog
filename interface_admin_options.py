@@ -20,7 +20,7 @@ class InterfaceAdminOptions:
 		users = Users.load_users()
 		option = input_until_valid(
 			
-			input_message = f"\n<homepage>\nPlease choose an option: (logged in as {self.current_user.username} ({'admin' if users[self.current_user.username]['is_admin'] else 'volunteer'}))\
+			input_message = f"\n<homepage>\nPlease choose an option: (logged in as {users[self.current_user.username]['fullname']} ({self.current_user.username}) - {'admin' if users[self.current_user.username]['is_admin'] else 'volunteer'})\
 				\n[1] Log out\
 				\n[2] Manage users (volunteers, admins)\
 				\n[3] Manage humanitarian plans\

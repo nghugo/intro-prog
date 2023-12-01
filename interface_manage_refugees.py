@@ -2,18 +2,21 @@ import json
 import uuid
 
 from interface_helper import input_until_valid, input_until_valid_name
+from users import Users
 
 class InterfaceManageRefugees:
-	
+	def __init__(self, current_user):
+		self.current_user = current_user
+
 	def prompt_volunteer_options(self):
 		option = input_until_valid(
 			
 			input_message = f"\n<homepage/manage-refugees>\nPlease choose a refugee management option below:\
 				\n[1] CANCEL\
-				\n[2] Add refugee profile\
-				\n[3] TODO\
-				\n[4] TODO\
-				\n[5] TODO\
+				\n[2] List all refugee profiles TODO\
+				\n[3] Add a refugee profile\
+				\n[4] Edit a refugee profile TODO\
+				\n[5] Delete a refugee profile TODO\
 				\n[6] TODO\
 				\n[7] TODO",
 			is_valid=lambda user_input: user_input.isdigit() and int(user_input) > 0 and int(user_input) <= 7,
@@ -22,9 +25,9 @@ class InterfaceManageRefugees:
 		if option == "1":
 			return  # option 1 is cancel, so just return
 		if option == "2":
-			self.prompt_add_refugee()
-		if option == "3":
 			pass
+		if option == "3":
+			self.prompt_add_refugee()
 		if option == "4":
 			pass
 		if option == "5":
@@ -45,7 +48,7 @@ class InterfaceManageRefugees:
 			refugee_id = uuid.uuid4().hex
 		name = input_until_valid_name(
 			input_message="Enter the name of the refugee/ representitive of the family:",
-			validation_message="Name can only contain letters. Please enter a valid name."
+			validation_message="Name can only contain letters and spaces. Please re-enter."
 		)
 		number_of_members = int(input_until_valid(
 			input_message="Enter the number of members in the refugee family:",
@@ -97,6 +100,11 @@ class InterfaceManageRefugees:
 				return json_load
 		except FileNotFoundError:
 			return {}
+	
+	def list_all_refugees_with_access_rights(self):
+		pass
+
+
 
 	# TODO: method: remove refugee from camp
 	# TODO: method: print all refugees of a camp
