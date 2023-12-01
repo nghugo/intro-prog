@@ -34,9 +34,9 @@ class InterfaceCamp:
 		if option == "4":
 			self.prompt_delete_camp()
 		if option == "5":
-			self.edit_camp_details()
+			self.prompt_edit_camp_details()
 		if option == "6":
-			self.edit_volunteer()
+			self.prompt_edit_volunteer()
 
 
 	def prompt_volunteer_options(self):
@@ -57,7 +57,7 @@ class InterfaceCamp:
 		if option == "2":
 			self.prompt_list_all_camps_with_access_rights()
 		if option == "3":
-			self.edit_camp_details()
+			self.prompt_edit_camp_details()
 		if option == "4":
 			pass
 		if option == "5":
@@ -143,7 +143,7 @@ class InterfaceCamp:
 		print(f"Successfully deleted {camp_id}" if test else f"Failed to delete {camp_id}")
 
 
-	def edit_camp_details(self):
+	def prompt_edit_camp_details(self):
 		
 		filtered_camps = Camp.load_camps_with_access_rights(self.current_user)
 		self.print_existing_or_accessible_camps()
@@ -213,67 +213,72 @@ class InterfaceCamp:
 			
 		
 			
-	def edit_volunteer(self):
+	def prompt_edit_volunteer(self):
 		camp_data = Camp.loadCampData()
 		users = Users.load_users()
-		if users[self.current_user.username]["is_admin"]:
-			self.print_existing_or_accessible_camps()
-
-			camp_id = input_until_valid(
-				input_message = "Please enter the camp_id of the camp you would like to amend the volunteers in, or leave empty to abort:",
-				is_valid = lambda user_input: user_input == "" or user_input in camp_data,
-				validation_message = "The camp_id you entered does not exist. Please re-enter or leave empty to abort."
-			)
-			# TODO: should add print camp data function here to show volunteers in the camp after entering the camp_id
-			if camp_id =="":
-				print("abort volunteers change")
-			else:
-				volunteer_list = Camp.get_volunteer_list(camp_id)
-
-				method_char = input_until_valid(
-				input_message= "Please choose an operation:\
-					 \n[a] Add a volunteer\
-					 \n[r] Remove a volunteer:",
-				is_valid = lambda user_input: user_input == "a" or user_input == "r",
-				validation_message = f"Invalid input. Please select (a/r) to either add or remove a volunteer in camp {camp_id}."
-				)				
-				print(f"\nExisting volunteers in {camp_id}: {", ".join(volunteer_list) if volunteer_list else "None found"}")
-
-				all_volunteers_from_users = {k for k,v in users.items() if not v["is_admin"]}
-				volunteers_to_add = all_volunteers_from_users.difference(set(volunteer_list))
-
-				if method_char == "a":
-					print(f"Volunteer usernames you can add: {", ".join(volunteers_to_add) if volunteers_to_add else "None found"}")
-					volunteer = input_until_valid(
-						input_message= f"Please enter the volunteer username you want to add into volunteer list for {camp_id}, or leave empty to abort.",
-						is_valid = lambda user_input: user_input == "" or (user_input not in camp_data[camp_id]["volunteers_in_charge"] and user_input in volunteers_to_add),
-						validation_message = f"The username must come from an existing volunteer user that is not already in the volunteer list for {camp_id}. Please re-enter."
-				)
-				else:
-					volunteer = input_until_valid(
-						input_message = f"Please enter the volunteer username you want to remove from volunteer list for {camp_id},  or leave empty to abort.",
-						is_valid = lambda user_input: user_input == "" or user_input in camp_data[camp_id]["volunteers_in_charge"],
-						validation_message = f"The volunteer you entered is not in the volunteer list for {camp_id}. Please re-enter or leave empty to abort."
-					)
-				method = "add" if method_char == "a" else "remove"
-				if volunteer == "":
-					print(f"Volunteer operation ({method}) aborted.")
-					return  # early termination
-				confirm = input_until_valid(
-					input_message = f"Please confirm you want to {method} {volunteer} into the camp {camp_id} \n[y] Yes\n[n] No (abort)",
-					is_valid = lambda user_input: user_input == "y" or user_input == "n",
-					validation_message = "Unrecognized input. Please confirm (y/n):\n[y] Yes\n[n] No (abort)"
-				)
-				if confirm == "y":
-					test = Camp.edit_volunteer(camp_id = camp_id, volunteer = volunteer, user = self.current_user.username, method = method)
-					if test:
-						print(f"You have {method} {volunteer} successfully!")
-					else:
-						print(f"Failed to {method} {volunteer}!")
-				else:
-					print(f"Aborted {method} volunteer operation")
-		else:
+		if not users[self.current_user.username]["is_admin"]:
 			print("You are not allowed to edit volunteer list.")
+
+		self.print_existing_or_accessible_camps()
+
+		camp_id = input_until_valid(
+			input_message = "Please enter the camp_id of the camp you would like to amend the volunteers in, or leave empty to abort:",
+			is_valid = lambda user_input: user_input == "" or user_input in camp_data,
+			validation_message = "The camp_id you entered does not exist. Please re-enter or leave empty to abort."
+		)
+		
+		if camp_id =="":
+			print("Aborted changing volunteer list.")
+			return
+		
+		
+		method_char = input_until_valid(
+		input_message= "Please choose an operation:\
+				\n[a] Add a volunteer\
+				\n[r] Remove a volunteer:",
+		is_valid = lambda user_input: user_input == "a" or user_input == "r",
+		validation_message = f"Invalid input. Please select (a/r) to either add or remove a volunteer in camp {camp_id}."
+		)
+		volunteer_list = Camp.get_volunteer_list(camp_id)
+		print(f"\nExisting volunteers in {camp_id}: {", ".join(volunteer_list) if volunteer_list else "None found"}")
+
+		all_volunteers_from_users = {k for k,v in users.items() if not v["is_admin"]}
+		volunteers_to_add = all_volunteers_from_users.difference(set(volunteer_list))
+
+		if method_char == "a":
+			print(f"Volunteer usernames you can add: {", ".join(volunteers_to_add) if volunteers_to_add else "None found"}")
+			volunteer = input_until_valid(
+				input_message= f"Please enter the volunteer username you want to add into volunteer list for {camp_id}, or leave empty to abort.",
+				is_valid = lambda user_input: user_input == "" or (user_input not in camp_data[camp_id]["volunteers_in_charge"] and user_input in volunteers_to_add),
+				validation_message = f"The username must come from an existing volunteer user that is not already in the volunteer list for {camp_id}. Please re-enter."
+		)
+		else:
+			volunteer = input_until_valid(
+				input_message = f"Please enter the volunteer username you want to remove from volunteer list for {camp_id},  or leave empty to abort.",
+				is_valid = lambda user_input: user_input == "" or user_input in camp_data[camp_id]["volunteers_in_charge"],
+				validation_message = f"The volunteer you entered is not in the volunteer list for {camp_id}. Please re-enter or leave empty to abort."
+			)
+
+		method = "add" if method_char == "a" else "remove"
+		if volunteer == "":
+			print(f"Volunteer operation ({method}) aborted.")
+			return  # early termination
+		confirm = input_until_valid(
+			input_message = f"Please confirm you want to {method} {volunteer} {"into" if method=="add" else "from"} the camp {camp_id} \n[y] Yes\n[n] No (abort)",
+			is_valid = lambda user_input: user_input == "y" or user_input == "n",
+			validation_message = "Unrecognized input. Please confirm (y/n):\n[y] Yes\n[n] No (abort)"
+		)
+		if confirm == "n":
+			print(f"Aborted {method} volunteer operation")
+			return
+
+		test = Camp.edit_volunteer(camp_id = camp_id, volunteer = volunteer, current_user = self.current_user, method = method)
+		if test:
+			print(f"You have {"added" if method=="add" else "removed"} {volunteer} successfully!")
+		else:
+			print(f"Failed to {method} {volunteer}!")
+			
+			
 
 
 	def prompt_list_all_camps_with_access_rights(self):
