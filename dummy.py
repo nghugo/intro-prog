@@ -56,13 +56,13 @@ dummy_camps = {
     "location": "China",
     "capacity": 20,
     "humanitarian_plan_in": "planA",
-    "volunteer_in_charge": ["volunteer1", "v"]
+    "volunteers_in_charge": ["volunteer1", "v"]
   },
   "camp2": {
     "location": "Ukraine",
     "capacity": 224,
     "humanitarian_plan_in": "planB",
-    "volunteer_in_charge": ["volunteer1", "volunteer2", "v"]
+    "volunteers_in_charge": ["volunteer1", "volunteer2", "v"]
   }
 }
 
@@ -91,25 +91,25 @@ dummy_refugees = {
   "refugee1": {
     "fullname": "John Doe",
     "number_of_members": 1,
-    "camp_identification": "camp1",
+    "camp_id": "camp1",
     "medical_condition": "food starved"
   },
   "refugee2": {
     "fullname": "Jane Smith",
     "number_of_members": 3,
-    "camp_identification": "camp1",
+    "camp_id": "camp1",
     "medical_condition": "healthy"
   },
   "refugee3": {
     "fullname": "Saul Goodman",
     "number_of_members": 3,
-    "camp_identification": "camp2",
+    "camp_id": "camp2",
     "medical_condition": "broken bones"
   },
   "f2db20d5525c49c2adaca68b15795f36": {
     "fullname": "Hugo",
     "number_of_members": 2,
-    "camp_identification": "camp1",
+    "camp_id": "camp1",
     "medical_condition": "hungry"
   }
 }

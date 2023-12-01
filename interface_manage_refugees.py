@@ -55,7 +55,7 @@ class InterfaceManageRefugees:
 			is_valid=lambda user_input: user_input.isdigit() and int(user_input) >= 1 and int(user_input) <= 100,
 			validation_message="Number of family members must be a positive integer (1-100 inclusive). Please re-enter."
 		))
-		camp_identification = input_until_valid(
+		camp_id = input_until_valid(
 			input_message="Enter camp identification for this refugee:",
 			is_valid=lambda user_input: user_input.strip() != "",
 			validation_message="Camp identification cannot be empty. Please enter a valid camp identification."
@@ -70,7 +70,7 @@ class InterfaceManageRefugees:
 				\n->Refugee ID: {refugee_id}\
 				\n->Full Name: {fullname}\
 				\n->Number of family members: {number_of_members}\
-				\n->Camp identification: {camp_identification}\
+				\n->Camp identification: {camp_id}\
 				\n->Medical condition: {medical_condition}\
 				\n[y] Yes\
 				\n[n] No (abort)",
@@ -81,7 +81,7 @@ class InterfaceManageRefugees:
 			refugee_infomation = {
 				"fullname": fullname,
 				"number_of_members": number_of_members,
-				"camp_identification": camp_identification,
+				"camp_id": camp_id,
 				"medical_condition": medical_condition,
 			}
 			recorded_refugees = self.load_refugees()
