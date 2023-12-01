@@ -2,6 +2,7 @@ import json
 
 dummy_users = {
     "admin": {
+        "fullname": "Homer Simpsons",
         "password": "111",
         "phone_number" : "11111",
         "email":"admin@mail.com",
@@ -9,6 +10,7 @@ dummy_users = {
         "is_activated": True,
     },
     "volunteer1": {
+        "fullname": "Lisa Simpsons",
         "password": "111",
         "phone_number" : "5028382739",
         "email":"volunteer1@mail.com",
@@ -16,6 +18,7 @@ dummy_users = {
         "is_activated": True,
     },
     "volunteer2": {
+        "fullname": "Peter Griffin",
         "password": "111",
         "phone_number" : "9027346729",
         "email":"volunteer2@mail.com",
@@ -23,6 +26,7 @@ dummy_users = {
         "is_activated": True,
     },
     "volunteer3": {
+        "fullname": "Brian Griffin",
         "password": "111",
         "phone_number" : "11111",
         "email":"volunteer3@mail.com",
@@ -30,6 +34,7 @@ dummy_users = {
         "is_activated": False,
     },
     "a": {
+        "fullname": "Gus Fring",
         "password": "a",
         "phone_number" : "11111",
         "email":"a@a.a",
@@ -37,6 +42,7 @@ dummy_users = {
         "is_activated": True,
     },  # for quick testing
     "v": {
+        "fullname": "Hank Schrader",
         "password": "v",
         "phone_number" : "11111",
         "email":"v@v.v",

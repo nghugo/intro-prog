@@ -48,7 +48,7 @@ class InterfaceManageRefugees:
 			refugee_id = uuid.uuid4().hex
 		name = input_until_valid_name(
 			input_message="Enter the name of the refugee/ representitive of the family:",
-			validation_message="Name can only contain letters. Please enter a valid name."
+			validation_message="Name can only contain letters and spaces. Please re-enter."
 		)
 		number_of_members = int(input_until_valid(
 			input_message="Enter the number of members in the refugee family:",
@@ -98,22 +98,6 @@ class InterfaceManageRefugees:
 			with open("refugees.json", "r") as json_file:
 				json_load = json.load(json_file)
 				return json_load
-		except FileNotFoundError:
-			return {}
-	
-	def load_camps_with_access_rights(self):
-		""" If admin, always allow access
-		If volunteer, only allow access if username is in volunteer_in_charge"""
-		try:
-			with open("camp.json", "r") as camp_json:
-				filtered_camps = {}
-				camps = json.load(camp_json)
-				users = Users.load_users()
-				for camp_id, camp_values in camps:
-					if (users[self.current_user.username]["is_admin"]
-		 				or camp_values["volunteer_in_charge"] == self.current_user.username):
-						filtered_camps[camp_id] = camp_values
-				return filtered_camps
 		except FileNotFoundError:
 			return {}
 	

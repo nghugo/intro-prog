@@ -32,6 +32,31 @@ class InterfaceCamp:
 			self.Edit_camp_information()
 		if option == "5":
 			self.Edit_volunteer()
+	
+
+	def prompt_volunteer_options(self):
+		"""bring up a volunteer menu for camp functions """
+		# camp_identification = Camp()
+		option = input_until_valid(
+			input_message = f"\n<homepage/manage-camps>\nPlease choose an operation on camps below:\
+				\n[1] CANCEL\
+				\n[2] Edit camp information\
+				\n[3] TODO\
+				\n[4] TODO\
+				\n[5] TODO",
+			is_valid=lambda user_input: user_input.isdigit() and int(user_input) > 0 and int(user_input) <= 5,
+			validation_message="Unrecognized input. Please choose from the above list."
+		)
+		if option == "1":
+			return  # CANCEL
+		if option == "2":
+			self.Edit_camp_information()
+		if option == "3":
+			pass
+		if option == "4":
+			pass
+		if option == "5":
+			pass
 		
 
 	def add_camp(self):
@@ -238,6 +263,21 @@ class InterfaceCamp:
 		else:
 			print("You are not allowed to edit volunteer list.")
 
+	def load_camps_with_access_rights(self):
+		""" If admin, always allow access
+		If volunteer, only allow access if username is in volunteer_in_charge"""
+		try:
+			with open("camp.json", "r") as camp_json:
+				filtered_camps = {}
+				camps = json.load(camp_json)
+				users = Users.load_users()
+				for camp_id, camp_values in camps:
+					if (users[self.current_user.username]["is_admin"]
+		 				or camp_values["volunteer_in_charge"] == self.current_user.username):
+						filtered_camps[camp_id] = camp_values
+				return filtered_camps
+		except FileNotFoundError:
+			return {}
 
 
 

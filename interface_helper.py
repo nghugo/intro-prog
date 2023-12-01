@@ -44,7 +44,7 @@ def input_until_valid_name(input_message, validation_message):
 		is_valid = is_valid_name,
 		validation_message = validation_message
 	)
-	return name.title()  
+	return " ".join(name.title().split())  # remove extra whitespaces and Capitalize first letter of each word
 
 
 def input_until_valid_password(input_message: str) -> str:
