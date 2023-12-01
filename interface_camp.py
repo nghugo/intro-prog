@@ -3,14 +3,14 @@ import json
 from camp_modified import Camp
 from interface_helper import input_until_valid
 
-class InterfaceCampOptions:
+class InterfaceCamp:
 	def __init__(self, users, current_user):
 		self.users = users
 		self.current_user = current_user
 
 
-	def show_camp_options(self):
-		"""bring up a menu for camp functions """
+	def show_admin_options(self):
+		"""bring up an admin menu for camp functions """
 		# camp_identification = Camp()
 		option = input_until_valid(
 			input_message = f"\n<homepage/manage-camps>\nPlease choose an operation on camps below:\
