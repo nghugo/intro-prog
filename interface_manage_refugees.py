@@ -7,7 +7,7 @@ class InterfaceManageRefugees:
 	
 	def prompt_volunteer_options(self):
 		option = input_until_valid(
-			# when extending this list, make sure the input message matches the is_valid validation function and the options in interface_admin_options.py
+			
 			input_message = f"\n<homepage/manage-refugees>\nPlease choose a refugee management option below:\
 				\n[1] CANCEL\
 				\n[2] Add refugee profile\
@@ -89,8 +89,8 @@ class InterfaceManageRefugees:
 		else:
 			print(f"Aborted refugee addition.")
 	
-	
-	def load_refugees(self):
+	@staticmethod
+	def load_refugees():
 		try:
 			with open("refugees.json", "r") as json_file:
 				json_load = json.load(json_file)

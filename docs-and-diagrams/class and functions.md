@@ -43,7 +43,7 @@ Classes:
 1. **Class: `InterfaceAdminOptions`**
    - Provides the interface and logic for the admin to interact with when they select an option.
    - Functions:
-     - `execute_option()`: Handles the options from numbers 2, 3, 4, ... and calls the corresponding function.
+     - `prompt_options()`: Handles the options from numbers 2, 3, 4, ... and calls the corresponding function.
      - `prompt_add_user()`: Prompts the admin to provide details for creating a new user.
      - `prompt_activate_user()`:  Prompts the admin to provide details for activating an existing user.
      - `prompt_deactivate_user()`:  Prompts the admin to provide details for deactivating an existing user.
@@ -54,7 +54,7 @@ Classes:
 1. **Class: `InterfaceVolunteerOptions`**
    - Provides the interface and logic for the volunteer to interact with when they select an option.
    - Functions:
-     - `execute_option()`: Handles the options from numbers 2, 3, 4, ... and calls the corresponding function.
+     - `prompt_options()`: Handles the options from numbers 2, 3, 4, ... and calls the corresponding function.
      - `prompt_modify_my_details()`: Prompts the volunteer to provide details for modifying a key-value pair in their user details.
      - `list_my_details()`: Lists all details of the volunteer.
      - `add_refugee()`:  Prompts the volunteer to provide details for adding a refugee.
