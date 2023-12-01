@@ -66,9 +66,8 @@ class Camp:
 	#edit camp with either id or other attributtes
 	@staticmethod
 	def delete_camp(camp_id, current_user):
-		# TODO: make sure delete_camp does not appear on volunteer's list of options
 		users = Users.load_users()
-		if not users[current_user.username]['is_admin']:
+		if not users[current_user.username]['is_admin']:  # only admin gets to delete camp
 			return False
 		data = Camp.loadCampData()
 		if camp_id not in data:
@@ -80,7 +79,7 @@ class Camp:
 
 
 	@staticmethod
-	def edit_camp_details_id(camp_id, new_identification, user):
+	def edit_camp_id(camp_id, new_identification, user):
 		# TODO: data validation either here or in admin/volunteer interface
 		"""edit the camp_id
 		user require to be admin or volunteer in charge.
@@ -156,6 +155,23 @@ class Camp:
 		camp_data = Camp.loadCampData()
 		volunteer_list = camp_data[camp_id]["volunteers_in_charge"]
 		return volunteer_list
+
+	@staticmethod
+	def load_camps_with_access_rights(current_user):
+		""" If admin, always allow access
+		If volunteer, only allow access if username is in volunteers_in_charge"""
+		try:
+			with open("camps.json", "r") as camp_json:
+				filtered_camps = {}
+				camps = json.load(camp_json)
+				users = Users.load_users()
+				for camp_id, camp_values in camps.items():
+					if (users[current_user.username]["is_admin"]
+		 				or current_user.username in camp_values["volunteers_in_charge"]):
+						filtered_camps[camp_id] = camp_values
+				return filtered_camps
+		except FileNotFoundError:
+			return {}
 
 
 
