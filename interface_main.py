@@ -87,7 +87,7 @@ class InterfaceMain:
 		if option == "1":
 			self.prompt_logout()
 		else:
-			interface_admin_options.execute_option(option)
+			interface_admin_options.show_options(option)
 		
  
 
@@ -112,7 +112,7 @@ class InterfaceMain:
 		if option == "1":
 			self.prompt_logout()
 		else:
-			interface_volunteer_options.execute_option(option)
+			interface_volunteer_options.show_options(option)
 	
 	def prompt_logout(self):
 		print("\nAre you sure you want to log out?")

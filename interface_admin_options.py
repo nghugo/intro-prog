@@ -14,52 +14,25 @@ class InterfaceAdminOptions:
 		self.current_user = current_user
 		self.interface_manage_users = InterfaceManageUsers(self.users, self.current_user)
 		self.interface_generate_reports = InterfaceGenerateReports()
+		self.interface_camp_options = InterfaceCampOptions(self.users, self.current_user)
 		# initialise self.plans
 		self.plans = Plans()
 
-	def execute_option(self, option):
+
+	def show_options(self, option):
 		# option 1 is log out, which is handled at interface_main.py
 		if option == "2":
-			self.execute_manage_users_options()
+			self.interface_manage_users.show_admin_options()
 		if option == "3":
 			self.prompt_create_plan()
 		if option == "4":
 			self.prompt_list_plans()
 		if option == "5":
-			self.execute_generate_reports_options()
+			self.interface_generate_reports.show_admin_options()
 		if option == "6":
-			self.execute_camp_options()
-			
-	def execute_manage_users_options(self):
-		option = input_until_valid(
-			# when extending this list, make sure the input message matches the is_valid validation function and the options in interface_admin_options.py
-			input_message = f"\n<homepage/manage-users>\nPlease choose a user management option below:\
-				\n[1] CANCEL\
-				\n[2] Add user\
-				\n[3] Delete user\
-				\n[4] Activate user\
-				\n[5] Deactivate user\
-				\n[6] Modify user\
-				\n[7] List all users",
-			is_valid=lambda user_input: user_input.isdigit() and int(user_input) > 0 and int(user_input) <= 7,
-			validation_message="Unrecognized input. Please choose from the above list."
-		)
-		if option == "1":
-			return  # option 1 is cancel, so just return
-		if option == "2":
-			self.interface_manage_users.prompt_add_user()
-		if option == "3":
-			self.interface_manage_users.prompt_delete_user()
-		if option == "4":
-			self.interface_manage_users.prompt_activate_user()
-		if option == "5":
-			self.interface_manage_users.prompt_deactivate_user()
-		if option == "6":
-			self.interface_manage_users.prompt_modify_user()
-		if option == "7":
-			self.interface_manage_users.list_users()
+			self.interface_camp_options.show_camp_options(self.users, self.current_user)
 
-	
+
 	def prompt_create_plan(self):
 		plan_name = input_until_valid(
 			input_message = "\nEnter plan name. This should be the name of the emergency occuring (E.g. Ukraine War):",
@@ -101,23 +74,8 @@ class InterfaceAdminOptions:
 		else:
 			print(f"Aborted plan creation.")
 
-	def execute_camp_options(self):
-		"""bring up a menu for camp functions """
-		users = Users()
-		# camp_identification = Camp()
-		option = input_until_valid(
-			input_message = f"\n<homepage/manage-camps>\nPlease choose an operation on camps below:\
-				\n[1] CANCEL\
-				\n[2] Add camp\
-				\n[3] Delete camp\
-				\n[4] Edit camp information\
-				\n[5] Edit volunteers: add in/remove from a specific camp",
-			is_valid=lambda user_input: user_input.isdigit() and int(user_input) > 0 and int(user_input) <= 5,
-			validation_message="Unrecognized input. Please choose from the above list."
-		)
-		
-		interface_camp_options = InterfaceCampOptions(users, self.current_user)
-		interface_camp_options.execute_option(option)
+
+
 	def prompt_list_plans(self):
 		print("--- Plans are as follows ---")
 		# create pandas dataframe from dictionary (self.plans.plans dict in .json file)
@@ -126,28 +84,6 @@ class InterfaceAdminOptions:
 		print("--- End of plans list ---")
 		input("Press Enter to continue...")
 	
-	def execute_generate_reports_options(self):
-		option = input_until_valid(
-			# when extending this list, make sure the input message matches the is_valid validation function and the options in interface_admin_options.py
-			#                 
-			input_message = f"\n<homepage/report>\nPlease choose a report to generate below:\
-				\n[1] CANCEL\
-				\n[2] Specific plan (not yet implemented)\
-				\n[3] All plans (not yet implemented)\
-				\n[4] Specific camp\
-				\n[5] All camps",
-			is_valid=lambda user_input: user_input.isdigit() and int(user_input) > 0 and int(user_input) <= 5,
-			validation_message="Unrecognized input. Please choose from the above list."
-		)
-		if option == "1":
-			return  # option 1 is cancel, so just return
-		if option == "2":
-			pass # TODO
-		if option == "3":
-			pass # TODO
-		if option == "4":
-			self.interface_generate_reports.generate_camp_report()
-		if option == "5":
-			self.interface_generate_reports.generate_overall_report()
+	
 
 			

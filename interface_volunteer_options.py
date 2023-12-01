@@ -9,7 +9,7 @@ class InterfaceVolunteerOptions:
 		self.current_user = current_user
 		self.interface_manage_refugees = InterfaceManageRefugees()
 
-	def execute_option(self, option):
+	def show_options(self, option):
 		if option == "2":
 			self.prompt_modify_my_details()
 		if option == "3":
