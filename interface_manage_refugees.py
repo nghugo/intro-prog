@@ -2,18 +2,21 @@ import json
 import uuid
 
 from interface_helper import input_until_valid, input_until_valid_name
+from users import Users
 
 class InterfaceManageRefugees:
-	
+	def __init__(self, current_user):
+		self.current_user = current_user
+
 	def prompt_volunteer_options(self):
 		option = input_until_valid(
 			
 			input_message = f"\n<homepage/manage-refugees>\nPlease choose a refugee management option below:\
 				\n[1] CANCEL\
-				\n[2] Add refugee profile\
-				\n[3] TODO\
-				\n[4] TODO\
-				\n[5] TODO\
+				\n[2] List all refugee profiles TODO\
+				\n[3] Add a refugee profile\
+				\n[4] Edit a refugee profile TODO\
+				\n[5] Delete a refugee profile TODO\
 				\n[6] TODO\
 				\n[7] TODO",
 			is_valid=lambda user_input: user_input.isdigit() and int(user_input) > 0 and int(user_input) <= 7,
@@ -22,9 +25,9 @@ class InterfaceManageRefugees:
 		if option == "1":
 			return  # option 1 is cancel, so just return
 		if option == "2":
-			self.prompt_add_refugee()
-		if option == "3":
 			pass
+		if option == "3":
+			self.prompt_add_refugee()
 		if option == "4":
 			pass
 		if option == "5":
@@ -97,6 +100,27 @@ class InterfaceManageRefugees:
 				return json_load
 		except FileNotFoundError:
 			return {}
+	
+	def load_camps_with_access_rights(self):
+		""" If admin, always allow access
+		If volunteer, only allow access if username is in volunteer_in_charge"""
+		try:
+			with open("camp.json", "r") as camp_json:
+				filtered_camps = {}
+				camps = json.load(camp_json)
+				users = Users.load_users()
+				for camp_id, camp_values in camps:
+					if (users[self.current_user.username]["is_admin"]
+		 				or camp_values["volunteer_in_charge"] == self.current_user.username):
+						filtered_camps[camp_id] = camp_values
+				return filtered_camps
+		except FileNotFoundError:
+			return {}
+	
+	def list_all_refugees_with_access_rights(self):
+		pass
+
+
 
 	# TODO: method: remove refugee from camp
 	# TODO: method: print all refugees of a camp

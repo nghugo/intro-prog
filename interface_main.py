@@ -46,11 +46,7 @@ class InterfaceMain:
 				print(
 					"\nYour account has been deactivated, contact the administrator.\nYou may try another account.")
 			else:
-				self.current_user = CurrentUser(
-					username = username,
-					password = password,
-					is_admin = is_admin
-				)
+				self.current_user = CurrentUser(username)
 				print(
 					f"\nLogin successful.")
 		else:

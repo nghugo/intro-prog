@@ -8,7 +8,7 @@ class InterfaceVolunteerOptions:
 	def __init__(self, current_user, main_self):
 		self.current_user = current_user
 		self.main_self = main_self
-		self.interface_manage_refugees = InterfaceManageRefugees()
+		self.interface_manage_refugees = InterfaceManageRefugees(self.current_user)
 		self.interface_volunteer_user_details = InterfaceVolunteerUserDetails(self.current_user)
 
 	def prompt_volunteer_options(self):  # TODO: implement handling for the other option values
