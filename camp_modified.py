@@ -116,31 +116,32 @@ class Camp:
 	# what is the attribute list? location/capacity/occupancy?
 
 	@staticmethod
-	def edit_volunteer(camp_id, volunteer, user, method = "add"):
-		# TODO: data validation of id and if for remove method, volunteer should be in list
+	def edit_volunteer(camp_id, volunteer, current_user, method = "add"):
 		"""add volunteer to volunteers_in_charge list
 		:parameter: method = "add" or "remove" where add means add volunteer to list and remove means remove volunteer from list"""
+		
+		users = Users.load_users()
 		camp_data = Camp.loadCampData()
 		if method == "add":
-			if user == 'admin':
-				volunteer_list = Camp.get_volunteer_list(camp_id)
-				volunteer_list.append(volunteer)
-				camp_data[camp_id]["volunteers_in_charge"] = volunteer_list
-				with open('camps.json', 'w') as file:
-					json.dump(camp_data, file, indent=2)
-					return True
-			else:
+			if not users[current_user.username]["is_admin"]:
 				return False
+			volunteer_list = Camp.get_volunteer_list(camp_id)
+			volunteer_list.append(volunteer)
+			camp_data[camp_id]["volunteers_in_charge"] = volunteer_list
+			with open('camps.json', 'w') as file:
+				json.dump(camp_data, file, indent=2)
+			return True
+			
 		elif method == "remove":
-			if user == 'admin':
-				volunteer_list = Camp.get_volunteer_list(camp_id)
-				volunteer_list.remove(volunteer)
-				camp_data[camp_id]["volunteers_in_charge"] = volunteer_list
-				with open('camps.json', 'w') as file:
-					json.dump(camp_data, file, indent=2)
-				return True
-			else:
+			if not users[current_user.username]["is_admin"]:
 				return False
+			volunteer_list = Camp.get_volunteer_list(camp_id)
+			volunteer_list.remove(volunteer)
+			camp_data[camp_id]["volunteers_in_charge"] = volunteer_list
+			with open('camps.json', 'w') as file:
+				json.dump(camp_data, file, indent=2)
+			return True
+			
 		else:
 			print("wrong method")
 
