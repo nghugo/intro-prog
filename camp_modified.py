@@ -51,7 +51,6 @@ class Camp:
 			return camp_data
 		
 	@staticmethod
-	# TODO: 
 	def addCamp(camp_identification, location , capacity, humanitarian_plan_in, volunteer_in_charge = None, occupancy = 0):
 		"""
 		Adds a camp to camps.json. 
@@ -103,9 +102,8 @@ class Camp:
 	#edit camp with either id or other attributtes
 	@staticmethod
 	def delete_camp(camp_identification, user):
+		# TODO: make sure delete_camp does not appear on volunteer's list of options
 		data = Camp.loadCampData()
-		# TODO: volunteer does not have this function initially. need to decide the account?
-		# response to TODO: Simply exclude the delete_camp method in the volunteer's list of options. We do not handle auth in the delete_camp method.
 		if user == "admin":
 			if camp_identification not in data:
 				return False
@@ -120,7 +118,7 @@ class Camp:
 
 	@staticmethod
 	def edit_camp_information_id(camp_identification, new_identification, user):
-		#todo: data validation either here or in admin/volunteer interface
+		# TODO: data validation either here or in admin/volunteer interface
 		"""edit the camp_identification
 		user require to be admin or volunteer in charge.
 		:return: boolean value. True if edited, False if not accessible"""

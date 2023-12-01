@@ -9,7 +9,7 @@ class InterfaceManageUsers:
 
 	def prompt_admin_options(self):
 		option = input_until_valid(
-			# when extending this list, make sure the input message matches the is_valid validation function and the options in interface_admin_options.py
+			
 			input_message = f"\n<homepage/manage-users>\nPlease choose a user management option below:\
 				\n[1] CANCEL\
 				\n[2] Add user\

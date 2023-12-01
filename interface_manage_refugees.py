@@ -7,7 +7,7 @@ class InterfaceManageRefugees:
 	
 	def prompt_volunteer_options(self):
 		option = input_until_valid(
-			# when extending this list, make sure the input message matches the is_valid validation function and the options in interface_admin_options.py
+			
 			input_message = f"\n<homepage/manage-refugees>\nPlease choose a refugee management option below:\
 				\n[1] CANCEL\
 				\n[2] Add refugee profile\

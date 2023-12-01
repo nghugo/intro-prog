@@ -6,12 +6,12 @@ class InterfaceGenerateReports:
 
 	def prompt_admin_options(self):
 		option = input_until_valid(
-			# when extending this list, make sure the input message matches the is_valid validation function and the options in interface_admin_options.py
+			
 			#                 
 			input_message = f"\n<homepage/report>\nPlease choose a report to generate below:\
 				\n[1] CANCEL\
-				\n[2] Specific plan (not yet implemented)\
-				\n[3] All plans (not yet implemented)\
+				\n[2] TODO: Specific plan (not yet implemented)\
+				\n[3] TODO: All plans (not yet implemented)\
 				\n[4] Specific camp\
 				\n[5] All camps",
 			is_valid=lambda user_input: user_input.isdigit() and int(user_input) > 0 and int(user_input) <= 5,
@@ -20,9 +20,9 @@ class InterfaceGenerateReports:
 		if option == "1":
 			return  # option 1 is cancel, so just return
 		if option == "2":
-			pass # TODO
+			pass
 		if option == "3":
-			pass # TODO
+			pass
 		if option == "4":
 			self.generate_camp_report()
 		if option == "5":

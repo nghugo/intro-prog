@@ -9,7 +9,7 @@ class InterfacePlan:
 	
 	def prompt_admin_options(self):		
 		option = input_until_valid(
-			# when extending this list, make sure the input message matches the is_valid validation function and the options in interface_admin_options.py
+			
 			input_message = f"\n<homepage/manage-plans>\nPlease choose a plan management option below:\
 				\n[1] CANCEL\
 				\n[2] Create new humanitarian plan\

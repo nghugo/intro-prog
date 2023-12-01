@@ -13,10 +13,7 @@ class InterfaceVolunteerOptions:
 
 	def prompt_volunteer_options(self):  # TODO: implement handling for the other option values
 		users = Users.load_users()
-		option = input_until_valid(
-			# when extending this list, make sure the input message matches the is_valid validation function and the options in interface_volunteer_options.py
-			# interface_volunteer_options.py currently has not currently been built
-			
+		option = input_until_valid(			
 			input_message = f"\n<homepage>\nPlease choose an option: (logged in as {self.current_user.username} ({'admin' if users[self.current_user.username]["is_admin"] else 'volunteer'}))\
 				\n[1] Log out\
 				\n[2] Modify my user account details\
@@ -36,8 +33,8 @@ class InterfaceVolunteerOptions:
 		if option == "4":
 			self.interface_manage_refugees.prompt_volunteer_options()
 		if option == "5":
-			pass  # TODO
+			pass
 		if option == "6":
-			pass  # TODO
+			pass
 
 	

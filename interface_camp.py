@@ -61,16 +61,7 @@ class InterfaceCamp:
 			input_message= "Please enter the humanitarian plan this camp belongs to",
 			is_valid = lambda user_input: user_input != "" and type(user_input) == str,
 			validation_message="This cannot be empty. Please enter the name of the humanitarian plan"
-		)
-
-		# NOTE: commented out (remove this field) because we do not need to enforce that a camp has a volunteer upfront
-		# volunteer_in_charge = input_until_valid(
-		#     input_message="Enter the volunteer name who charges this camp",
-		#     is_valid=lambda user_input: user_input!="",
-		#     validation_message="volunteer does not exist or volunteer is in other camps! Please retry."
-		# )
-		# TODO: refer volunteerlist to add more deciding criteria in is_valid
-		
+		)		
 		confirm = input_until_valid(
 			input_message=f"Please confirm details of the new camp (y/n):\n->CampID: {camp_identification}\n->location: {location}\n->capacity: {capacity}\n->in {humanitarian_plan_in} humanitarian plan\n[y] Yes\n[n] No (abort)",
 			is_valid=lambda user_input: user_input == "y" or user_input == "n",
