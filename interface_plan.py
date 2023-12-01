@@ -4,8 +4,7 @@ from interface_helper import input_until_valid, is_valid_date
 from plans import Plans
 
 class InterfacePlan:
-	def __init__(self, users, current_user):
-		self.users = users
+	def __init__(self, current_user):
 		self.current_user = current_user
 	
 	def prompt_admin_options(self):		

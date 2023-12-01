@@ -1,11 +1,11 @@
 import json
 
 from camp_modified import Camp
+from users import Users
 from interface_helper import input_until_valid
 
 class InterfaceCamp:
-	def __init__(self, users, current_user):
-		self.users = users
+	def __init__(self, current_user):
 		self.current_user = current_user
 
 
@@ -139,7 +139,8 @@ class InterfaceCamp:
 			print("Camp modification aborted.")
 		
 		else:
-			if self.users.users[self.current_user.username]["is_admin"] or self.current_user.username == camp_data[camp_identification]["volunteer_in_charge"]:
+			users = Users.load_users()
+			if users[self.current_user.username]["is_admin"] or self.current_user.username == camp_data[camp_identification]["volunteer_in_charge"]:
 				attribute = input_until_valid(
 				input_message="Enter the attribute (camp_identification/location/capacity/humanitarian_plan_in/volunteer_in_charge) to modify:",
 				is_valid=lambda user_input: user_input in {
@@ -176,8 +177,7 @@ class InterfaceCamp:
 						test = Camp.edit_camp_information(camp_identification=camp_identification, attribute=attribute, new_value=new_value, user = self.current_user.username)
 					
 					if test:
-					   print(f"You've changed the {attribute} successfully!")
-					
+						print(f"You've changed the {attribute} successfully!")
 					else:
 						print(f'Failed to change {attribute}')
 
@@ -190,7 +190,9 @@ class InterfaceCamp:
 
 		camp_data = Camp.loadCampData()
 
-		if self.users.users[self.current_user.username]["is_admin"]:
+		users = Users.load_users()
+
+		if users[self.current_user.username]["is_admin"]:
 		  
 			print(f"Existing camp(s): {", ".join(list(camp_data.keys())) if camp_data else "None found"}")
 

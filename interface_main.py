@@ -36,13 +36,13 @@ class InterfaceMain:
 		password = input_until_valid("Enter your password:")
 		is_admin = account_type_or_exit=="a"
 
-		users = Users()
-		if (users.users  # check that the users dictionary (from persistent storage) is not empty
-	  		and username in users.users  # check if the specified username matches a user
-			and users.users[username]['password'] == password  # check against password associated with the username
-			and users.users[username]['is_admin'] == is_admin  # check if user is of correct type (admin vs volunteer)
+		users = Users.load_users()
+		if (users  # check that the users dictionary (from persistent storage) is not empty
+	  		and username in users  # check if the specified username matches a user
+			and users[username]['password'] == password  # check against password associated with the username
+			and users[username]['is_admin'] == is_admin  # check if user is of correct type (admin vs volunteer)
 		):
-			if not users.users[username]["is_activated"]:
+			if not users[username]["is_activated"]:
 				print(
 					"\nYour account has been deactivated, contact the administrator.\nYou may try another account.")
 			else:
@@ -58,14 +58,14 @@ class InterfaceMain:
 
 	def prompt_options(self):
 		"""Provides options available to the currently logged in user"""
-		users = Users()
+		users = Users.load_users()
 		
 		if self.current_user:
-			if users.users[self.current_user.username]["is_admin"]:
-				interface_admin_options = InterfaceAdminOptions(users, self.current_user, self)
+			if users[self.current_user.username]["is_admin"]:
+				interface_admin_options = InterfaceAdminOptions(self.current_user, self)
 				interface_admin_options.prompt_admin_options()
 			else:
-				interface_volunteer_options = InterfaceVolunteerOptions(users, self.current_user, self)
+				interface_volunteer_options = InterfaceVolunteerOptions(self.current_user, self)
 				interface_volunteer_options.prompt_volunteer_options() 
 	
 	def prompt_logout(self):

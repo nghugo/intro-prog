@@ -2,8 +2,8 @@ import os.path
 import json
 
 class Users:
-	def __init__(self):
-		self.users = self.load_users()  # username: {password: xxx, is_admin: xxx, is_activated: xxx}
+	# def __init__(self):
+	# 	self.users = self.load_users()  # username: {password: xxx, is_admin: xxx, is_activated: xxx}
 	
 	@staticmethod
 	def load_users():
