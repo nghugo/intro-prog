@@ -1,1 +1,44 @@
-{"admin": {"password": "111", "phone_number": "11111", "email": "admin@mail.com", "is_admin": true, "is_activated": true}, "volunteer1": {"password": "111", "phone_number": "5028382739", "email": "volunteer1@mail.com", "is_admin": false, "is_activated": true}, "volunteer2": {"password": "111", "phone_number": "9027346729", "email": "volunteer2@mail.com", "is_admin": false, "is_activated": true}, "volunteer3": {"password": "111", "phone_number": "11111", "email": "volunteer3@mail.com", "is_admin": false, "is_activated": false}, "a": {"password": "a", "phone_number": "11111", "email": "a@a", "is_admin": true, "is_activated": true}, "v": {"password": "v", "phone_number": "23311", "email": "v@xx.", "is_admin": false, "is_activated": true}}
+{
+  "admin": {
+    "password": "111",
+    "phone_number": "11111",
+    "email": "admin@mail.com",
+    "is_admin": true,
+    "is_activated": true
+  },
+  "volunteer1": {
+    "password": "111",
+    "phone_number": "5028382739",
+    "email": "volunteer1@mail.com",
+    "is_admin": false,
+    "is_activated": true
+  },
+  "volunteer2": {
+    "password": "111",
+    "phone_number": "9027346729",
+    "email": "volunteer2@mail.com",
+    "is_admin": false,
+    "is_activated": true
+  },
+  "volunteer3": {
+    "password": "111",
+    "phone_number": "11111",
+    "email": "volunteer3@mail.com",
+    "is_admin": false,
+    "is_activated": false
+  },
+  "a": {
+    "password": "a",
+    "phone_number": "11111",
+    "email": "a@a",
+    "is_admin": true,
+    "is_activated": true
+  },
+  "v": {
+    "password": "v",
+    "phone_number": "11111",
+    "email": "v@v",
+    "is_admin": false,
+    "is_activated": true
+  }
+}

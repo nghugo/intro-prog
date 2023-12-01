@@ -32,14 +32,14 @@ dummy_users = {
     "a": {
         "password": "a",
         "phone_number" : "11111",
-        "email":"a@a",
+        "email":"a@a.a",
         "is_admin": True,
         "is_activated": True,
     },  # for quick testing
     "v": {
         "password": "v",
         "phone_number" : "11111",
-        "email":"v@v",
+        "email":"v@v.v",
         "is_admin": False,
         "is_activated": True,
     },  # for quick testing
