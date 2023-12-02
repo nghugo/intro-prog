@@ -24,13 +24,17 @@ class InterfaceVolunteerUserDetails:
 			self.prompt_modify_my_details()
 
 	def prompt_modify_my_details(self):
+		Users.print_current_user_values(self.current_user.username)
 		users = Users.load_users()
 		field = input_until_valid(
-			input_message="Enter the field (password/fullname/email/phone_number) to modify:",
-			is_valid=lambda user_input: user_input in {
-				"password", "fullname", "email", "phone_number"},
+			input_message="Enter the field (password/fullname/email/phone_number) to modify, or leave empty to abort:",
+			is_valid=lambda user_input: user_input == "" or user_input in {"password", "fullname", "email", "phone_number"},
 			validation_message="Unrecognized input. Please enter a valid field (password/fullname/email/phone_number)."
 		)
+		if field == "":
+			print("User modification aborted.")
+			return
+		
 		if field == "phone_number":
 			value = input_until_valid(
 				input_message=f"Enter the new phone number (5+ digits or leave empty)",

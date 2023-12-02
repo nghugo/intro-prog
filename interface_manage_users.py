@@ -133,15 +133,6 @@ class InterfaceManageUsers:
 		else:
 			Users.modify_user(username, "is_activated", False)
 			print(f"User {username} has been deactivated.")
-	
-	@staticmethod
-	def print_current_user_values(username):
-		users = Users.load_users()
-		user_obj = users[username]
-		print("\nCurrent values of the selected user:")
-		print(f"-> username: {username} (not modifiable)")
-		for field, val in user_obj.items():
-			print(f"-> {field}: {val}")
 
 	def prompt_modify_user(self):
 		users = Users.load_users()
@@ -156,7 +147,7 @@ class InterfaceManageUsers:
 			print("User modification aborted.")
 			return  # early termination
 		
-		self.print_current_user_values(username)
+		Users.print_current_user_values(username)
 
 		field = input_until_valid(
 			input_message="Enter the field (password/fullname/email/phone_number/is_admin/is_activated) to modify, or leave empty to abort:",
