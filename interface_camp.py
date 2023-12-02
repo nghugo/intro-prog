@@ -1,7 +1,5 @@
 import pandas as pd
 
-import json
-
 from camp_modified import Camp
 from users import Users
 from plans import Plans
