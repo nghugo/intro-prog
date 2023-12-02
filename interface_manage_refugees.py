@@ -31,9 +31,9 @@ class InterfaceManageRefugees:
 		if option == "3":
 			self.prompt_add_refugee()
 		if option == "4":
-			pass
+			pass  # NOTE: make sure a volunteer is only able to edit refugees in the camps that they have access to
 		if option == "5":
-			pass
+			pass  # NOTE: make sure a volunteer is only able to delete refugees from the camps that they have access to
 
 	def prompt_volunteer_options(self):
 		option = input_until_valid(
@@ -76,7 +76,8 @@ class InterfaceManageRefugees:
 			is_valid=lambda user_input: user_input.isdigit() and int(user_input) >= 1 and int(user_input) <= 100,
 			validation_message="Number of family members must be a positive integer (1-100 inclusive). Please re-enter."
 		))
-		# TODO: make sure a volunteer is only able to add refugees to the camps that they have access to
+		
+		# Done: make sure a volunteer is only able to add refugees to the camps that they have access to
 
 		filtered_camps = Camp.load_camps_user_has_access_to(self.current_user.username)
 		filtered_camps_ids = filtered_camps.keys()
@@ -154,6 +155,3 @@ class InterfaceManageRefugees:
 					print(f"-> {refugee_fullname} ({refugee_id})")
 		print("--- End of refugee list ---")
 		input("Press Enter to continue...")
-
-
-	# TODO: method: remove refugee from camp
