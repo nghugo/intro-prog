@@ -1,40 +1,61 @@
 import json
 import uuid
+from collections import defaultdict
 
 from interface_helper import input_until_valid, input_until_valid_name
+from camp_modified import Camp
 from users import Users
+
+
 
 class InterfaceManageRefugees:
 	def __init__(self, current_user):
 		self.current_user = current_user
+	
+	def prompt_admin_options(self):
+		option = input_until_valid(
+			
+			input_message = f"\n<homepage/manage-refugees>\nPlease choose a refugee management option below:\
+				\n[1] CANCEL\
+				\n[2] List all refugee profiles under each camp\
+				\n[3] Add a refugee profile\
+				\n[4] Edit a refugee profile TODO\
+				\n[5] Delete a refugee profile TODO",
+			is_valid=lambda user_input: user_input.isdigit() and int(user_input) > 0 and int(user_input) <= 5,
+			validation_message="Unrecognized input. Please choose from the above list."
+		)
+		if option == "1":
+			return  # option 1 is cancel, so just return
+		if option == "2":
+			self.print_all_refugees_user_has_access_to()
+		if option == "3":
+			self.prompt_add_refugee()
+		if option == "4":
+			pass  # NOTE: make sure a volunteer is only able to edit refugees in the camps that they have access to
+		if option == "5":
+			pass  # NOTE: make sure a volunteer is only able to delete refugees from the camps that they have access to
 
 	def prompt_volunteer_options(self):
 		option = input_until_valid(
 			
 			input_message = f"\n<homepage/manage-refugees>\nPlease choose a refugee management option below:\
 				\n[1] CANCEL\
-				\n[2] List all refugee profiles TODO\
+				\n[2] List all refugee profiles under camps you have access to\
 				\n[3] Add a refugee profile\
 				\n[4] Edit a refugee profile TODO\
-				\n[5] Delete a refugee profile TODO\
-				\n[6] TODO\
-				\n[7] TODO",
-			is_valid=lambda user_input: user_input.isdigit() and int(user_input) > 0 and int(user_input) <= 7,
+				\n[5] Delete a refugee profile TODO",
+			is_valid=lambda user_input: user_input.isdigit() and int(user_input) > 0 and int(user_input) <= 5,
 			validation_message="Unrecognized input. Please choose from the above list."
 		)
 		if option == "1":
 			return  # option 1 is cancel, so just return
 		if option == "2":
-			pass
+			self.print_all_refugees_user_has_access_to()
 		if option == "3":
 			self.prompt_add_refugee()
 		if option == "4":
 			pass
 		if option == "5":
-			pass
-		if option == "6":
-			pass
-		if option == "7":
 			pass
 	
 	def prompt_add_refugee(self):
@@ -55,11 +76,21 @@ class InterfaceManageRefugees:
 			is_valid=lambda user_input: user_input.isdigit() and int(user_input) >= 1 and int(user_input) <= 100,
 			validation_message="Number of family members must be a positive integer (1-100 inclusive). Please re-enter."
 		))
+		
+		# Done: make sure a volunteer is only able to add refugees to the camps that they have access to
+
+		filtered_camps = Camp.load_camps_user_has_access_to(self.current_user.username)
+		filtered_camps_ids = filtered_camps.keys()
+
 		camp_id = input_until_valid(
-			input_message="Enter camp identification for this refugee:",
-			is_valid=lambda user_input: user_input.strip() != "",
-			validation_message="Camp identification cannot be empty. Please enter a valid camp identification."
+			input_message=f"Enter camp ID for this refugee, or leave empty to abort:\
+				\n(Note: Camps accessible by you are: {", ".join(filtered_camps_ids) if filtered_camps_ids else "None found"})",
+			is_valid=lambda user_input: user_input == "" or user_input in filtered_camps_ids,
+			validation_message="Camp ID not found. Please choose from the above list of camp IDs, or leave empty to abort."
 		)
+		if camp_id == "":
+			print("Refugee creation aborted.")
+			return
 		medical_condition = input_until_valid(
 			input_message="Enter medical condition:",
 			is_valid=lambda user_input: user_input.strip() != "",
@@ -70,7 +101,7 @@ class InterfaceManageRefugees:
 				\n->Refugee ID: {refugee_id}\
 				\n->Full Name: {fullname}\
 				\n->Number of family members: {number_of_members}\
-				\n->Camp identification: {camp_id}\
+				\n->Camp ID: {camp_id}\
 				\n->Medical condition: {medical_condition}\
 				\n[y] Yes\
 				\n[n] No (abort)",
@@ -101,10 +132,26 @@ class InterfaceManageRefugees:
 		except FileNotFoundError:
 			return {}
 	
-	def list_all_refugees_with_access_rights(self):
-		pass
+	def print_all_refugees_user_has_access_to(self):
+		all_refugees = self.load_refugees()
+		
+		camp_to_filtered_refugees = defaultdict(list)
+		for refugee_id, refugee_values in all_refugees.items():
+			if Camp.user_has_access(camp_id = refugee_values["camp_id"], username = self.current_user.username):
+				camp_to_filtered_refugees[refugee_values["camp_id"]].append((refugee_id, refugee_values["fullname"]))
+		
+		users = Users.load_users()
+		if users[self.current_user.username]["is_admin"]:
+			print("\n--- List of refugees ---")
+		else:
+			print("\n--- List of refugees under camps you have access rights to ---")
 
-
-
-	# TODO: method: remove refugee from camp
-	# TODO: method: print all refugees of a camp
+		if not camp_to_filtered_refugees:
+			print("None found")
+		else:
+			for camp, refugee_id_fullname in camp_to_filtered_refugees.items():
+				print(f"{camp}:")
+				for refugee_id, refugee_fullname in refugee_id_fullname:
+					print(f"-> {refugee_fullname} ({refugee_id})")
+		print("--- End of refugee list ---")
+		input("Press Enter to continue...")

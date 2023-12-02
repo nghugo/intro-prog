@@ -32,7 +32,7 @@ Admin
     │   ├── Display humanitarian plan
     │   │   ├── Summary of Details
     │   │   ├── Number of Refugees
-    │   │   ├── Camp Identification
+    │   │   ├── Camp Id
     │   │   └── Number of Volunteers
     │   ├── Edit volunteer accounts
     │   │   ├── Deactivate/Reactivate
@@ -47,10 +47,10 @@ Admin
     │   ├── Name
     │   └── Phone
     ├── Edit Camp Information
-    │   ├── Camp Identification
+    │   ├── Camp Id
     │   └── Capacity for New Refugees
     ├── Create Refugee Profile
-    │   ├── Camp Identification
+    │   ├── Camp Id
     │   └── Medical Condition
     └── Display Resources
         └── Camp Resources (e.g., Food Packets)

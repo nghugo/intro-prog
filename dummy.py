@@ -63,6 +63,12 @@ dummy_camps = {
     "capacity": 224,
     "humanitarian_plan_in": "planB",
     "volunteers_in_charge": ["volunteer1", "volunteer2", "v"]
+  },
+  "camp3": {
+    "location": "UK",
+    "capacity": 30,
+    "humanitarian_plan_in": "planC",
+    "volunteers_in_charge": []
   }
 }
 
@@ -108,8 +114,8 @@ dummy_refugees = {
   },
   "f2db20d5525c49c2adaca68b15795f36": {
     "fullname": "Hugo",
-    "number_of_members": 2,
-    "camp_id": "camp1",
+    "number_of_members": 1,
+    "camp_id": "camp3",
     "medical_condition": "hungry"
   }
 }

@@ -28,7 +28,7 @@ class InterfaceCamp:
 		if option == "1":
 			return  # CANCEL
 		if option == "2":
-			self.prompt_list_all_camps_with_access_rights()
+			self.prompt_list_all_camps_user_has_access_to()
 		if option == "3":
 			self.prompt_add_camp()
 		if option == "4":
@@ -55,7 +55,7 @@ class InterfaceCamp:
 		if option == "1":
 			return  # CANCEL
 		if option == "2":
-			self.prompt_list_all_camps_with_access_rights()
+			self.prompt_list_all_camps_user_has_access_to()
 		if option == "3":
 			self.prompt_edit_camp_details()
 		if option == "4":
@@ -139,13 +139,13 @@ class InterfaceCamp:
 			print("Camp deletion aborted.")
 			return
 		
-		test = Camp.delete_camp(camp_id = camp_id, current_user = self.current_user)
+		test = Camp.delete_camp(camp_id = camp_id, username = self.current_user.username)
 		print(f"Successfully deleted {camp_id}" if test else f"Failed to delete {camp_id}")
 
 
 	def prompt_edit_camp_details(self):
 		
-		filtered_camps = Camp.load_camps_with_access_rights(self.current_user)
+		filtered_camps = Camp.load_camps_user_has_access_to(self.current_user.username)
 		self.print_existing_or_accessible_camps()
 
 		camp_id = input_until_valid(
@@ -202,7 +202,7 @@ class InterfaceCamp:
 			return
 
 		if attribute == "camp_id":
-			test = Camp.edit_camp_id(camp_id = camp_id, new_identification = new_value, user = self.current_user.username)
+			test = Camp.edit_camp_id(camp_id = camp_id, new_id = new_value, user = self.current_user.username)
 		else:
 			test = Camp.edit_camp_details(camp_id=camp_id, attribute=attribute, new_value=new_value, user = self.current_user.username)
 		
@@ -272,7 +272,7 @@ class InterfaceCamp:
 			print(f"Aborted {method} volunteer operation")
 			return
 
-		test = Camp.edit_volunteer(camp_id = camp_id, volunteer = volunteer, current_user = self.current_user, method = method)
+		test = Camp.edit_volunteer(camp_id = camp_id, volunteer = volunteer, username = self.current_user.username, method = method)
 		if test:
 			print(f"You have {"added" if method=="add" else "removed"} {volunteer} successfully!")
 		else:
@@ -281,25 +281,25 @@ class InterfaceCamp:
 			
 
 
-	def prompt_list_all_camps_with_access_rights(self):
+	def prompt_list_all_camps_user_has_access_to(self):
 		users = Users.load_users()
 		user_is_admin = users[self.current_user.username]["is_admin"]
-		filtered_camps = Camp.load_camps_with_access_rights(self.current_user)
+		filtered_camps = Camp.load_camps_user_has_access_to(self.current_user.username)
 		
 		print("--- Camps are as follows ---" if user_is_admin else "--- Camps you have access to are as follows ---")
 		filtered_camps_df = pd.DataFrame.from_dict(filtered_camps).transpose()  # use pandas for pretty print
 		print(filtered_camps_df)
 		print("--- End of camps list ---")
 		input("Press Enter to continue...")
-	
-	def prompt_camp_details(self):
-		pass
+
 	
 	def print_existing_or_accessible_camps(self):
+		"""All existing camps if user is admin type
+		Accessible camps if user is volunteer type """
 		
 		users = Users.load_users()
 		is_admin =  users[self.current_user.username]["is_admin"]
-		filtered_camps = Camp.load_camps_with_access_rights(self.current_user)
+		filtered_camps = Camp.load_camps_user_has_access_to(self.current_user.username)
 
 		message_key = "\nExisting camp(s):" if is_admin else "Camp(s) you have access to:"
 		message_value = ", ".join(list(filtered_camps.keys())) if filtered_camps else "None found"
