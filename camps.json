@@ -5,14 +5,23 @@
     "humanitarian_plan_in": "planA",
     "volunteers_in_charge": [
       "volunteer1",
-      "v",
-      "volunteer2"
+      "v"
     ]
   },
   "camp2": {
     "location": "Ukraine",
     "capacity": 224,
     "humanitarian_plan_in": "planB",
+    "volunteers_in_charge": [
+      "volunteer1",
+      "volunteer2",
+      "v"
+    ]
+  },
+  "camp3": {
+    "location": "UK",
+    "capacity": 30,
+    "humanitarian_plan_in": "planC",
     "volunteers_in_charge": []
   }
 }

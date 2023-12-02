@@ -157,7 +157,7 @@ class Camp:
 		return volunteer_list
 
 	@staticmethod
-	def load_camps_with_access_rights(current_user):
+	def load_camps_user_has_access_to(current_user):
 		""" If admin, always allow access
 		If volunteer, only allow access if username is in volunteers_in_charge"""
 		try:
@@ -172,6 +172,20 @@ class Camp:
 				return filtered_camps
 		except FileNotFoundError:
 			return {}
+	
+	@staticmethod
+	def user_has_access(camp_id, username):
+		users = Users.load_users()
+		with open("camps.json", "r") as camp_json:
+			camps = json.load(camp_json)
+			if camp_id not in camps:
+				print("Error: camp_id {camp_id} not in the list of camps {camps}")
+				return False
+			if users[username]["is_admin"] or username in camps[camp_id]["volunteers_in_charge"]:
+				return True
+		return False
+			
+
 
 
 
