@@ -12,21 +12,25 @@ class InterfacePlan:
 			
 			input_message = f"\n<homepage/manage-plans>\nPlease choose a plan management option below:\
 				\n[1] CANCEL\
-				\n[2] Create new humanitarian plan\
-				\n[3] Display details of all plans\
-				\n[4] TODO\
-				\n[5] TODO\
+				\n[2] Display details of all plans\
+				\n[3] Create new humanitarian plan\
+				\n[4] TODO: Edit a humanitarian plan\
+				\n[5] TODO: Remove a humanitarian plan\
 				\n[6] TODO\
 				\n[7] TODO",
-			is_valid=lambda user_input: user_input.isdigit() and int(user_input) > 0 and int(user_input) <= 3,
+			is_valid=lambda user_input: user_input.isdigit() and int(user_input) > 0 and int(user_input) <= 5,
 			validation_message="Unrecognized input. Please choose from the above list."
 		)
 		if option == "1":
 			return  # option 1 is cancel, so just return
 		if option == "2":
-			self.prompt_create_plan()
-		if option == "3":
 			self.prompt_list_plans()
+		if option == "3":
+			self.prompt_create_plan()
+		if option == "4":
+			pass
+		if option == "5":
+			pass
 
 	def prompt_create_plan(self):
 		plan_name = input_until_valid(
