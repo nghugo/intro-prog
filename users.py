@@ -87,5 +87,14 @@ class Users:
 		with open("users.json", "w") as json_file:
 			json.dump(data, json_file, indent=2)
 		return True
+
+	@classmethod
+	def print_current_user_values(cls, username):
+		users = cls.load_users()
+		user_obj = users[username]
+		print("\nCurrent values of the selected user:")
+		print(f"-> username: {username} (not modifiable)")
+		for field, val in user_obj.items():
+			print(f"-> {field}: {val} {'(only modifiable by admin via manage users section)' if field in ['is_admin', 'is_activated'] else ''}")
 	
 	
