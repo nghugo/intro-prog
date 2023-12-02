@@ -133,6 +133,15 @@ class InterfaceManageUsers:
 		else:
 			Users.modify_user(username, "is_activated", False)
 			print(f"User {username} has been deactivated.")
+	
+	@staticmethod
+	def print_current_user_values(username):
+		users = Users.load_users()
+		user_obj = users[username]
+		print("\nCurrent values of the selected user:")
+		print(f"-> username: {username}")
+		for field, val in user_obj.items():
+			print(f"-> {field}: {val}")
 
 	def prompt_modify_user(self):
 		users = Users.load_users()
@@ -146,13 +155,18 @@ class InterfaceManageUsers:
 		if username == "":
 			print("User modification aborted.")
 			return  # early termination
+		
+		self.print_current_user_values(username)
 
 		field = input_until_valid(
-			input_message="Enter the field (password/fullname/email/phone_number/is_admin/is_activated) to modify:",
+			input_message="Enter the field (password/fullname/email/phone_number/is_admin/is_activated) to modify, or leave empty to abort:",
 			is_valid=lambda user_input: user_input in {
-				"password", "fullname", "email", "phone_number", "is_admin", "is_activated"},
+				"", "password", "fullname", "email", "phone_number", "is_admin", "is_activated"},
 			validation_message="Unrecognized input. Please enter a valid field (password/email/phone_number/is_admin/is_activated)."
 		)
+		if field == "":
+			print("User modification aborted.")
+			return
 		if field in {"is_admin", "is_activated"}:
 			if username == self.current_user.username:
 				# do not allow deactivation or admin disabling of own account
