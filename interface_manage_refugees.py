@@ -134,24 +134,27 @@ class InterfaceManageRefugees:
 			return {}
 	
 	def verbose_print_all_refugees_user_has_access_to(self):
-		accessible_refugeeids_sep_by_camp = self.get_accessible_refugeeids_sep_by_camp(username = self.current_user.username)
+		accessible_refugeesep_by_camp = self.get_accessible_refugeesep_by_camp(username = self.current_user.username)
 		users = Users.load_users()
 		if users[self.current_user.username]["is_admin"]:
 			print("\n--- List of refugees ---")
 		else:
 			print("\n--- List of refugees under camps you have access rights to ---")
-		if not accessible_refugeeids_sep_by_camp:
+		if not accessible_refugeesep_by_camp:
 			print("None found")
 		else:
-			for camp, refugee_id_fullname in accessible_refugeeids_sep_by_camp.items():
-				print(f"{camp}:")
-				for refugee_id, refugee_fullname in refugee_id_fullname:
-					print(f"-> {refugee_fullname} (ID: {refugee_id})")
-		print("--- End of refugee list ---")
+			for camp, refugee_id_values in accessible_refugeesep_by_camp.items():
+				print(f"\n{{{camp}}}")
+				for refugee_id, refugee_values in refugee_id_values:
+					print(f"\n{refugee_values["fullname"]} (ID: {refugee_id})")
+					for attr, val in refugee_values.items():
+						if attr != "fullname":
+							print(f"-> {attr}: {val}")
+		print("\n--- End of refugee list ---")
 		input("Press Enter to continue...")
 
 	def succint_print_all_refugees_user_has_access_to(self):
-		accessible_refugeeids_sep_by_camp = self.get_accessible_refugeeids_sep_by_camp(username = self.current_user.username)
+		accessible_refugeesep_by_camp = self.get_accessible_refugeesep_by_camp(username = self.current_user.username)
 		users = Users.load_users()
 
 		if users[self.current_user.username]["is_admin"]:
@@ -159,20 +162,20 @@ class InterfaceManageRefugees:
 		else:
 			print("\nExisting refugees under camps that have access rights to:")
 		
-		for camp, refugee_id_fullname in accessible_refugeeids_sep_by_camp.items():
+		for camp, refugee_id_values in accessible_refugeesep_by_camp.items():
 			print(f"{camp}:")
 			ref_list_in_camp = []
-			for refugee_id, refugee_fullname in refugee_id_fullname:
-				ref_list_in_camp.append(f"{refugee_fullname} (ID: {refugee_id})")
+			for refugee_id, refugee_values in refugee_id_values:
+				ref_list_in_camp.append(f"{refugee_values["fullname"]} (ID: {refugee_id})")
 			print("-> " + ", ".join(ref_list_in_camp))
 
 
-	def get_accessible_refugeeids_sep_by_camp(self, username) -> dict:
+	def get_accessible_refugeesep_by_camp(self, username) -> dict:
 		accessible_refugees = self.get_accessible_refugees(username)
-		accessible_refugeeids_sep_by_camp = defaultdict(list)
+		accessible_refugeesep_by_camp = defaultdict(list)
 		for refugee_id, refugee_values in accessible_refugees.items():
-			accessible_refugeeids_sep_by_camp[refugee_values["camp_id"]].append((refugee_id, refugee_values["fullname"]))
-		return accessible_refugeeids_sep_by_camp
+			accessible_refugeesep_by_camp[refugee_values["camp_id"]].append((refugee_id, refugee_values))
+		return accessible_refugeesep_by_camp
 
 
 	def get_accessible_refugees(self, username):
