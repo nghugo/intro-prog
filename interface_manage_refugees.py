@@ -77,11 +77,19 @@ class InterfaceManageRefugees:
 			validation_message="Number of family members must be a positive integer (1-100 inclusive). Please re-enter."
 		))
 		# TODO: make sure a volunteer is only able to add refugees to the camps that they have access to
+
+		filtered_camps = Camp.load_camps_user_has_access_to(self.current_user.username)
+		filtered_camps_ids = filtered_camps.keys()
+
 		camp_id = input_until_valid(
-			input_message="Enter camp identification for this refugee:",
-			is_valid=lambda user_input: user_input.strip() != "",
-			validation_message="Camp identification cannot be empty. Please enter a valid camp identification."
+			input_message=f"Enter camp ID for this refugee, or leave empty to abort:\
+				\n(Note: Camps accessible by you are: {", ".join(filtered_camps_ids) if filtered_camps_ids else "None found"})",
+			is_valid=lambda user_input: user_input == "" or user_input in filtered_camps_ids,
+			validation_message="Camp ID not found. Please choose from the above list of camp IDs, or leave empty to abort."
 		)
+		if camp_id == "":
+			print("Refugee creation aborted.")
+			return
 		medical_condition = input_until_valid(
 			input_message="Enter medical condition:",
 			is_valid=lambda user_input: user_input.strip() != "",
@@ -92,7 +100,7 @@ class InterfaceManageRefugees:
 				\n->Refugee ID: {refugee_id}\
 				\n->Full Name: {fullname}\
 				\n->Number of family members: {number_of_members}\
-				\n->Camp identification: {camp_id}\
+				\n->Camp ID: {camp_id}\
 				\n->Medical condition: {medical_condition}\
 				\n[y] Yes\
 				\n[n] No (abort)",

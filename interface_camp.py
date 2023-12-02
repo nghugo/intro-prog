@@ -202,7 +202,7 @@ class InterfaceCamp:
 			return
 
 		if attribute == "camp_id":
-			test = Camp.edit_camp_id(camp_id = camp_id, new_identification = new_value, user = self.current_user.username)
+			test = Camp.edit_camp_id(camp_id = camp_id, new_id = new_value, user = self.current_user.username)
 		else:
 			test = Camp.edit_camp_details(camp_id=camp_id, attribute=attribute, new_value=new_value, user = self.current_user.username)
 		

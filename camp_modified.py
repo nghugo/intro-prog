@@ -78,7 +78,7 @@ class Camp:
 
 
 	@staticmethod
-	def edit_camp_id(camp_id, new_identification, user):
+	def edit_camp_id(camp_id, new_id, user):
 		# TODO: data validation either here or in admin/volunteer interface
 		"""edit the camp_id
 		user require to be admin or volunteer in charge.
@@ -86,7 +86,7 @@ class Camp:
 		users = Users.load_users()
 		camp_data = Camp.loadCampData()
 		if user in users and (user == 'admin' or user in camp_data[camp_id]["volunteers_in_charge"]):
-			camp_data[new_identification] = camp_data.pop(camp_id)
+			camp_data[new_id] = camp_data.pop(camp_id)
 			with open('camps.json','w') as file:
 				json.dump(camp_data, file, indent=2)
 			return True
@@ -101,10 +101,6 @@ class Camp:
 				:return: boolean value. True if edited, False if not accessible"""
 		users = Users.load_users()
 		camp_data = Camp.loadCampData()
-
-		print("*** DEBUG ***")
-		print(f'camp_data[camp_id]["volunteers_in_charge"]: {camp_data[camp_id]["volunteers_in_charge"]}')
-		print("*** DEBUG END ***")
 
 		if user in users and (user == 'admin' or user in camp_data[camp_id]["volunteers_in_charge"]):
 			camp_data[camp_id][attribute] = new_value
