@@ -11,29 +11,29 @@ class InterfaceManageUsers:
 		option = input_until_valid(
 			input_message = f"\n<homepage/manage-users>\nPlease choose a user management option below:\
 				\n[1] CANCEL\
-				\n[2] Add user\
-				\n[3] Edit user\
-				\n[4] Delete user\
-				\n[5] Activate user\
-				\n[6] Deactivate user\
-				\n[7] List all users",
+				\n[2] List all users\
+				\n[3] Add user\
+				\n[4] Edit user\
+				\n[5] Delete user\
+				\n[6] Activate user\
+				\n[7] Deactivate user",
 			is_valid=lambda user_input: user_input.isdigit() and int(user_input) > 0 and int(user_input) <= 7,
 			validation_message="Unrecognized input. Please choose from the above list."
 		)
 		if option == "1":
 			return  # option 1 is cancel, so just return
 		if option == "2":
-			self.prompt_add_user()
-		if option == "3":
-			self.prompt_modify_user()
-		if option == "4":
-			self.prompt_delete_user()
-		if option == "5":
-			self.prompt_activate_user()
-		if option == "6":
-			self.prompt_deactivate_user()
-		if option == "7":
 			self.list_users()
+		if option == "3":
+			self.prompt_add_user()
+		if option == "4":
+			self.prompt_modify_user()
+		if option == "5":
+			self.prompt_delete_user()
+		if option == "6":
+			self.prompt_activate_user()
+		if option == "7":
+			self.prompt_deactivate_user()
 
 	def prompt_add_user(self):
 		users = Users.load_users()
@@ -225,4 +225,4 @@ class InterfaceManageUsers:
 	@staticmethod
 	def print_all_users():
 		users = Users.load_users()
-		print(f"\nList of existing username(s): {", ".join(users.keys()) if users else 'None found'}")
+		print(f"\nExisting username(s): {", ".join(users.keys()) if users else 'None found'}")
