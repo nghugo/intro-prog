@@ -22,7 +22,7 @@ class InterfaceManageRefugees:
 				\n[2] List all refugee profiles under each camp\
 				\n[3] Add a refugee profile\
 				\n[4] Edit a refugee profile\
-				\n[5] Delete a refugee profile TODO",
+				\n[5] Delete a refugee profile",
 			is_valid=lambda user_input: user_input.isdigit() and int(user_input) > 0 and int(user_input) <= 5,
 			validation_message="Unrecognized input. Please choose from the above list."
 		)
@@ -35,7 +35,7 @@ class InterfaceManageRefugees:
 		if option == "4":
 			self.prompt_modify_refugee()
 		if option == "5":
-			self.prompt_delete_refugee()  # TODO: make sure a volunteer is only able to delete refugees from the camps that they have access rights to
+			self.prompt_delete_refugee()
 
 
 	def prompt_volunteer_options(self):
@@ -46,7 +46,7 @@ class InterfaceManageRefugees:
 				\n[2] List all refugee profiles under camps you have access rights to\
 				\n[3] Add a refugee profile\
 				\n[4] Edit a refugee profile\
-				\n[5] Delete a refugee profile TODO",
+				\n[5] Delete a refugee profile",
 			is_valid=lambda user_input: user_input.isdigit() and int(user_input) > 0 and int(user_input) <= 5,
 			validation_message="Unrecognized input. Please choose from the above list."
 		)
@@ -59,7 +59,7 @@ class InterfaceManageRefugees:
 		if option == "4":
 			self.prompt_modify_refugee()
 		if option == "5":
-			self.prompt_delete_refugee()  # TODO: make sure a volunteer is only able to delete refugees from the camps that they have access rights to
+			self.prompt_delete_refugee()
 	
 
 	def prompt_add_refugee(self):
@@ -271,4 +271,12 @@ class InterfaceManageRefugees:
 			print("Aborted refugee profile edit.")
 			return
 	
-		print("TODO")
+		refugee_fullname = accessible_refugees[refugee_id]["fullname"]
+
+		with open("refugees.json", "r") as json_file:
+			data = json.load(json_file)
+		del data[refugee_id]
+		with open("refugees.json", "w") as json_file:
+			json.dump(data, json_file, indent=2)
+
+		print(f"Successfully deleted refugee {refugee_fullname} ({refugee_id})")
