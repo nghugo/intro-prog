@@ -139,7 +139,7 @@ class InterfaceManageUsers:
 		users = Users.load_users()
 		user_obj = users[username]
 		print("\nCurrent values of the selected user:")
-		print(f"-> username: {username}")
+		print(f"-> username: {username} (not modifiable)")
 		for field, val in user_obj.items():
 			print(f"-> {field}: {val}")
 

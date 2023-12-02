@@ -45,7 +45,7 @@ class InterfaceManageRefugees:
 				\n[1] CANCEL\
 				\n[2] List all refugee profiles under camps you have access rights to\
 				\n[3] Add a refugee profile\
-				\n[4] Edit a refugee profile TODO\
+				\n[4] Edit a refugee profile\
 				\n[5] Delete a refugee profile TODO",
 			is_valid=lambda user_input: user_input.isdigit() and int(user_input) > 0 and int(user_input) <= 5,
 			validation_message="Unrecognized input. Please choose from the above list."
@@ -57,7 +57,7 @@ class InterfaceManageRefugees:
 		if option == "3":
 			self.prompt_add_refugee()
 		if option == "4":
-			self.prompt_modify_refugee() # TODO: make sure a volunteer is only able to edit refugees in the camps that they have access rights to
+			self.prompt_modify_refugee()
 		if option == "5":
 			self.prompt_delete_refugee()  # TODO: make sure a volunteer is only able to delete refugees from the camps that they have access rights to
 	
