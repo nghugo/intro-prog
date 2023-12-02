@@ -1,8 +1,9 @@
 import json
 import uuid
-from collections import defaultdict
+
 
 from interface_helper import input_until_valid, input_until_valid_name
+from refugees import load_refugees, get_accessible_refugees, get_accessible_refugees_sep_by_camp
 from camp_modified import Camp
 from users import Users
 
@@ -12,6 +13,7 @@ class InterfaceManageRefugees:
 	def __init__(self, current_user):
 		self.current_user = current_user
 	
+
 	def prompt_admin_options(self):
 		option = input_until_valid(
 			
@@ -34,6 +36,7 @@ class InterfaceManageRefugees:
 			self.prompt_modify_refugee()
 		if option == "5":
 			self.prompt_delete_refugee()  # TODO: make sure a volunteer is only able to delete refugees from the camps that they have access rights to
+
 
 	def prompt_volunteer_options(self):
 		option = input_until_valid(
@@ -58,8 +61,9 @@ class InterfaceManageRefugees:
 		if option == "5":
 			self.prompt_delete_refugee()  # TODO: make sure a volunteer is only able to delete refugees from the camps that they have access rights to
 	
+
 	def prompt_add_refugee(self):
-		existing_ids = self.load_refugees().keys()
+		existing_ids = load_refugees().keys()
 		print(f"Existing refugee IDs: {", ".join(existing_ids) if existing_ids else "None found."}")
 		refugee_id = input_until_valid(
 			input_message="Enter a unique id to identify this refugee (different from above list), or leave empty to auto-generate:",
@@ -116,25 +120,17 @@ class InterfaceManageRefugees:
 				"camp_id": camp_id,
 				"medical_condition": medical_condition,
 			}
-			recorded_refugees = self.load_refugees()
+			recorded_refugees = load_refugees()
 			recorded_refugees[refugee_id] = refugee_infomation
 			with open("refugees.json", "w") as json_file:
 				json.dump(recorded_refugees, json_file, indent=2)
 			print(f"Refugee {fullname} ({refugee_id}) has been added successfully.")
 		else:
 			print(f"Aborted refugee profile creation.")
-	
-	@staticmethod
-	def load_refugees():
-		try:
-			with open("refugees.json", "r") as json_file:
-				json_load = json.load(json_file)
-				return json_load
-		except FileNotFoundError:
-			return {}
-	
+
+
 	def verbose_print_all_refugees_user_has_access_to(self):
-		accessible_refugees_sep_by_camp = self.get_accessible_refugees_sep_by_camp(username = self.current_user.username)
+		accessible_refugees_sep_by_camp = get_accessible_refugees_sep_by_camp(username = self.current_user.username)
 		users = Users.load_users()
 		if users[self.current_user.username]["is_admin"]:
 			print("\n--- List of refugees ---")
@@ -153,8 +149,9 @@ class InterfaceManageRefugees:
 		print("\n--- End of refugee list ---")
 		input("Press Enter to continue...")
 
+
 	def succint_print_all_refugees_user_has_access_to(self):
-		accessible_refugees_sep_by_camp = self.get_accessible_refugees_sep_by_camp(username = self.current_user.username)
+		accessible_refugees_sep_by_camp = get_accessible_refugees_sep_by_camp(username = self.current_user.username)
 		users = Users.load_users()
 
 		if users[self.current_user.username]["is_admin"]:
@@ -170,23 +167,8 @@ class InterfaceManageRefugees:
 			print("-> " + ", ".join(ref_list_in_camp))
 
 
-	def get_accessible_refugees_sep_by_camp(self, username) -> dict:
-		accessible_refugees = self.get_accessible_refugees(username)
-		accessible_refugees_sep_by_camp = defaultdict(list)
-		for refugee_id, refugee_values in accessible_refugees.items():
-			accessible_refugees_sep_by_camp[refugee_values["camp_id"]].append((refugee_id, refugee_values))
-		return accessible_refugees_sep_by_camp
-
-
-	def get_accessible_refugees(self, username):
-		all_refugees = self.load_refugees()
-		accessible_refugees = {refugee_id: refugee_values for refugee_id, refugee_values in all_refugees.items() 
-						 if Camp.user_has_access(camp_id = refugee_values["camp_id"], username = username)}
-		return accessible_refugees
-
-
 	def prompt_modify_refugee(self):
-		accessible_refugees = self.get_accessible_refugees(self.current_user.username)
+		accessible_refugees = get_accessible_refugees(self.current_user.username)
 		self.succint_print_all_refugees_user_has_access_to()
 		
 		refugee_id = input_until_valid(
@@ -257,7 +239,7 @@ class InterfaceManageRefugees:
 			print("Refugee modification aborted.")
 			return
 	
-		recorded_refugees = self.load_refugees()			
+		recorded_refugees = load_refugees()			
 		refugee_obj = recorded_refugees[refugee_id]
 		refugee_obj[field] = value  # update refugee object's field to new value
 		recorded_refugees[refugee_id] = refugee_obj
@@ -267,13 +249,6 @@ class InterfaceManageRefugees:
 		print(f"Refugee {accessible_refugees[refugee_id]["fullname"]} ({refugee_id}) has been added successfully.")
 		print("Successfully modified refugee.")
 			
-		
-
-
-
-
-
-
 	
 	@staticmethod
 	def print_refugee_values(refugee_id, refugee_obj):
@@ -284,7 +259,7 @@ class InterfaceManageRefugees:
 	
 
 	def prompt_delete_refugee(self):
-		accessible_refugees = self.get_accessible_refugees(self.current_user.username)
+		accessible_refugees = get_accessible_refugees(self.current_user.username)
 		self.succint_print_all_refugees_user_has_access_to()
 		
 		refugee_id = input_until_valid(
