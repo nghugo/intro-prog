@@ -139,13 +139,13 @@ class InterfaceCamp:
 			print("Camp deletion aborted.")
 			return
 		
-		test = Camp.delete_camp(camp_id = camp_id, current_user = self.current_user)
+		test = Camp.delete_camp(camp_id = camp_id, username = self.current_user.username)
 		print(f"Successfully deleted {camp_id}" if test else f"Failed to delete {camp_id}")
 
 
 	def prompt_edit_camp_details(self):
 		
-		filtered_camps = Camp.load_camps_user_has_access_to(self.current_user)
+		filtered_camps = Camp.load_camps_user_has_access_to(self.current_user.username)
 		self.print_existing_or_accessible_camps()
 
 		camp_id = input_until_valid(
@@ -272,7 +272,7 @@ class InterfaceCamp:
 			print(f"Aborted {method} volunteer operation")
 			return
 
-		test = Camp.edit_volunteer(camp_id = camp_id, volunteer = volunteer, current_user = self.current_user, method = method)
+		test = Camp.edit_volunteer(camp_id = camp_id, volunteer = volunteer, username = self.current_user.username, method = method)
 		if test:
 			print(f"You have {"added" if method=="add" else "removed"} {volunteer} successfully!")
 		else:
@@ -284,7 +284,7 @@ class InterfaceCamp:
 	def prompt_list_all_camps_user_has_access_to(self):
 		users = Users.load_users()
 		user_is_admin = users[self.current_user.username]["is_admin"]
-		filtered_camps = Camp.load_camps_user_has_access_to(self.current_user)
+		filtered_camps = Camp.load_camps_user_has_access_to(self.current_user.username)
 		
 		print("--- Camps are as follows ---" if user_is_admin else "--- Camps you have access to are as follows ---")
 		filtered_camps_df = pd.DataFrame.from_dict(filtered_camps).transpose()  # use pandas for pretty print
@@ -299,7 +299,7 @@ class InterfaceCamp:
 		
 		users = Users.load_users()
 		is_admin =  users[self.current_user.username]["is_admin"]
-		filtered_camps = Camp.load_camps_user_has_access_to(self.current_user)
+		filtered_camps = Camp.load_camps_user_has_access_to(self.current_user.username)
 
 		message_key = "\nExisting camp(s):" if is_admin else "Camp(s) you have access to:"
 		message_value = ", ".join(list(filtered_camps.keys())) if filtered_camps else "None found"

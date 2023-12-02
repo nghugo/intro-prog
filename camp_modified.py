@@ -64,9 +64,9 @@ class Camp:
 
 	#edit camp with either id or other attributtes
 	@staticmethod
-	def delete_camp(camp_id, current_user):
+	def delete_camp(camp_id, username):
 		users = Users.load_users()
-		if not users[current_user.username]['is_admin']:  # only admin gets to delete camp
+		if not users[username]['is_admin']:  # only admin gets to delete camp
 			return False
 		data = Camp.loadCampData()
 		if camp_id not in data:
@@ -116,14 +116,14 @@ class Camp:
 	# what is the attribute list? location/capacity/occupancy?
 
 	@staticmethod
-	def edit_volunteer(camp_id, volunteer, current_user, method = "add"):
+	def edit_volunteer(camp_id, volunteer, username, method = "add"):
 		"""add volunteer to volunteers_in_charge list
 		:parameter: method = "add" or "remove" where add means add volunteer to list and remove means remove volunteer from list"""
 		
 		users = Users.load_users()
 		camp_data = Camp.loadCampData()
 		if method == "add":
-			if not users[current_user.username]["is_admin"]:
+			if not users[username]["is_admin"]:
 				return False
 			volunteer_list = Camp.get_volunteer_list(camp_id)
 			volunteer_list.append(volunteer)
@@ -133,7 +133,7 @@ class Camp:
 			return True
 			
 		elif method == "remove":
-			if not users[current_user.username]["is_admin"]:
+			if not users[username]["is_admin"]:
 				return False
 			volunteer_list = Camp.get_volunteer_list(camp_id)
 			volunteer_list.remove(volunteer)
@@ -157,7 +157,7 @@ class Camp:
 		return volunteer_list
 
 	@staticmethod
-	def load_camps_user_has_access_to(current_user):
+	def load_camps_user_has_access_to(username):
 		""" If admin, always allow access
 		If volunteer, only allow access if username is in volunteers_in_charge"""
 		try:
@@ -166,8 +166,8 @@ class Camp:
 				camps = json.load(camp_json)
 				users = Users.load_users()
 				for camp_id, camp_values in camps.items():
-					if (users[current_user.username]["is_admin"]
-		 				or current_user.username in camp_values["volunteers_in_charge"]):
+					if (users[username]["is_admin"]
+		 				or username in camp_values["volunteers_in_charge"]):
 						filtered_camps[camp_id] = camp_values
 				return filtered_camps
 		except FileNotFoundError:
