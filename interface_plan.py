@@ -73,8 +73,9 @@ class InterfacePlan:
 
 	def prompt_list_plans(self):
 		print("--- Plans are as follows ---")
-		# create pandas dataframe from dictionary (self.plans.plans dict in .json file)
-		plans_df = pd.DataFrame.from_dict(self.plans.plans).transpose()
+		# create pandas dataframe from dictionary
+		plans = Plans.load_plans()
+		plans_df = pd.DataFrame.from_dict(plans).transpose()
 		print(plans_df)
 		print("--- End of plans list ---")
 		input("Press Enter to continue...")
