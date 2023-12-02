@@ -27,20 +27,20 @@ class InterfaceManageRefugees:
 		if option == "1":
 			return  # option 1 is cancel, so just return
 		if option == "2":
-			self.print_all_refugees_user_has_access_to()
+			self.verbose_print_all_refugees_user_has_access_to()
 		if option == "3":
 			self.prompt_add_refugee()
 		if option == "4":
-			pass  # NOTE: make sure a volunteer is only able to edit refugees in the camps that they have access to
+			self.prompt_modify_refugee() # TODO: make sure a volunteer is only able to edit refugees in the camps that they have access rights to
 		if option == "5":
-			pass  # NOTE: make sure a volunteer is only able to delete refugees from the camps that they have access to
+			self.prompt_delete_refugee()  # TODO: make sure a volunteer is only able to delete refugees from the camps that they have access rights to
 
 	def prompt_volunteer_options(self):
 		option = input_until_valid(
 			
 			input_message = f"\n<homepage/manage-refugees>\nPlease choose a refugee management option below:\
 				\n[1] CANCEL\
-				\n[2] List all refugee profiles under camps you have access to\
+				\n[2] List all refugee profiles under camps you have access rights to\
 				\n[3] Add a refugee profile\
 				\n[4] Edit a refugee profile TODO\
 				\n[5] Delete a refugee profile TODO",
@@ -50,18 +50,19 @@ class InterfaceManageRefugees:
 		if option == "1":
 			return  # option 1 is cancel, so just return
 		if option == "2":
-			self.print_all_refugees_user_has_access_to()
+			self.verbose_print_all_refugees_user_has_access_to()
 		if option == "3":
 			self.prompt_add_refugee()
 		if option == "4":
-			pass
+			self.prompt_modify_refugee() # TODO: make sure a volunteer is only able to edit refugees in the camps that they have access rights to
 		if option == "5":
-			pass
+			self.prompt_delete_refugee()  # TODO: make sure a volunteer is only able to delete refugees from the camps that they have access rights to
 	
 	def prompt_add_refugee(self):
 		existing_ids = self.load_refugees().keys()
+		print(f"Existing refugee IDs: {", ".join(existing_ids) if existing_ids else "None found."}")
 		refugee_id = input_until_valid(
-			input_message="Enter a unique id to identify this refugee, or leave empty to auto-generate:",
+			input_message="Enter a unique id to identify this refugee (different from above list), or leave empty to auto-generate:",
 			is_valid=lambda user_input: user_input == "" or user_input not in existing_ids,
 			validation_message="Refugee id already exists. Please try another id."
 		)
@@ -77,7 +78,7 @@ class InterfaceManageRefugees:
 			validation_message="Number of family members must be a positive integer (1-100 inclusive). Please re-enter."
 		))
 		
-		# Done: make sure a volunteer is only able to add refugees to the camps that they have access to
+		# Done: make sure a volunteer is only able to add refugees to the camps that they have access rights to
 
 		filtered_camps = Camp.load_camps_user_has_access_to(self.current_user.username)
 		filtered_camps_ids = filtered_camps.keys()
@@ -121,7 +122,7 @@ class InterfaceManageRefugees:
 				json.dump(recorded_refugees, json_file, indent=2)
 			print(f"Refugee {fullname} ({refugee_id}) has been added successfully.")
 		else:
-			print(f"Aborted refugee addition.")
+			print(f"Aborted refugee profile creation.")
 	
 	@staticmethod
 	def load_refugees():
@@ -132,26 +133,85 @@ class InterfaceManageRefugees:
 		except FileNotFoundError:
 			return {}
 	
-	def print_all_refugees_user_has_access_to(self):
-		all_refugees = self.load_refugees()
-		
-		camp_to_filtered_refugees = defaultdict(list)
-		for refugee_id, refugee_values in all_refugees.items():
-			if Camp.user_has_access(camp_id = refugee_values["camp_id"], username = self.current_user.username):
-				camp_to_filtered_refugees[refugee_values["camp_id"]].append((refugee_id, refugee_values["fullname"]))
-		
+	def verbose_print_all_refugees_user_has_access_to(self):
+		accessible_refugeesep_by_camp = self.get_accessible_refugeesep_by_camp(username = self.current_user.username)
 		users = Users.load_users()
 		if users[self.current_user.username]["is_admin"]:
 			print("\n--- List of refugees ---")
 		else:
 			print("\n--- List of refugees under camps you have access rights to ---")
-
-		if not camp_to_filtered_refugees:
+		if not accessible_refugeesep_by_camp:
 			print("None found")
 		else:
-			for camp, refugee_id_fullname in camp_to_filtered_refugees.items():
-				print(f"{camp}:")
-				for refugee_id, refugee_fullname in refugee_id_fullname:
-					print(f"-> {refugee_fullname} ({refugee_id})")
-		print("--- End of refugee list ---")
+			for camp, refugee_id_values in accessible_refugeesep_by_camp.items():
+				print(f"\n{{{camp}}}")
+				for refugee_id, refugee_values in refugee_id_values:
+					print(f"\n{refugee_values["fullname"]} (ID: {refugee_id})")
+					for attr, val in refugee_values.items():
+						if attr != "fullname":
+							print(f"-> {attr}: {val}")
+		print("\n--- End of refugee list ---")
 		input("Press Enter to continue...")
+
+	def succint_print_all_refugees_user_has_access_to(self):
+		accessible_refugeesep_by_camp = self.get_accessible_refugeesep_by_camp(username = self.current_user.username)
+		users = Users.load_users()
+
+		if users[self.current_user.username]["is_admin"]:
+			print("\nExisting refugees:")
+		else:
+			print("\nExisting refugees under camps that have access rights to:")
+		
+		for camp, refugee_id_values in accessible_refugeesep_by_camp.items():
+			print(f"{camp}:")
+			ref_list_in_camp = []
+			for refugee_id, refugee_values in refugee_id_values:
+				ref_list_in_camp.append(f"{refugee_values["fullname"]} (ID: {refugee_id})")
+			print("-> " + ", ".join(ref_list_in_camp))
+
+
+	def get_accessible_refugeesep_by_camp(self, username) -> dict:
+		accessible_refugees = self.get_accessible_refugees(username)
+		accessible_refugeesep_by_camp = defaultdict(list)
+		for refugee_id, refugee_values in accessible_refugees.items():
+			accessible_refugeesep_by_camp[refugee_values["camp_id"]].append((refugee_id, refugee_values))
+		return accessible_refugeesep_by_camp
+
+
+	def get_accessible_refugees(self, username):
+		all_refugees = self.load_refugees()
+		accessible_refugees = {refugee_id: refugee_values for refugee_id, refugee_values in all_refugees.items() 
+						 if Camp.user_has_access(camp_id = refugee_values["camp_id"], username = username)}
+		return accessible_refugees
+
+
+	def prompt_modify_refugee(self):
+		accessible_refugees = self.get_accessible_refugees(self.current_user.username)
+		self.succint_print_all_refugees_user_has_access_to()
+		
+		refugee_id = input_until_valid(
+			input_message="Enter the refugee ID of the refugee to modify or leave empty to abort:",
+			is_valid = lambda user_input: user_input in accessible_refugees or user_input == "",
+			validation_message="Refugee ID not found. Please enter an existing refugee ID or leave empty to abort."
+		)
+		if refugee_id == "":
+			print("Aborted refugee profile edit.")
+			return
+	
+		print("TODO")
+	
+
+	def prompt_delete_refugee(self):
+		accessible_refugees = self.get_accessible_refugees(self.current_user.username)
+		self.succint_print_all_refugees_user_has_access_to()
+		
+		refugee_id = input_until_valid(
+			input_message="Enter the refugee ID of the refugee to modify or leave empty to abort:",
+			is_valid = lambda user_input: user_input in accessible_refugees or user_input == "",
+			validation_message="Refugee ID not found. Please enter an existing refugee ID or leave empty to abort."
+		)
+		if refugee_id == "":
+			print("Aborted refugee profile edit.")
+			return
+	
+		print("TODO")

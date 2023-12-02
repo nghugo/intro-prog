@@ -107,6 +107,12 @@ dummy_refugees = {
     "medical_condition": "healthy"
   },
   "refugee3": {
+    "fullname": "Pepe the Frog",
+    "number_of_members": 3,
+    "camp_id": "camp3",
+    "medical_condition": "dehydrated"
+  },
+  "refugee4": {
     "fullname": "Saul Goodman",
     "number_of_members": 3,
     "camp_id": "camp2",

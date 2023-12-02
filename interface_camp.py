@@ -46,7 +46,7 @@ class InterfaceCamp:
 		option = input_until_valid(
 			input_message = f"\n<homepage/manage-camps>\nPlease choose an operation on camps below:\
 				\n[1] CANCEL\
-				\n[2] List all camps that I have access to\
+				\n[2] List all camps that you have access rights to\
 				\n[3] Edit details of a camp\
 				\n[4] TODO\
 				\n[5] TODO",
@@ -157,7 +157,7 @@ class InterfaceCamp:
 		camp_id = input_until_valid(
 			input_message = "Please enter the camp_id of the camp you would like to change camp details of, or leave empty to abort",
 			is_valid = lambda user_input: user_input == "" or user_input in filtered_camps,
-			validation_message= "You do not have access to this camp_id, or it does not exist. Please re-enter or leave empty to abort."
+			validation_message= "You do not have access rights to this camp_id, or it does not exist. Please re-enter or leave empty to abort."
 		)   
 		
 		if camp_id == "":
@@ -292,7 +292,7 @@ class InterfaceCamp:
 		user_is_admin = users[self.current_user.username]["is_admin"]
 		filtered_camps = Camp.load_camps_user_has_access_to(self.current_user.username)
 		
-		print("--- Camps are as follows ---" if user_is_admin else "--- Camps you have access to are as follows ---")
+		print("--- Camps are as follows ---" if user_is_admin else "--- Camps you have access rights to are as follows ---")
 		filtered_camps_df = pd.DataFrame.from_dict(filtered_camps).transpose()  # use pandas for pretty print
 		print(filtered_camps_df)
 		print("--- End of camps list ---")
@@ -307,7 +307,7 @@ class InterfaceCamp:
 		is_admin =  users[self.current_user.username]["is_admin"]
 		filtered_camps = Camp.load_camps_user_has_access_to(self.current_user.username)
 
-		message_key = "\nExisting camp(s):" if is_admin else "Camp(s) you have access to:"
+		message_key = "\nExisting camp(s):" if is_admin else "Camp(s) you have access rights to:"
 		message_value = ", ".join(list(filtered_camps.keys())) if filtered_camps else "None found"
 		print(f"{message_key} {message_value}")
 

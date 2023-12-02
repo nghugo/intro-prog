@@ -142,7 +142,7 @@ class InterfaceManageUsers:
 			is_valid=lambda user_input: user_input in users or user_input == "",
 			validation_message="Username not found. Please enter an existing username or leave empty to abort."
 		)
-
+		
 		if username == "":
 			print("User modification aborted.")
 			return  # early termination
