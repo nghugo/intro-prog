@@ -4,6 +4,7 @@ import json
 
 from camp_modified import Camp
 from users import Users
+from plans import Plans
 from interface_helper import input_until_valid
 
 class InterfaceCamp:
@@ -70,7 +71,7 @@ class InterfaceCamp:
 		self.print_existing_or_accessible_camps()
 
 		camp_id = input_until_valid(
-		input_message = "Please enter the new camp_id",
+		input_message = "Please enter the new camp ID (must be different from existing IDs)",
 		is_valid = lambda user_input: user_input != "" and user_input not in camp_data,
 		validation_message = "This camp_id already exists or cannot be empty."
 	)
@@ -86,12 +87,17 @@ class InterfaceCamp:
 			is_valid = lambda user_input: user_input.isdigit() and int(user_input) >= 1,
 			validation_message = "Camp capacity must be a positive integer. Please re-enter."
 		)
-		
+
+		plan_keys = Plans.load_plans().keys()
+		print(f"\nExisting plans(s): {", ".join(plan_keys) if plan_keys else 'None found'}")
 		humanitarian_plan_in = input_until_valid(
-			input_message= "Please enter the humanitarian plan this camp belongs to",
-			is_valid = lambda user_input: user_input != "" and type(user_input) == str,
-			validation_message = "This cannot be empty. Please enter the name of the humanitarian plan"
-		)		
+			input_message= "Please enter the humanitarian plan this camp belongs to. Choose from the above list, or leave to abort.",
+			is_valid = lambda user_input: user_input == "" or user_input in plan_keys,
+			validation_message = "Invalid value. Please enter the name of the humanitarian plan from the above list, or leave to abort."
+		)
+		if humanitarian_plan_in == "":
+			print("Camp creation aborted.")
+			return
 
 		confirm = input_until_valid(
 			input_message = f"Please confirm details of the new camp (y/n):\

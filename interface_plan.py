@@ -33,11 +33,19 @@ class InterfacePlan:
 			pass
 
 	def prompt_create_plan(self):
+		
+		plan_keys = Plans.load_plans().keys()
+		print(f"\nExisting plans(s): {", ".join(plan_keys) if plan_keys else 'None found'}")
+
 		plan_name = input_until_valid(
-			input_message = "\nEnter plan name. This should be the name of the emergency occuring (E.g. Ukraine War):",
-			is_valid = lambda plan_name: plan_name != "",
-			validation_message = "plan name cannot be empty. Please enter an plan name."
+			input_message = "\nEnter plan name. This should be the name of the emergency occuring (E.g. Ukraine War) and must be different from existing plans. Leave empty to abort:",
+			is_valid = lambda plan_name: plan_name == "" or plan_name not in plan_keys,
+			validation_message = "Plan name already exists. Please enter a different plan name."
 		)
+		if plan_name == "":
+			print("Plan creation aborted.")
+			return
+
 		description = input_until_valid(
 			input_message = "\nEnter plan description:",
 			is_valid = lambda description: description != "",
@@ -54,11 +62,11 @@ class InterfacePlan:
 			validation_message = "Invalid date format. Please re-enter the date in the format dd/mm/yyyy."
 		)
 		confirm = input_until_valid(
-			input_message = f"""Please confirm details of the new plan (y/n):\n
-			Plan name: {plan_name}\n
-			Plan Description: {description}\n
-			Plan Location: {location}\n
-			Plan Start Date: {start_date}""",
+			input_message = f"Please confirm details of the new plan (y/n):\
+				\nPlan name: {plan_name}\
+				\nPlan Description: {description}\
+				\nPlan Location: {location}\
+				\nPlan Start Date: {start_date}",
 			is_valid=lambda user_input: user_input == "y" or user_input == "n",
 			validation_message="Unrecognized input. Please confirm details of the new user (y/n):\n[y] Yes\n[n] No (abort)"
 			)

@@ -225,4 +225,4 @@ class InterfaceManageUsers:
 	@staticmethod
 	def print_all_users():
 		users = Users.load_users()
-		print(f"\nList of existing username(s): {", ".join(users.keys()) if users else 'None found'}")
+		print(f"\nExisting username(s): {", ".join(users.keys()) if users else 'None found'}")
