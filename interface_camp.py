@@ -16,7 +16,7 @@ class InterfaceCamp:
 		option = input_until_valid(
 			input_message = f"\n<homepage/manage-camps>\nPlease choose an operation on camps below:\
 				\n[1] CANCEL\
-				\n[2] List all camps\
+				\n[2] Display details of all camps\
 				\n[3] Add a camp\
 				\n[4] Delete a camp\
 				\n[5] Edit details of a camp\
@@ -44,7 +44,7 @@ class InterfaceCamp:
 		option = input_until_valid(
 			input_message = f"\n<homepage/manage-camps>\nPlease choose an operation on camps below:\
 				\n[1] CANCEL\
-				\n[2] List all camps that you have access rights to\
+				\n[2] Display details of all camps that you have access rights to\
 				\n[3] Edit details of a camp\
 				\n[4] TODO\
 				\n[5] TODO",
