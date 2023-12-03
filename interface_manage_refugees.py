@@ -3,7 +3,7 @@ import uuid
 
 
 from interface_helper import input_until_valid, input_until_valid_name
-from refugees import load_refugees, get_accessible_refugees, get_accessible_refugees_sep_by_camp
+from refugees import load_refugees, get_accessible_refugees, get_accessible_refugees_sep_by_camp, get_num_families_and_members_by_camp
 from camp_modified import Camp
 from users import Users
 
@@ -139,13 +139,14 @@ class InterfaceManageRefugees:
 		if not accessible_refugees_sep_by_camp:
 			print("None found")
 		else:
+			refugee_count = get_num_families_and_members_by_camp()
 			for camp, refugee_id_values in accessible_refugees_sep_by_camp.items():
-				print(f"\n{{{camp}}}")
+				print(f"\n{{{camp}}} (total families: {refugee_count[camp]["num_families"]}, total members: {refugee_count[camp]["num_members"]})")
 				for refugee_id, refugee_values in refugee_id_values:
-					print(f"\n{refugee_values["fullname"]} (ID: {refugee_id})")
+					print(f"\n  {refugee_values["fullname"]} (ID: {refugee_id})")
 					for attr, val in refugee_values.items():
 						if attr != "fullname":
-							print(f"-> {attr}: {val}")
+							print(f"  -> {attr}: {val}")
 		print("\n--- End of refugee list ---")
 		input("Press Enter to continue...")
 
