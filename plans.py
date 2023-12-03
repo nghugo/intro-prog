@@ -34,7 +34,6 @@ class Plans:
 			return False
 		
 		data[plan_name] = {
-			"plan_name" : plan_name,
             "description" : description,
             "location" : location,
             "start_date" : start_date

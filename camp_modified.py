@@ -78,14 +78,14 @@ class Camp:
 
 
 	@staticmethod
-	def edit_camp_id(camp_id, new_id, user):
+	def edit_camp_id(camp_id, new_id, username):
 		# TODO: data validation either here or in admin/volunteer interface
 		"""edit the camp_id
 		user require to be admin or volunteer in charge.
 		:return: boolean value. True if edited, False if not accessible"""
 		users = Users.load_users()
 		camp_data = Camp.loadCampData()
-		if user in users and (user == 'admin' or user in camp_data[camp_id]["volunteers_in_charge"]):
+		if username in users and (users[username]['is_admin'] or user in camp_data[camp_id]["volunteers_in_charge"]):
 			camp_data[new_id] = camp_data.pop(camp_id)
 			with open('camps.json','w') as file:
 				json.dump(camp_data, file, indent=2)
@@ -94,7 +94,7 @@ class Camp:
 			return False
 
 	@staticmethod
-	def edit_camp_details(camp_id, attribute, new_value, user):
+	def edit_camp_details(camp_id, attribute, new_value, username):
 		# TODO: data validation of id,attribute, new_attributes
 		"""edit the camp information
 				user require to be admin or volunteer in charge.
@@ -102,7 +102,7 @@ class Camp:
 		users = Users.load_users()
 		camp_data = Camp.loadCampData()
 
-		if user in users and (user == 'admin' or user in camp_data[camp_id]["volunteers_in_charge"]):
+		if username in users and (users[username]['is_admin'] or user in camp_data[camp_id]["volunteers_in_charge"]):
 			camp_data[camp_id][attribute] = new_value
 			with open('camps.json', 'w') as file:
 				json.dump(camp_data, file, indent=2)
@@ -174,7 +174,7 @@ class Camp:
 		users = Users.load_users()
 		with open("camps.json", "r") as camp_json:
 			camps = json.load(camp_json)
-			if camp_id not in camps:
+			if camp_id not in camps:  # this is to handle deleted camps
 				print("Error: camp_id {camp_id} not in the list of camps {camps}")
 				return False
 			if users[username]["is_admin"] or username in camps[camp_id]["volunteers_in_charge"]:

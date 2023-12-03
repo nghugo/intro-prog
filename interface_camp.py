@@ -89,9 +89,9 @@ class InterfaceCamp:
 		plan_keys = Plans.load_plans().keys()
 		print(f"\nExisting plans(s): {", ".join(plan_keys) if plan_keys else 'None found'}")
 		humanitarian_plan_in = input_until_valid(
-			input_message= "Please enter the humanitarian plan this camp belongs to. Choose from the above list, or leave to abort.",
+			input_message= "Please enter the humanitarian plan this camp belongs to. Choose from the above list, or leave empty to abort.",
 			is_valid = lambda user_input: user_input == "" or user_input in plan_keys,
-			validation_message = "Invalid value. Please enter the name of the humanitarian plan from the above list, or leave to abort."
+			validation_message = "Invalid value. Please enter the name of the humanitarian plan from the above list, or leave empty to abort."
 		)
 		if humanitarian_plan_in == "":
 			print("Camp creation aborted.")
@@ -189,6 +189,15 @@ class InterfaceCamp:
 				is_valid = lambda user_input: user_input.isdigit() and int(user_input) >= 1,
 				validation_message = "Camp capacity must be a positive integer. Please re-enter."
 			)
+		elif attribute == "humanitarian_plan_in":
+			plan_keys = Plans.load_plans().keys()
+			print(f"\nExisting plans(s): {", ".join(plan_keys) if plan_keys else 'None found'}")
+			new_value = input_until_valid(
+				input_message= "Enter the humanitarian plan this camp belongs to. Choose from the above list, or leave empty to abort.",
+				is_valid = lambda user_input: user_input == "" or user_input in plan_keys,
+				validation_message = "Humanitarian plan must be chosen from the above list. Please re-enter or leave empty to abort."
+			)
+
 		else:  
 			# TODO: location -> implement country checks from hashset
 			# TODO: humanitarian plan (admin check implemented already, see is_admin above) -> implement checks from loaded plans
@@ -206,9 +215,9 @@ class InterfaceCamp:
 			return
 
 		if attribute == "camp_id":
-			test = Camp.edit_camp_id(camp_id = camp_id, new_id = new_value, user = self.current_user.username)
+			test = Camp.edit_camp_id(camp_id = camp_id, new_id = new_value, username = self.current_user.username)
 		else:
-			test = Camp.edit_camp_details(camp_id=camp_id, attribute=attribute, new_value=new_value, user = self.current_user.username)
+			test = Camp.edit_camp_details(camp_id=camp_id, attribute=attribute, new_value=new_value, username = self.current_user.username)
 		
 		if test:
 			print(f"You've changed the {attribute} successfully!")

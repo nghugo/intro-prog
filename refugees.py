@@ -24,3 +24,15 @@ def get_accessible_refugees(username):
     accessible_refugees = {refugee_id: refugee_values for refugee_id, refugee_values in all_refugees.items() 
                         if Camp.user_has_access(camp_id = refugee_values["camp_id"], username = username)}
     return accessible_refugees
+
+def get_num_families_and_members_by_camp():
+    """Returns the number of families and members in a dictionary with 2 keys
+        {"num_families": int f,
+         "num_members" int m}
+    """
+    all_refugees = load_refugees()
+    num_refugees_by_camp = defaultdict(lambda: defaultdict(int))
+    for refugee_values in all_refugees.values():
+        num_refugees_by_camp[refugee_values["camp_id"]]["num_families"] += 1
+        num_refugees_by_camp[refugee_values["camp_id"]]["num_members"] += refugee_values["number_of_members"]
+    return num_refugees_by_camp
