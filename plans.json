@@ -1,18 +1,15 @@
 {
   "Ukraine war": {
-    "plan_name": "Ukraine war",
     "description": "Helping victims of Ukraine war",
     "location": "kyiv",
     "start_date": "24/12/2022"
   },
   "planA": {
-    "plan_name": "planA",
     "description": "UCL campaign for refugee education",
     "location": "ucl",
     "start_date": "25/09/2023"
   },
   "planB": {
-    "plan_name": "planB",
     "description": "Helping Asylum Seekers and refugees in London since 2023",
     "location": "london",
     "start_date": "05/01/2023"
