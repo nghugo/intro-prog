@@ -12,7 +12,7 @@ class InterfacePlan:
 			
 			input_message = f"\n<homepage/manage-plans>\nPlease choose a plan management option below:\
 				\n[1] CANCEL\
-				\n[2] Display details of all plans\
+				\n[2] List all plans\
 				\n[3] Create new humanitarian plan\
 				\n[4] TODO: Edit a humanitarian plan\
 				\n[5] TODO: Remove a humanitarian plan\
