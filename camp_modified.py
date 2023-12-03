@@ -174,7 +174,7 @@ class Camp:
 		users = Users.load_users()
 		with open("camps.json", "r") as camp_json:
 			camps = json.load(camp_json)
-			if camp_id not in camps:
+			if camp_id not in camps:  # this is to handle deleted camps
 				print("Error: camp_id {camp_id} not in the list of camps {camps}")
 				return False
 			if users[username]["is_admin"] or username in camps[camp_id]["volunteers_in_charge"]:
