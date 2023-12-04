@@ -22,7 +22,7 @@ class InterfaceCamp:
 				\n[3] List all camps under a plan\
 				\n[4] Add a camp\
 				\n[5] Delete a camp\
-				\n[6] Edit details of a camp\
+				\n[6] Edit camp details\
 				\n[7] Edit volunteers: add to/remove from a camp",
 			is_valid = lambda user_input: user_input.isdigit() and int(user_input) > 0 and int(user_input) <= 7,
 			validation_message = "Unrecognized input. Please choose from the above list."
@@ -51,7 +51,7 @@ class InterfaceCamp:
 			input_message = f"\n<homepage/manage-camps>\nPlease choose an operation on camps below:\
 				\n[1] CANCEL\
 				\n[2] List all camps that you have access rights to\
-				\n[3] Edit details of a camp\
+				\n[3] Edit camp details\
 				\n[4] TODO\
 				\n[5] TODO",
 			is_valid = lambda user_input: user_input.isdigit() and int(user_input) > 0 and int(user_input) <= 5,
@@ -167,9 +167,28 @@ class InterfaceCamp:
 		if camp_id == "":
 			print("Camp modification aborted.")
 			return
-		
+
 		users = Users.load_users()
-		if users[self.current_user.username]["is_admin"]:
+		is_admin = users[self.current_user.username]["is_admin"]
+		
+		print("\nCurrent values of the selected camp:")
+		print(f"-> camp_id: {camp_id}")
+		selected_camp = filtered_camps[camp_id]
+		for field, val in selected_camp.items():
+			# do not print "volunteers_in_charge", since this method does not handle it
+			if field == "volunteers_in_charge" and not is_admin:
+				continue
+			elif field == "volunteers_in_charge":
+				print(f"-> {field}: {val} (not modified here (*))")
+			elif field == "humanitarian_plan_in" and not is_admin:
+				print(f"-> {field}: {val} (only modifiable by admin via manage camps section)")
+			else:
+				print(f"-> {field}: {val}")
+		
+		if is_admin:
+			print("(*) To modify volunteers, please exit and choose the edit volunteers option rather than edit camp details option")
+		
+		if is_admin:
 			attribute = input_until_valid(
 				input_message = "Enter the attribute (camp_id/location/max_capacity/humanitarian_plan_in) to modify:",
 				is_valid = lambda user_input: user_input in {"camp_id", "location", "max_capacity", "humanitarian_plan_in"},
@@ -189,6 +208,12 @@ class InterfaceCamp:
 				is_valid = lambda user_input: user_input not in list(filtered_camps.keys()),
 				validation_message = f"This camp_id is already taken. Please enter another camp_id."
 			)
+
+			# Tightly coupled code but gotta make do
+			# TODO: also add the code for relocating refugees (update their camp_id from previous value to newer value)
+			# TODO: also add the code for relocating resources (update their camp_id from previous value to newer value)
+
+
 		elif attribute == "max_capacity":
 			current_population_size = get_num_families_and_members_by_camp()[camp_id]["num_members"]
 			print(f"The current population size under {camp_id} is {current_population_size}.")
