@@ -39,7 +39,7 @@ class InterfaceGenerateReports:
 			if camp_data:
 				report = ""
 				report += f"Location: {camp_data.get('location', 'N/A')}\n"
-				report += f"Capacity: {camp_data.get('capacity', 'N/A')}\n"
+				report += f"Max capacity: {camp_data.get('max_capacity', 'N/A')}\n"
 				report += f"Occupancy: {camp_data.get('occupancy', 'N/A')}\n"
 				report += f"Humanitarian Plan: {camp_data.get('humanitarian_plan_in', 'N/A')}\n"
 				volunteerString = ', '.join(camp_data.get('volunteers_in_charge', []))
@@ -60,7 +60,7 @@ class InterfaceGenerateReports:
 			for camp_name, camp_data in camps_data.items():
 				report += f"Camp Name: {camp_name}\n"
 				report += f"Location: {camp_data.get('location', 'N/A')}\n"
-				report += f"Capacity: {camp_data.get('capacity', 'N/A')}\n"
+				report += f"Max capacity: {camp_data.get('max_capacity', 'N/A')}\n"
 				report += f"Occupancy: {camp_data.get('occupancy', 'N/A')}\n"
 				report += f"Humanitarian Plan: {camp_data.get('humanitarian_plan_in', 'N/A')}\n"
 				volunteerString = ', '.join(camp_data.get('volunteers_in_charge', []))

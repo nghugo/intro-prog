@@ -19,11 +19,12 @@ class InterfaceManageRefugees:
 			
 			input_message = f"\n<homepage/manage-refugees>\nPlease choose a refugee management option below:\
 				\n[1] CANCEL\
-				\n[2] List all refugee profiles under each camp\
-				\n[3] Add a refugee profile\
-				\n[4] Edit a refugee profile\
-				\n[5] Delete a refugee profile",
-			is_valid=lambda user_input: user_input.isdigit() and int(user_input) > 0 and int(user_input) <= 5,
+				\n[2] List all refugee profiles under all camps\
+				\n[3] List all refugee profiles under a specific camp\
+				\n[4] Add a refugee profile\
+				\n[5] Edit a refugee profile\
+				\n[6] Delete a refugee profile",
+			is_valid=lambda user_input: user_input.isdigit() and int(user_input) > 0 and int(user_input) <= 6,
 			validation_message="Unrecognized input. Please choose from the above list."
 		)
 		if option == "1":
@@ -31,10 +32,12 @@ class InterfaceManageRefugees:
 		if option == "2":
 			self.verbose_print_all_refugees_user_has_access_to()
 		if option == "3":
-			self.prompt_add_refugee()
+			self.prompt_verbose_print_all_refugees_under_camp()
 		if option == "4":
-			self.prompt_modify_refugee()
+			self.prompt_add_refugee()
 		if option == "5":
+			self.prompt_modify_refugee()
+		if option == "6":
 			self.prompt_delete_refugee()
 
 
@@ -43,7 +46,8 @@ class InterfaceManageRefugees:
 			
 			input_message = f"\n<homepage/manage-refugees>\nPlease choose a refugee management option below:\
 				\n[1] CANCEL\
-				\n[2] List all refugee profiles under camps you have access rights to\
+				\n[2] List all refugee profiles under all camps you have access rights to\
+				\n[3] List all refugee profiles under a specific camp\
 				\n[3] Add a refugee profile\
 				\n[4] Edit a refugee profile\
 				\n[5] Delete a refugee profile",
@@ -55,10 +59,12 @@ class InterfaceManageRefugees:
 		if option == "2":
 			self.verbose_print_all_refugees_user_has_access_to()
 		if option == "3":
-			self.prompt_add_refugee()
+			self.prompt_verbose_print_all_refugees_under_camp()
 		if option == "4":
-			self.prompt_modify_refugee()
+			self.prompt_add_refugee()
 		if option == "5":
+			self.prompt_modify_refugee()
+		if option == "6":
 			self.prompt_delete_refugee()
 	
 
@@ -139,14 +145,51 @@ class InterfaceManageRefugees:
 		if not accessible_refugees_sep_by_camp:
 			print("None found")
 		else:
-			refugee_count = get_num_families_and_members_by_camp()
+			refugee_count_dict = get_num_families_and_members_by_camp()
 			for camp, refugee_id_values in accessible_refugees_sep_by_camp.items():
-				print(f"\n{{{camp}}} (total families: {refugee_count[camp]["num_families"]}, total members: {refugee_count[camp]["num_members"]})")
-				for refugee_id, refugee_values in refugee_id_values:
-					print(f"\n  {refugee_values["fullname"]} (ID: {refugee_id})")
-					for attr, val in refugee_values.items():
-						if attr != "fullname":
-							print(f"  -> {attr}: {val}")
+				refugee_count = refugee_count_dict[camp]
+				self.print_refugees_one_camp_helper(camp, refugee_id_values, refugee_count)
+				
+		print("\n--- End of refugee list ---")
+		input("Press Enter to continue...")
+
+	@staticmethod
+	def print_refugees_one_camp_helper(camp, refugee_id_values, refugee_count):
+		print(f"\n{{{camp}}} (total families: {refugee_count["num_families"]}, total members: {refugee_count["num_members"]})")
+		for refugee_id, refugee_values in refugee_id_values:
+			print(f"\n  {refugee_values["fullname"]} (ID: {refugee_id})")
+			for attr, val in refugee_values.items():
+				if attr != "fullname":
+					print(f"  -> {attr}: {val}")
+
+
+	def prompt_verbose_print_all_refugees_under_camp(self):
+		users = Users.load_users()
+		accessible_camps = Camp.load_camps_user_has_access_to(self.current_user.username)
+		if users[self.current_user.username]["is_admin"]:
+			print(f"Existing camps: {", ".join(accessible_camps.keys() if accessible_camps else "None found")}")
+		else:
+			print(f"The camps that you have access to are: {", ".join(accessible_camps.keys() if accessible_camps else "None found")}")
+
+		selected_camp = input_until_valid(
+			input_message="Enter the camp ID of the camp under which you want to list all refugees",
+			is_valid = lambda user_input: user_input in accessible_camps or user_input == "",
+			validation_message="Camp ID not found or not accessible by you. Please enter an existing camp ID or leave empty to abort."
+		)
+		if selected_camp == "":
+			print("Aborted listing refugees under camp.")
+			return
+		
+		accessible_refugees_sep_by_camp = get_accessible_refugees_sep_by_camp(username = self.current_user.username)
+		refugees_under_selected_camp = accessible_refugees_sep_by_camp[selected_camp]
+		
+		print(f"\n--- List of refugees under {selected_camp} ---")
+
+		if not refugees_under_selected_camp:
+			print("None found")
+		else:
+			refugee_count = get_num_families_and_members_by_camp()[selected_camp]
+			self.print_refugees_one_camp_helper(selected_camp, refugees_under_selected_camp, refugee_count)
 		print("\n--- End of refugee list ---")
 		input("Press Enter to continue...")
 
