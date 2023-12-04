@@ -34,13 +34,12 @@ class Plans:
 			return False
 		
 		data[plan_name] = {
-			"plan_name" : plan_name,
             "description" : description,
             "location" : location,
             "start_date" : start_date
 		}
 		with open("plans.json", "w") as json_file:
-			json.dump(data, json_file)
+			json.dump(data, json_file, indent=2)
 		return True
 
 	@staticmethod
@@ -58,7 +57,7 @@ class Plans:
 		
 		del data[plan_name]
 		with open("plans.json", "w") as json_file:
-			json.dump(data, json_file)
+			json.dump(data, json_file, indent=2)
 		return True
 		
 
@@ -74,7 +73,7 @@ class Plans:
 
 		# reject if username does not match that of an existing user
 		# also reject if field is not already defined in plans.json (prevents typo)
-		if plan_namee not in data or (field != "plan_name" and field not in data[plan_name]):
+		if plan_name not in data or (field != "plan_name" and field not in data[plan_name]):
 			return False
 
 		if field != "plan_name":
@@ -83,7 +82,7 @@ class Plans:
 			data[new_value] = data.pop(plan_name)
 
 		with open("plans.json", "w") as json_file:
-			json.dump(data, json_file)
+			json.dump(data, json_file, indent=2)
 		return True
 	
 	
