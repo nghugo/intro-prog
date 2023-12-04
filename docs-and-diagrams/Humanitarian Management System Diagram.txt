@@ -48,7 +48,7 @@ Admin
     │   └── Phone
     ├── Edit Camp Information
     │   ├── Camp Id
-    │   └── Capacity for New Refugees
+    │   └── Max capacity for New Refugees
     ├── Create Refugee Profile
     │   ├── Camp Id
     │   └── Medical Condition

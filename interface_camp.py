@@ -5,6 +5,8 @@ from users import Users
 from plans import Plans
 from interface_helper import input_until_valid
 
+from refugees import get_num_families_and_members_by_camp
+
 class InterfaceCamp:
 	def __init__(self, current_user):
 		self.current_user = current_user
@@ -84,10 +86,10 @@ class InterfaceCamp:
 			validation_message = "This cannot be empty. Please enter the camp location"
 		)    # TODO: location -> implement checks
 
-		capacity = input_until_valid(
-			input_message = "Enter the camp capacity",
+		max_capacity = input_until_valid(
+			input_message = "Enter the camp max_capacity",
 			is_valid = lambda user_input: user_input.isdigit() and int(user_input) >= 1,
-			validation_message = "Camp capacity must be a positive integer. Please re-enter."
+			validation_message = "Camp max_capacity must be a positive integer. Please re-enter."
 		)
 
 		plan_keys = Plans.load_plans().keys()
@@ -105,7 +107,7 @@ class InterfaceCamp:
 			input_message = f"Please confirm details of the new camp (y/n):\
 				\n->Camp ID: {camp_id}\
 				\n->Location: {location}\
-				\n->Capacity: {capacity}\
+				\n->Max capacity: {max_capacity}\
 				\n->Associated humanitarian plan: {humanitarian_plan_in}\
 				\n[y] Yes\
 				\n[n] No (abort)",
@@ -114,7 +116,7 @@ class InterfaceCamp:
 		)
 		if confirm == "y":
 			success = Camp.addCamp(
-				camp_id, location , capacity, humanitarian_plan_in)
+				camp_id, location , max_capacity, humanitarian_plan_in)
 			if success:
 				print(f"Successfully added {camp_id}")
 			else:
@@ -169,15 +171,15 @@ class InterfaceCamp:
 		users = Users.load_users()
 		if users[self.current_user.username]["is_admin"]:
 			attribute = input_until_valid(
-				input_message = "Enter the attribute (camp_id/location/capacity/humanitarian_plan_in) to modify:",
-				is_valid = lambda user_input: user_input in {"camp_id", "location", "capacity", "humanitarian_plan_in"},
-				validation_message = "Unrecognized input. Please enter a valid field (camp_methodid/location/capacity/humanitarian_plan_in)."
+				input_message = "Enter the attribute (camp_id/location/max_capacity/humanitarian_plan_in) to modify:",
+				is_valid = lambda user_input: user_input in {"camp_id", "location", "max_capacity", "humanitarian_plan_in"},
+				validation_message = "Unrecognized input. Please enter a valid field (camp_methodid/location/max_capacity/humanitarian_plan_in)."
 			)
 		else:
 			attribute = input_until_valid(
-				input_message = "Enter the attribute (camp_id/location/capacity) to modify:",
-				is_valid = lambda user_input: user_input in {"camp_id", "location", "capacity"},
-				validation_message = "Unrecognized input. Please enter a valid field (camp_id/location/capacity)."
+				input_message = "Enter the attribute (camp_id/location/max_capacity) to modify:",
+				is_valid = lambda user_input: user_input in {"camp_id", "location", "max_capacity"},
+				validation_message = "Unrecognized input. Please enter a valid field (camp_id/location/max_capacity)."
 			)
 
 
@@ -187,11 +189,14 @@ class InterfaceCamp:
 				is_valid = lambda user_input: user_input not in list(filtered_camps.keys()),
 				validation_message = f"This camp_id is already taken. Please enter another camp_id."
 			)
-		elif attribute == "capacity":
+		elif attribute == "max_capacity":
+			current_population_size = get_num_families_and_members_by_camp()[camp_id]["num_members"]
+			print(f"The current population size under {camp_id} is {current_population_size}.")
+
 			new_value = input_until_valid(
-				input_message = "Enter the camp capacity",
-				is_valid = lambda user_input: user_input.isdigit() and int(user_input) >= 1,
-				validation_message = "Camp capacity must be a positive integer. Please re-enter."
+				input_message = "Enter the camp max_capacity. Note, it must be a positive integer that is no smaller than the current population size.",
+				is_valid = lambda user_input: user_input.isdigit() and int(user_input) >= max(1, current_population_size),
+				validation_message = "Camp max_capacity must be a positive integer that is no smaller than the current population size. Please re-enter."
 			)
 		elif attribute == "humanitarian_plan_in":
 			plan_keys = Plans.load_plans().keys()

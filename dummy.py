@@ -54,31 +54,31 @@ dummy_users = {
 dummy_camps = {
   "camp1": {
     "location": "China",
-    "capacity": 20,
+    "max_capacity": 20,
     "humanitarian_plan_in": "planA",
     "volunteers_in_charge": ["volunteer1", "v"]
   },
   "camp2": {
     "location": "Ukraine",
-    "capacity": 224,
+    "max_capacity": 224,
     "humanitarian_plan_in": "planB",
     "volunteers_in_charge": ["volunteer1", "volunteer2", "v"]
   },
   "camp3": {
     "location": "UK",
-    "capacity": 30,
+    "max_capacity": 30,
     "humanitarian_plan_in": "planC",
     "volunteers_in_charge": ["v"]
   },
   "camp4": {
     "location": "China",
-    "capacity": 10,
+    "max_capacity": 10,
     "humanitarian_plan_in": "planA",
     "volunteers_in_charge": ["volunteer2"]
   },
   "camp5": {
     "location": "Ukraine",
-    "capacity": 13,
+    "max_capacity": 13,
     "humanitarian_plan_in": "planB",
     "volunteers_in_charge": ["volunteer1", "v"]
   }

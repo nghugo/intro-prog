@@ -9,7 +9,7 @@ class Camp:
 	 --------------------------------
 	 camp_id(str): refer to camp_1,camp_2,camp_3 (don't overlap even in different humanitarian plan);
 	 location(str): detailed location;
-	 capacity(int):  flexible and size of the camp which is varied from hundreds to thousands;
+	 max_capacity(int):  flexible and size of the camp which is varied from hundreds to thousands;
 	 occupancy(int): current amount of people settled in
 	 humanitarian_plan_in: the humanitarian plan that the camp is in;
 	 volunteers_in_charge(str_list): a list storing volunteer who in charge of the camp
@@ -21,7 +21,7 @@ class Camp:
 	# attributes
 		# camp_id
 		# location
-		# capacity
+		# max_capacity
 		# occupancy (determined by linear scan, not by setting a number)
 		# humanitarian_plan_in
 		# volunteers_in_charge
@@ -38,7 +38,7 @@ class Camp:
 			return camp_data
 		
 	@staticmethod
-	def addCamp(camp_id, location, capacity, humanitarian_plan_in, volunteers_in_charge = None):
+	def addCamp(camp_id, location, max_capacity, humanitarian_plan_in, volunteers_in_charge = None):
 		"""
 		Adds a camp to camps.json. 
 		Halts and returns False if camp_id already exists.
@@ -52,7 +52,7 @@ class Camp:
 		
 		data[camp_id] = {
 			"location": location,
-			"capacity": capacity,
+			"max_capacity": max_capacity,
 			"humanitarian_plan_in": humanitarian_plan_in,
 			"volunteers_in_charge": volunteers_in_charge if volunteers_in_charge != None else [],
 		}
@@ -109,7 +109,7 @@ class Camp:
 			return True
 		else:
 			return False
-	# what is the attribute list? location/capacity/occupancy?
+	# what is the attribute list? location/max_capacity/occupancy?
 
 	@staticmethod
 	def edit_volunteer(camp_id, volunteer, username, method = "add"):
@@ -189,7 +189,7 @@ class Camp:
 
 # Camp.delete_camp('camp1', 'admin')
 # camp = Camp('camp1','China',30,"planA",[])
-# print(Camp.edit_camp_details('camp1','capacity',20,'admin'))
+# print(Camp.edit_camp_details('camp1','max_capacity',20,'admin'))
 
 
 
