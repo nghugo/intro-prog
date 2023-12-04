@@ -278,16 +278,20 @@ class InterfaceCamp:
 			print("Aborted changing volunteer list.")
 			return
 		
-		
-		method_char = input_until_valid(
-		input_message= "Please choose an operation:\
-				\n[a] Add a volunteer\
-				\n[r] Remove a volunteer:",
-		is_valid = lambda user_input: user_input == "a" or user_input == "r",
-		validation_message = f"Invalid input. Please select (a/r) to either add or remove a volunteer in camp {camp_id}."
-		)
 		volunteer_list = Camp.get_volunteer_list(camp_id)
-		print(f"\nExisting volunteers in {camp_id}: {", ".join(volunteer_list) if volunteer_list else "None found"}")
+		print(f"\nExisting volunteers in {camp_id}: {", ".join(volunteer_list) if volunteer_list else "None found"} (total: {len(volunteer_list)})")
+
+		method_char = input_until_valid(
+		input_message= "Please choose an operation, or leave empty to abort:\
+				\n[a] Add a volunteer\
+				\n[r] Remove a volunteer",
+		is_valid = lambda user_input: user_input in {"a", "r", ""},
+		validation_message = f"Invalid input. Please select (a/r) to either add or remove a volunteer in camp {camp_id}, or leave empty to abort."
+		)
+		if method_char == "":
+			print("Aborted changing volunteer list.")
+			return
+		
 
 		all_volunteers_from_users = {k for k,v in users.items() if not v["is_admin"]}
 		volunteers_to_add = all_volunteers_from_users.difference(set(volunteer_list))
