@@ -17,7 +17,7 @@ class InterfaceCamp:
 			input_message = f"\n<homepage/manage-camps>\nPlease choose an operation on camps below:\
 				\n[1] CANCEL\
 				\n[2] List all camps (under any plan)\
-				\n[3] TODO: List all camps under a plan\
+				\n[3] List all camps under a plan\
 				\n[4] Add a camp\
 				\n[5] Delete a camp\
 				\n[6] Edit details of a camp\
@@ -28,8 +28,9 @@ class InterfaceCamp:
 		if option == "1":
 			return  # CANCEL
 		if option == "2":
-			self.prompt_list_all_camps_user_has_access_to()
+			self.list_all_camps_user_has_access_to()
 		if option == "3":
+			self.prompt_list_all_camps_under_specific_plan()
 			pass  # list all camps under a plan
 		if option == "4":
 			self.prompt_add_camp()
@@ -57,7 +58,7 @@ class InterfaceCamp:
 		if option == "1":
 			return  # CANCEL
 		if option == "2":
-			self.prompt_list_all_camps_user_has_access_to()
+			self.list_all_camps_user_has_access_to()
 		if option == "3":
 			self.prompt_edit_camp_details()
 		if option == "4":
@@ -295,16 +296,34 @@ class InterfaceCamp:
 			print(f"Failed to {method} {volunteer}!")
 			
 			
-
-
-	def prompt_list_all_camps_user_has_access_to(self):
+	def list_all_camps_user_has_access_to(self):
 		users = Users.load_users()
 		user_is_admin = users[self.current_user.username]["is_admin"]
 		filtered_camps = Camp.load_camps_user_has_access_to(self.current_user.username)
 		
 		print("--- Camps are as follows ---" if user_is_admin else "--- Camps you have access rights to are as follows ---")
 		filtered_camps_df = pd.DataFrame.from_dict(filtered_camps).transpose()  # use pandas for pretty print
-		print(filtered_camps_df)
+		print(filtered_camps_df if not filtered_camps_df.empty else "None found")
+		print("--- End of camps list ---")
+		input("Press Enter to continue...")
+	
+	def prompt_list_all_camps_under_specific_plan(self):
+		""" This is intended for admin only """
+		
+		filtered_camps = Camp.load_camps_user_has_access_to(self.current_user.username)
+
+		plan_keys = Plans.load_plans().keys()
+		print(f"\nExisting plans(s): {", ".join(plan_keys) if plan_keys else 'None found'}")
+		selected_plan = input_until_valid(
+			input_message= "Please enter the humanitarian plan to view camps under, or leave empty to abort.",
+			is_valid = lambda user_input: user_input == "" or user_input in plan_keys,
+			validation_message = "Invalid value. Please enter the name of the humanitarian plan from the above list, or leave empty to abort."
+		)
+		
+		print(f"--- Camps under {selected_plan} are as follows ---")
+		filtered_camps_df = pd.DataFrame.from_dict(filtered_camps).transpose()  # use pandas for pretty print
+		filtered_camps_df = filtered_camps_df[filtered_camps_df["humanitarian_plan_in"] == selected_plan]  # filter by humanitarian_plan_in
+		print(filtered_camps_df if not filtered_camps_df.empty else "None found")
 		print("--- End of camps list ---")
 		input("Press Enter to continue...")
 
