@@ -319,6 +319,9 @@ class InterfaceCamp:
 			is_valid = lambda user_input: user_input == "" or user_input in plan_keys,
 			validation_message = "Invalid value. Please enter the name of the humanitarian plan from the above list, or leave empty to abort."
 		)
+		if selected_plan == "":
+			print("Camp viewing aborted.")
+			return
 		
 		print(f"--- Camps under {selected_plan} are as follows ---")
 		filtered_camps_df = pd.DataFrame.from_dict(filtered_camps).transpose()  # use pandas for pretty print
