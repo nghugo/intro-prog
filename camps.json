@@ -1,1 +1,46 @@
-{"camp1": {"location": "China", "capacity": 20, "occupancy": 0, "humanitarian_plan_in": "planA", "volunteer_in_charge": []}}
+{
+  "camp1": {
+    "location": "China",
+    "max_capacity": 20,
+    "humanitarian_plan_in": "planA",
+    "volunteers_in_charge": [
+      "volunteer1",
+      "v"
+    ]
+  },
+  "camp2": {
+    "location": "Ukraine",
+    "max_capacity": 224,
+    "humanitarian_plan_in": "planB",
+    "volunteers_in_charge": [
+      "volunteer1",
+      "volunteer2",
+      "v"
+    ]
+  },
+  "camp3": {
+    "location": "UK",
+    "max_capacity": 30,
+    "humanitarian_plan_in": "planC",
+    "volunteers_in_charge": [
+      "v"
+    ]
+  },
+  "camp4": {
+    "location": "China",
+    "max_capacity": 10,
+    "humanitarian_plan_in": "planA",
+    "volunteers_in_charge": [
+      "volunteer2"
+    ]
+  },
+  "camp5": {
+    "location": "Ukraine",
+    "max_capacity": 13,
+    "humanitarian_plan_in": "planB",
+    "volunteers_in_charge": [
+      "volunteer1",
+      "v"
+    ]
+  }
+}
