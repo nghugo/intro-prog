@@ -68,7 +68,19 @@ dummy_camps = {
     "location": "UK",
     "capacity": 30,
     "humanitarian_plan_in": "planC",
-    "volunteers_in_charge": []
+    "volunteers_in_charge": ["v"]
+  },
+  "camp4": {
+    "location": "China",
+    "capacity": 10,
+    "humanitarian_plan_in": "planA",
+    "volunteers_in_charge": ["volunteer2"]
+  },
+  "camp5": {
+    "location": "Ukraine",
+    "capacity": 13,
+    "humanitarian_plan_in": "planB",
+    "volunteers_in_charge": ["volunteer1", "v"]
   }
 }
 

@@ -16,12 +16,13 @@ class InterfaceCamp:
 		option = input_until_valid(
 			input_message = f"\n<homepage/manage-camps>\nPlease choose an operation on camps below:\
 				\n[1] CANCEL\
-				\n[2] List all camps\
-				\n[3] Add a camp\
-				\n[4] Delete a camp\
-				\n[5] Edit details of a camp\
-				\n[6] Edit volunteers: add to/remove from a camp",
-			is_valid = lambda user_input: user_input.isdigit() and int(user_input) > 0 and int(user_input) <= 6,
+				\n[2] List all camps (under any plan)\
+				\n[3] TODO: List all camps under a plan\
+				\n[4] Add a camp\
+				\n[5] Delete a camp\
+				\n[6] Edit details of a camp\
+				\n[7] Edit volunteers: add to/remove from a camp",
+			is_valid = lambda user_input: user_input.isdigit() and int(user_input) > 0 and int(user_input) <= 7,
 			validation_message = "Unrecognized input. Please choose from the above list."
 		)
 		if option == "1":
@@ -29,12 +30,14 @@ class InterfaceCamp:
 		if option == "2":
 			self.prompt_list_all_camps_user_has_access_to()
 		if option == "3":
-			self.prompt_add_camp()
+			pass  # list all camps under a plan
 		if option == "4":
-			self.prompt_delete_camp()
+			self.prompt_add_camp()
 		if option == "5":
-			self.prompt_edit_camp_details()
+			self.prompt_delete_camp()
 		if option == "6":
+			self.prompt_edit_camp_details()
+		if option == "7":
 			self.prompt_edit_volunteer()
 
 

@@ -26,9 +26,10 @@ def get_accessible_refugees(username):
     return accessible_refugees
 
 def get_num_families_and_members_by_camp():
-    """Returns the number of families and members in a dictionary with 2 keys
-        {"num_families": int f,
-         "num_members" int m}
+    """Returns the a dict with camp_id as key and nested dict as value
+        The nested dict is:
+            {"num_families": int f,
+            "num_members" int m}
     """
     all_refugees = load_refugees()
     num_refugees_by_camp = defaultdict(lambda: defaultdict(int))

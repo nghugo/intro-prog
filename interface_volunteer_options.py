@@ -21,7 +21,7 @@ class InterfaceVolunteerOptions:
 				\n[2] Manage my user account\
 				\n[3] Manage camps\
 				\n[4] Manage refugee profiles\
-				\n[5] TODO placeholder\
+				\n[5] TODO: Manage resources\
 				\n[6] TODO placeholder",
 			is_valid=lambda user_input: user_input.isdigit() and int(user_input) > 0 and int(user_input) <= 6,
 			validation_message="Unrecognized input. Please choose from the above list."
