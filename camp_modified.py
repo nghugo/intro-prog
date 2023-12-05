@@ -1,7 +1,7 @@
 import json
 
 from users import Users
-from db_relocate import relocate_all_refugees_by_camp, relocate_all_resources_by_camp
+from db_relocate import update_all_camp_values_in_refugees, update_all_camp_values_in_resources
 
 class Camp:
 	"""camp is used for store and modify data regard with camps;
@@ -90,8 +90,8 @@ class Camp:
 			camp_data[new_id] = camp_data.pop(camp_id)
 			with open('camps.json','w') as file:
 				json.dump(camp_data, file, indent=2)
-			relocate_all_refugees_by_camp(camp_id, new_id)
-			relocate_all_resources_by_camp(camp_id, new_id)
+			update_all_camp_values_in_refugees(camp_id, new_id)
+			update_all_camp_values_in_resources(camp_id, new_id)
 			return True
 		else:
 			return False
