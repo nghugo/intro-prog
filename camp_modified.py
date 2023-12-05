@@ -1,6 +1,7 @@
-
 import json
+
 from users import Users
+from db_relocate import relocate_all_refugees_by_camp, relocate_all_resources_by_camp
 
 class Camp:
 	"""camp is used for store and modify data regard with camps;
@@ -85,10 +86,12 @@ class Camp:
 		:return: boolean value. True if edited, False if not accessible"""
 		users = Users.load_users()
 		camp_data = Camp.loadCampData()
-		if username in users and (users[username]['is_admin'] or user in camp_data[camp_id]["volunteers_in_charge"]):
+		if username in users and (users[username]['is_admin'] or username in camp_data[camp_id]["volunteers_in_charge"]):
 			camp_data[new_id] = camp_data.pop(camp_id)
 			with open('camps.json','w') as file:
 				json.dump(camp_data, file, indent=2)
+			relocate_all_refugees_by_camp(camp_id, new_id)
+			relocate_all_resources_by_camp(camp_id, new_id)
 			return True
 		else:
 			return False
@@ -102,7 +105,7 @@ class Camp:
 		users = Users.load_users()
 		camp_data = Camp.loadCampData()
 
-		if username in users and (users[username]['is_admin'] or user in camp_data[camp_id]["volunteers_in_charge"]):
+		if username in users and (users[username]['is_admin'] or username in camp_data[camp_id]["volunteers_in_charge"]):
 			camp_data[camp_id][attribute] = new_value
 			with open('camps.json', 'w') as file:
 				json.dump(camp_data, file, indent=2)
