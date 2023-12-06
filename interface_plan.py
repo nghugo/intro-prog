@@ -143,7 +143,7 @@ class InterfacePlan:
 			validation_message = "Location cannot be empty. Please enter the location of the emergency."
 		)
 		
-		elif atribute == "start_date":
+		elif attribute == "start_date":
 			new_value = input_until_valid(
 			input_message = "\nEnter the plan start date in the format dd/mm/yyyy:",
 			is_valid = lambda start_date: is_valid_date(start_date),
@@ -156,7 +156,7 @@ class InterfacePlan:
 			new_value = input_until_valid(f"Enter the new value for the {attribute}:")
 
 		confirm = input_until_valid(
-			input_message = f"Please confirm you want to change {attribute} from previous value to new value:\n |{plan_name if attribute == "plan_name" else Plans.load_plans()[plan_name][attribute]}| --> |{new_value} \n[y] Yes\n[n] No (abort)|",
+			input_message = f"Please confirm you want to change {attribute} from previous value to new value:\n |{plan_name if attribute == "plan_name" else Plans.load_plans()[plan_name][attribute]}| --> |{new_value}| \n[y] Yes\n[n] No (abort)",
 			is_valid = lambda user_input: user_input == "y" or user_input == "n",
 			validation_message = "Unrecognized input. Please confirm (y/n):\n[y] Yes\n[n] No (abort)"
 		)
