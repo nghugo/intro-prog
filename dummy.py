@@ -135,6 +135,59 @@ dummy_refugees = {
   }
 }
 
+dummy_resources = {
+  "camp1": {
+    "food_packets": 10,
+    "medical_packets": 10,
+    "water_packets": 5,
+    "shelter_packets": 5,
+    "clothing_packets": 5,
+    "first_aid_packets": 5,
+    "baby_packets": 3,
+    "sanitation_packets": 10
+  },
+  "camp2": {
+    "food_packets": 2,
+    "medical_packets": 3,
+    "water_packets": 4,
+    "shelter_packets": 5,
+    "clothing_packets": 6,
+    "first_aid_packets": 7,
+    "baby_packets": 8,
+    "sanitation_packets": 9
+  },
+  "camp3": {
+    "food_packets": 0,
+    "medical_packets": 0,
+    "water_packets": 0,
+    "shelter_packets": 0,
+    "clothing_packets": 0,
+    "first_aid_packets": 0,
+    "baby_packets": 0,
+    "sanitation_packets": 0
+  },
+  "camp4": {
+    "food_packets": 0,
+    "medical_packets": 0,
+    "water_packets": 0,
+    "shelter_packets": 0,
+    "clothing_packets": 0,
+    "first_aid_packets": 0,
+    "baby_packets": 0,
+    "sanitation_packets": 0
+  },
+  "camp5": {
+    "food_packets": 0,
+    "medical_packets": 0,
+    "water_packets": 0,
+    "shelter_packets": 0,
+    "clothing_packets": 0,
+    "first_aid_packets": 0,
+    "baby_packets": 0,
+    "sanitation_packets": 0
+  }
+}
+
 
 
 def overwrite_json(object, file): 

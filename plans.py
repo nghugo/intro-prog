@@ -1,6 +1,8 @@
 import os.path
 import json
 
+from db_relocate import update_all_plan_values_in_camps
+
 class Plans:
 	def __init__(self):
 		self.plans = self.load_plans()
@@ -95,6 +97,7 @@ class Plans:
 			return False
 		# Change plan_name to new name
 		data[new_name] = data.pop(plan_name)
+		update_all_plan_values_in_camps(plan_name, new_name)  # also update camps under the plan
 		# Open file in write mode and make changes to data
 		with open("plans.json", "w") as json_file:
 			json.dump(data, json_file, indent=2)
