@@ -2,6 +2,7 @@ from users import Users
 
 from interface_manage_refugees import InterfaceManageRefugees
 from interface_volunteer_user_details import InterfaceVolunteerUserDetails
+from interface_manage_resource import InterfaceManageResource
 from interface_camp import InterfaceCamp
 from interface_helper import input_until_valid
 
@@ -12,6 +13,7 @@ class InterfaceVolunteerOptions:
 		self.interface_manage_refugees = InterfaceManageRefugees(self.current_user)
 		self.interface_volunteer_user_details = InterfaceVolunteerUserDetails(self.current_user)
 		self.interface_camp = InterfaceCamp(self.current_user)
+		self.interface_manage_resource = InterfaceManageResource(self.current_user)
 
 	def prompt_volunteer_options(self):  # TODO: implement handling for the other option values
 		users = Users.load_users()
@@ -21,7 +23,7 @@ class InterfaceVolunteerOptions:
 				\n[2] Manage my user account\
 				\n[3] Manage camps\
 				\n[4] Manage refugee profiles\
-				\n[5] TODO: Manage resources\
+				\n[5] Manage resources\
 				\n[6] TODO placeholder",
 			is_valid=lambda user_input: user_input.isdigit() and int(user_input) > 0 and int(user_input) <= 6,
 			validation_message="Unrecognized input. Please choose from the above list."
@@ -35,7 +37,7 @@ class InterfaceVolunteerOptions:
 		if option == "4":
 			self.interface_manage_refugees.prompt_volunteer_options()
 		if option == "5":
-			pass
+			self.interface_manage_resource.prompt_volunteer_options()
 		if option == "6":
 			pass
 	
