@@ -2,7 +2,7 @@ import json
 
 from users import Users
 from db_relocate import update_all_camp_values_in_refugees, update_all_camp_values_in_resources
-
+from resource_modified import CampResources
 class Camp:
 	"""camp is used for store and modify data regard with camps;
 
@@ -60,6 +60,28 @@ class Camp:
 
 		with open("camps.json", "w") as json_file:
 			json.dump(data, json_file, indent=2)
+
+	    #add camp_id to resource:
+		with open("camp_resources.json", "r") as json_file:
+			data_resource = json.load(json_file)
+
+		if camp_id in data_resource:  # reject, as camp_id collides with that of an existing camp
+			return False
+
+		data_resource[camp_id] = {  #set all initial value into zero
+			"food_packets": 0,
+            "medical_packets": 0,
+            "water_packets": 0,
+            "shelter_packets": 0,
+            "clothing_packets": 0,
+            "first_aid_packets": 0,
+            "baby_packets": 0,
+            "sanitation_packets": 0,
+        }
+
+		with open('camp_resources.json', 'w') as json_file:
+			json.dump(data_resource, json_file, indent = 2)
+
 		return True
 	
 
@@ -75,6 +97,16 @@ class Camp:
 		data.pop(camp_id)
 		with open('camps.json','w') as file:
 			json.dump(data,file,indent=2)
+        
+		#not sure about the case when delete camp and there is still resource in
+		data_resource = CampResources.load_resources()
+		#delete resource in data_resource
+		if camp_id not in data_resource:
+			return False
+		data_resource.pop(camp_id)
+		with open('camp_resources.json', 'w') as file:
+			json.dump(data_resource,file,indent=2)
+	
 		return True
 
 
@@ -184,18 +216,6 @@ class Camp:
 				return True
 		return False
 			
-
-
-
-
-
-
-# Camp.delete_camp('camp1', 'admin')
-# camp = Camp('camp1','China',30,"planA",[])
-# print(Camp.edit_camp_details('camp1','max_capacity',20,'admin'))
-
-
-
 
 
 

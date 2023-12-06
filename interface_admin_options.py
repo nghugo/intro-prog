@@ -6,6 +6,7 @@ from interface_camp import InterfaceCamp
 from interface_manage_refugees import InterfaceManageRefugees
 from interface_generate_reports import InterfaceGenerateReports
 from interface_volunteer_user_details import InterfaceVolunteerUserDetails
+from interface_manage_resource import InterfaceManageResource
 
 from interface_helper import input_until_valid
 
@@ -20,6 +21,7 @@ class InterfaceAdminOptions:
 		self.interface_manage_refugees = InterfaceManageRefugees(self.current_user)
 		self.interface_generate_reports = InterfaceGenerateReports()
 		self.interface_volunteer_user_details = InterfaceVolunteerUserDetails(self.current_user)
+		self.interface_manage_resources = InterfaceManageResource(self.current_user)
 	
 	def prompt_admin_options(self):
 		users = Users.load_users()
@@ -32,7 +34,7 @@ class InterfaceAdminOptions:
 				\n[4] Manage humanitarian plans\
 				\n[5] Manage camps and volunteers\
 				\n[6] Manage refugee profiles\
-				\n[7] TODO: Manage resources\
+				\n[7] Manage resources\
 				\n[8] Generate a report (plans, camps)",
 			is_valid=lambda user_input: user_input.isdigit() and int(user_input) > 0 and int(user_input) <= 8,
 			validation_message="Unrecognized input. Please choose from the above list."
@@ -52,6 +54,6 @@ class InterfaceAdminOptions:
 		if option == "6":
 			self.interface_manage_refugees.prompt_admin_options()
 		if option == "7":
-			pass
+			self.interface_manage_resources.prompt_admin_options()
 		if option == "8":
 			self.interface_generate_reports.prompt_admin_options()
