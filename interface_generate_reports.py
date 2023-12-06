@@ -6,30 +6,30 @@ class InterfaceGenerateReports:
 
 	def prompt_admin_options(self):
 		option = input_until_valid(
-			
-			#                 
+			              
 			input_message = f"\n<homepage/report>\nPlease choose a report to generate below:\
 				\n[1] CANCEL\
-				\n[2] Specific plan\
-				\n[3] All plans \
-				\n[4] All camps in specific plan\
-				\n[5] Specific camp with resoucres amount, and  refugee number \
-				\n[6] All camps",
-			is_valid=lambda user_input: user_input.isdigit() and int(user_input) > 0 and int(user_input) <= 5,
+				\n[2] All plans\
+				\n[3] Specific plan\
+				\n[4] All camps\
+				\n[5] All camps in specific plan\
+				\n[6] TODO (LATER): Specific camp with resources amount and refugee number",
+			is_valid=lambda user_input: user_input.isdigit() and int(user_input) > 0 and int(user_input) <= 6,
 			validation_message="Unrecognized input. Please choose from the above list."
 		)
 		if option == "1":
 			return  # option 1 is cancel, so just return
 		if option == "2":
-			self.generate_specific_plan_report()
-		if option == "3":
 			self.generate_all_plans_report()
+		if option == "3":
+			self.generate_specific_plan_report()
 		if option == "4":
-			self.generate_camps_in_specific_plan_report()
-		if option == "5":
-			self.generate_camp_report()
-		if option == "6":
 			self.generate_overall_report()
+		if option == "5":
+			self.generate_camps_in_specific_plan_report()
+		if option == "6":
+			self.generate_camp_report()
+	
 	#2nd option 
 	@staticmethod
 	def generate_specific_plan_report():
