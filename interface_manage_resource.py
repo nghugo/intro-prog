@@ -59,11 +59,11 @@ class InterfaceManageResource:
 			self.prompt_update_resources()
 	
 	def prompt_display_all_camps(self):
-		print('the information of resources of all camps is display as below:')
+		print('Resources for all camps:')
 		df = pd.DataFrame(self.resources)
-		df_tranpose = df.transpose()
+		df_tranpose = df.to_string()  # to_string: prevent table truncation
 		print(df_tranpose)
-		print("----------------------------------end table-------------------------------------")
+		print("----------------------------------End of resources table-------------------------------------")
 		input("Press Enter to continue...")
 
 	# def print_exist_camp(self):
@@ -83,8 +83,10 @@ class InterfaceManageResource:
 		print(f"{message_key} {message_value}")
 
 		if is_admin:
-			camp_id = input_until_valid(input_message="Enter the camp name: ", is_valid=lambda user_input: (user_input == "") or (user_input in self.resources), 
-							validation_message="Unrecognized camp. Please enter a new one: ")
+			camp_id = input_until_valid(
+				input_message = "Enter the camp name, or leave empty to abort: ", 
+				is_valid = lambda user_input: (user_input == "") or (user_input in self.resources), 
+				validation_message = "Unrecognized camp. Please enter a new one, or leave empty to abort: ")
 			
 			if camp_id == "":
 				print("Aborted displaying resources.")
@@ -92,13 +94,13 @@ class InterfaceManageResource:
 
 			resource_sepecific_camp = CampResources()
 			resource_sepecific_camp.display_resources(camp_id)
-			print("-------end of resource details--------")
+			print("-------End of resource details--------")
 			input("Press Enter to continue...")
 		else:
-			camp_data = Camp.loadCampData()
-			camp_id = input_until_valid(input_message="Enter the camp name: ", 
-							is_valid=lambda user_input: (user_input == "") or user_input in filtered_camps, 
-							validation_message="Unrecognized camp or camp not accessible. Please enter a new one: ")
+			camp_id = input_until_valid(
+				input_message = "Enter the camp name, or leave empty to abort: ", 
+				is_valid = lambda user_input: (user_input == "") or (user_input in filtered_camps), 
+				validation_message = "Unrecognized camp or camp not accessible. Please enter a new one or leave empty to abort: ")
 			
 			if camp_id == "":
 				print("Aborted displaying resources.")
@@ -106,7 +108,7 @@ class InterfaceManageResource:
 
 			resource_sepecific_camp = CampResources()
 			resource_sepecific_camp.display_resources(camp_id)
-			print("-------end of resource details--------")
+			print("-------End of resource details--------")
 			input("Press Enter to continue...")
 		
 
@@ -114,7 +116,7 @@ class InterfaceManageResource:
 		# TODO: if required to display the campid volunteer incharge first:
 		# find how many camps a volunteer is in charge and print them down.
 		# This is so strange! time cosumming if there exists a lot of data
-		print("Existing camp(s):")
+		
 		# self.print_exist_camp()
 
 		users = Users.load_users()
@@ -125,50 +127,55 @@ class InterfaceManageResource:
 		message_value = ", ".join(list(filtered_camps.keys())) if filtered_camps else "None found"
 		print(f"{message_key} {message_value}")
 
-		camp_id = input_until_valid(input_message="Enter the camp name or press enter to return to the former page: ", 
+		camp_id = input_until_valid(input_message="Enter the camp name or press Enter to return to the former page: ", 
 						is_valid=lambda user_input:(user_input == "") or user_input in filtered_camps, 
-						validation_message="Unrecognized camp or camp not accessible. Please enter a new one: ")
+						validation_message="Unrecognized camp or camp not accessible. Please enter a new one or leave empty to abort: ")
 		
 		if camp_id =="":
-			print("Aborted resource modification.")
+			print("Aborted resource amount modification.")
 			return
 		
 		# TODO: present the population of the camp.
 		df = pd.DataFrame(self.resources).transpose()
-		print("detailed information of this camp:")
-		print(df.loc[camp_id])
+		print(f"Resources allocated to this {camp_id}:")
+		print(df.loc[camp_id].to_string())
 		not_exit = True
-		while(not_exit == True):
-			resource_to_edit = input_until_valid(input_message="Enter one resource type to edit: food_packets/medical_packets/water_packets/shelter_packets/clothing_packets/first_aid_packets/baby_packet/sanitation_packets)/n Or press Enter to return: ",
+		while not_exit:
+			resource_to_edit = input_until_valid(input_message="Enter the resource to edit: food_packets/medical_packets/water_packets/shelter_packets/clothing_packets/first_aid_packets/baby_packet/sanitation_packets), or leave empty to abort:",
 												is_valid=lambda user_input: user_input in self.resources[camp_id] or user_input == "",
-												validation_message="Unrecognized type, please enter again.")
+												validation_message="Unrecognized input. Please enter again.")
 			if resource_to_edit == "":
-				print("Aborted resource modification.")
+				print("Aborted resource amount modification.")
 				return
 			
-			amount_edit = input_until_valid(input_message= f"Enter the new amount for {resource_to_edit} or press enter to return to the former page: ",
+			new_amount = input_until_valid(input_message= f"Enter the new amount for {resource_to_edit} or press Enter to abort: ",
 												is_valid=lambda user_input: user_input.isdigit() or user_input == "",
-												validation_message="Unrecognized type, please enter again.")
-			if amount_edit == "":
-				print("Aborted resource modification.")
+												validation_message="Unrecognized input. Please enter again.")
+			if new_amount == "":
+				print("Aborted resource amount modification.")
 				return
 			
-			confirm = input_until_valid(input_message=f"Please confirm your Resource edit for change {resource_to_edit} to amount {amount_edit} \n[y] Yes\n[n] No (abort)",
+			confirm = input_until_valid(input_message=f"Please confirm your modification:\
+							   \n-> Resource: {resource_to_edit}\
+							   \n-> Old amount: {df.loc[camp_id, resource_to_edit]}\
+							   \n-> New amount: {new_amount}\
+							   \n[y] Yes\
+							   \n[n] No (abort)",
 										is_valid = lambda user_input: user_input == "y" or user_input == "n",
 										validation_message="Unrecognized input. Please confirm (y/n):\n[y] Yes\n[n] No (abort)")
 			
 			if confirm == "n":
-				print(f"Camp information modification aborted.")
+				print("Aborted resource amount modification.")
 				return
 			resource = CampResources()
-			test = resource.update_resources(camp_id,resource_to_edit,int(amount_edit))
+			test = resource.update_resources(camp_id,resource_to_edit,int(new_amount))
 
 			if test:
 				print(f"You've changed the {resource_to_edit} successfully!")
 			else:
 				print(f'Failed to change {resource_to_edit}')
 
-			exit_confirm = input_until_valid(input_message="Do you want to edit other resource information?\n[y] Yes\n[n] No (abort)",
+			exit_confirm = input_until_valid(input_message="Do you want to edit other resource amounts?\n[y] Yes\n[n] No (abort)",
 										is_valid = lambda user_input: user_input == "y" or user_input == "n",
 										validation_message="Unrecognized input. Please confirm (y/n):\n[y] Yes\n[n] No (abort)")
 			
