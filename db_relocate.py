@@ -20,17 +20,15 @@ def update_all_camp_values_in_refugees(from_camp, to_camp):
     
 
 
-def update_all_camp_values_in_resources(from_camp, to_camp):
+def update_all_camp_values_in_camp_resources(from_camp, to_camp):
     """ Changes all camp_id == from_camp to to_camp for all resources in refugees.json """
     # TODO Have the edit resource method call this method -> Relocate resources
     try:
-        with open("resources.json", "r") as resources_file:
-            resources = json.load(resources_file)
-            for resource_values in resources.values():
-                if resource_values["camp_id"] == from_camp:
-                    resource_values["camp_id"] = to_camp 
-            with open('resources.json','w') as file:
-                json.dump(resources, file, indent = 2)
+        with open("camp_resources.json", "r") as camp_resources_file:
+            camp_resources = json.load(camp_resources_file)
+            camp_resources[to_camp] = camp_resources.pop(from_camp)
+            with open('camp_resources.json','w') as file:
+                json.dump(camp_resources, file, indent = 2)
     except:
         print("\nError relocating resources to new camps\n")
     
