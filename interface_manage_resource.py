@@ -123,7 +123,7 @@ class InterfaceManageResource:
 		message_value = ", ".join(list(filtered_camps.keys())) if filtered_camps else "None found"
 		print(f"{message_key} {message_value}")
 
-		camp_id = input_until_valid(input_message="Enter the camp name or press Enter to return to the former page: ", 
+		camp_id = input_until_valid(input_message="Enter the camp name or press Enter to abort: ", 
 						is_valid=lambda user_input:(user_input == "") or user_input in filtered_camps, 
 						validation_message="Unrecognized camp or camp not accessible. Please enter a new one or leave empty to abort: ")
 		
