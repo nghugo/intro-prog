@@ -13,7 +13,7 @@ class InterfaceGenerateReports:
 				\n[2] Specific plan\
 				\n[3] All plans \
 				\n[4] All camps in specific plan\
-				\n[5] Specific camp\
+				\n[5] Specific camp with resoucres amount, and  refugee number \
 				\n[6] All camps",
 			is_valid=lambda user_input: user_input.isdigit() and int(user_input) > 0 and int(user_input) <= 5,
 			validation_message="Unrecognized input. Please choose from the above list."
