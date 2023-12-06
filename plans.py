@@ -64,7 +64,7 @@ class Plans:
 	@staticmethod
 	def modify_plan(plan_name, field, new_value):
 		"""
-		Overwrites the value in the field of a user in plans.json.
+		Overwrites the value in the field of a plan_name in plans.json.
 		Halts and returns False if username is not existing or if the field is not found in plans.json (prevents typo)
 		Otherwise, returns True indicating success.
 		"""
@@ -78,11 +78,24 @@ class Plans:
 
 		if field != "plan_name":
 			data[plan_name][field] = new_value
-		else:  # changing plan_name needs to be handled differently than other fields, as they are on different levels
-			data[new_value] = data.pop(plan_name)
-
+			with open("plans.json", "w") as json_file:
+				json.dump(data, json_file, indent=2)
+			return True
+		# changing plan_name needs to be handled by modify_plan_name()
+		else:
+			return False
+	
+	@staticmethod
+	def modify_plan_name(plan_name, new_name):
+		# Open file in read mode
+		with open("plans.json", "r") as json_file:
+			data = json.load(json_file)
+		# Check that plan_name exists
+		if plan_name not in data:
+			return False
+		# Change plan_name to new name
+		data[new_name] = data.pop(plan_name)
+		# Open file in write mode and make changes to data
 		with open("plans.json", "w") as json_file:
 			json.dump(data, json_file, indent=2)
 		return True
-	
-	

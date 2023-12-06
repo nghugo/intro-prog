@@ -4,14 +4,14 @@
     "location": "kyiv",
     "start_date": "24/12/2022"
   },
-  "planA": {
-    "description": "UCL campaign for refugee education",
-    "location": "ucl",
-    "start_date": "25/09/2023"
-  },
   "planB": {
     "description": "Helping Asylum Seekers and refugees in London since 2023",
     "location": "london",
     "start_date": "05/01/2023"
+  },
+  "planY": {
+    "description": "This is a new description@",
+    "location": "Dublin",
+    "start_date": "13/04/2001"
   }
 }
