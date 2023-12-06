@@ -66,6 +66,7 @@ class InterfaceManageResource:
 		print("----------------------------------End of resources table-------------------------------------")
 		input("Press Enter to continue...")
 
+	# removed functionality
 	# def print_exist_camp(self):
 	#     df = pd.DataFrame(self.resources)
 	#     df_tranpose = df.transpose()
@@ -113,11 +114,6 @@ class InterfaceManageResource:
 		
 
 	def prompt_update_resources(self):
-		# TODO: if required to display the campid volunteer incharge first:
-		# find how many camps a volunteer is in charge and print them down.
-		# This is so strange! time cosumming if there exists a lot of data
-		
-		# self.print_exist_camp()
 
 		users = Users.load_users()
 		is_admin =  users[self.current_user.username]["is_admin"]
