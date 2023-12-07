@@ -103,6 +103,7 @@ class InterfaceGenerateReports:
 			print("--- End of report for {camp_name} ---\n")
 			input("Press Enter to continue...")
 			break
+		
 	@staticmethod
 	def generate_camps_in_specific_plan_report():
 		with open('plans.json', 'r') as file:
