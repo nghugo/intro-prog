@@ -16,8 +16,8 @@ class InterfacePlan:
 				\n[2] List all plans\
 				\n[3] Create new humanitarian plan\
 				\n[4] Modify a humanitarian plan\
-				\n[5] TODO: Remove a humanitarian plan\
-				\n[6] TODO\
+				\n[5] Immediately end a humanitarian plan\
+				\n[6] Delete a humanitarian plan\
 				\n[7] TODO",
 			is_valid=lambda user_input: user_input.isdigit() and int(user_input) > 0 and int(user_input) <= 5,
 			validation_message="Unrecognized input. Please choose from the above list."
@@ -62,19 +62,26 @@ class InterfacePlan:
 			is_valid = lambda start_date: is_valid_date(start_date),
 			validation_message = "Invalid date format. Please re-enter the date in the format dd/mm/yyyy."
 		)
+		end_date = input_until_valid(
+			input_message = "\nEnter the plan end date in the format dd/mm/yyyy: \nNote:\nFor active plans please enter a future date. \nIf this is an old plan, you can archive it by adding its end date.",
+			is_valid = lambda end_date: is_valid_date(end_date),
+			validation_message = "Invalid date format. Please re-enter the date in the format dd/mm/yyyy."
+		)
+
 		confirm = input_until_valid(
 			input_message = f"Please confirm details of the new plan (y/n):\
 				\nPlan name: {plan_name}\
 				\nPlan Description: {description}\
 				\nPlan Location: {location}\
-				\nPlan Start Date: {start_date}",
+				\nPlan Start Date: {start_date}\
+				\nPlan End Date: {end_date}",
 			is_valid=lambda user_input: user_input == "y" or user_input == "n",
 			validation_message="Unrecognized input. Please confirm details of the new user (y/n):\n[y] Yes\n[n] No (abort)"
 			)
 		if confirm == "y":
 			plans = Plans()
 			success = plans.add_plan(
-				plan_name=plan_name, description=description, location=location, start_date=start_date)
+				plan_name=plan_name, description=description, location=location, start_date=start_date, end_date=end_date)
 			if success:
 				print(f"Plan for {plan_name} successfully added.")
 			else:
