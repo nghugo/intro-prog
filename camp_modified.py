@@ -1,7 +1,7 @@
 import json
 
 from users import Users
-from db_relocate import update_all_camp_values_in_refugees, update_all_camp_values_in_resources
+from db_relocate import update_all_camp_values_in_refugees, update_all_camp_values_in_camp_resources
 from resource_modified import CampResources
 class Camp:
 	"""camp is used for store and modify data regard with camps;
@@ -123,7 +123,7 @@ class Camp:
 			with open('camps.json','w') as file:
 				json.dump(camp_data, file, indent=2)
 			update_all_camp_values_in_refugees(camp_id, new_id)
-			update_all_camp_values_in_resources(camp_id, new_id)
+			update_all_camp_values_in_camp_resources(camp_id, new_id)
 			return True
 		else:
 			return False
