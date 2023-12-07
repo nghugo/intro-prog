@@ -2,6 +2,7 @@ import pandas as pd
 
 from interface_helper import input_until_valid, is_valid_date
 from plans import Plans
+from data_validator import DataValidator
 
 class InterfacePlan:
 	def __init__(self, current_user):
@@ -52,9 +53,9 @@ class InterfacePlan:
 			validation_message = "Plan description cannot be empty. Please enter a plan description."
 		)
 		location = input_until_valid(
-			input_message = "\nEnter location of the emergency:",
-			is_valid = lambda location: location != "",
-			validation_message = "Location cannot be empty. Please enter the location of the emergency."
+			input_message = "\nEnter location of the emergency (This should be a country name e.g. Belgium):",
+			is_valid = lambda location: DataValidator.validate_country(location) is True,
+			validation_message = "Location must be a valid country. Please re-enter the location of the emergency."
 		)
 		start_date = input_until_valid(
 			input_message = "\nEnter the plan start date in the format dd/mm/yyyy:",
@@ -138,14 +139,14 @@ class InterfacePlan:
 		
 		elif attribute == "location":
 			new_value = input_until_valid(
-			input_message = "\nEnter new location of the emergency:",
-			is_valid = lambda location: location != "",
-			validation_message = "Location cannot be empty. Please enter the location of the emergency."
+			input_message = "\nEnter the new location of the emergency (This should be a country name e.g. Belgium):",
+			is_valid = lambda location: DataValidator.validate_country(location) is True,
+			validation_message = "Location must be a valid country. Please re-enter the location of the emergency."
 		)
 		
 		elif attribute == "start_date":
 			new_value = input_until_valid(
-			input_message = "\nEnter the plan start date in the format dd/mm/yyyy:",
+			input_message = "\nEnter the plan's new start date in the format dd/mm/yyyy:",
 			is_valid = lambda start_date: is_valid_date(start_date),
 			validation_message = "Invalid date format. Please re-enter the date in the format dd/mm/yyyy."
 		)
