@@ -193,6 +193,11 @@ class InterfaceManageUsers:
 					user_input.isdigit() and len(user_input) >= 5),
 				validation_message=f"Unrecognized input. Please specify the new phone number (5+ digits or leave empty)"
 			)
+		elif field == "password":
+			plain_text_password = input_until_valid(f"Please enter the new password:") 
+			salt = users[self.current_user.username]["salt"]
+			hashed_password = hashlib.sha256((plain_text_password + salt).encode('utf-8')).hexdigest()
+			value = hashed_password
 		else:
 			value = input_until_valid(f"Please enter the new value for the {field} field:")
 

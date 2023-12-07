@@ -1,5 +1,6 @@
-from users import Users
+import hashlib
 
+from users import Users
 from interface_helper import input_until_valid, input_until_valid_email, input_until_valid_name
 
 class InterfaceVolunteerUserDetails:
@@ -49,6 +50,11 @@ class InterfaceVolunteerUserDetails:
 				)
 		elif field == "email":
 			value=input_until_valid_email("Enter the new email (format: xxx@yyy.zzz with no spaces):")
+		elif field == "password":
+			plain_text_password = input_until_valid(f"Please enter the new password:") 
+			salt = users[self.current_user.username]["salt"]
+			hashed_password = hashlib.sha256((plain_text_password + salt).encode('utf-8')).hexdigest()
+			value = hashed_password
 		else:  # field == "password"
 			value = input_until_valid(f"Enter the new value for the {field} field:")
 
