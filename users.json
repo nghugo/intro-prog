@@ -37,7 +37,7 @@
   },
   "a": {
     "fullname": "Gus Fring",
-    "password": "b3932fc5878291b8b32fc9933f33d4151b7c3163848b9030c634d0d2482116c1",
+    "password": "234df68fd1d98e9642de27a17cd850a34ab1f8c48f5dba100751c624263ec675",
     "phone_number": "11111",
     "email": "a@a.a",
     "is_admin": true,
@@ -46,7 +46,7 @@
   },
   "v": {
     "fullname": "Hank Schrader",
-    "password": "7be2054f71bc8fbd9fc175b8014e5392fc55e678eb5e78784de1650fcb7a3762",
+    "password": "f2f82dd7fd56621f0ad05249a32f9d3743ef915aae6e5bcd2b06486e03026353",
     "phone_number": "11111",
     "email": "v@v.v",
     "is_admin": false,

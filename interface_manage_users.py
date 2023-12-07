@@ -58,8 +58,6 @@ class InterfaceManageUsers:
 		salt = secrets.token_hex(16)
 		hashed_password = hashlib.sha256((password + salt).encode('utf-8')).hexdigest()
 
-
-
 		fullname = input_until_valid_name(
 			input_message="Enter the full name of the new user:",
 			validation_message="User's full name can only contain letters and spaces. Please re-enter."

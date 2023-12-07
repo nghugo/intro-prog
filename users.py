@@ -21,7 +21,7 @@ class Users:
 				return json_load
 
 	@staticmethod
-	def add_user(username, password, fullname, email, phone_number, is_admin, is_activated,salt):
+	def add_user(username, password, fullname, email, phone_number, is_admin, is_activated, salt):
 		"""
 		Adds user to users.json. 
 		Halts and returns False if username already exists.

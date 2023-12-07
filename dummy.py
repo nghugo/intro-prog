@@ -2,57 +2,72 @@ import json
 import secrets
 import hashlib
 
-initial_password = "111"
-
+# password for most users are 111
+# exceptions: user a has password a, and user v has password v
 dummy_users = {
-    "admin": {
-        "fullname": "Homer Simpsons",
-        "password": "111",
-        "phone_number": "11111",
-        "email": "admin@mail.com",
-        "is_admin": True,
-        "is_activated": True,
-    },
-    "volunteer1": {
-        "fullname": "Lisa Simpsons",
-        "password": "111",
-        "phone_number": "5028382739",
-        "email": "volunteer1@mail.com",
-        "is_admin": False,
-        "is_activated": True,
-    },
-    "volunteer2": {
-        "fullname": "Peter Griffin",
-        "password": "111",
-        "phone_number": "9027346729",
-        "email": "volunteer2@mail.com",
-        "is_admin": False,
-        "is_activated": True,
-    },
-    "volunteer3": {
-        "fullname": "Brian Griffin",
-        "password": "111",
-        "phone_number": "11111",
-        "email": "volunteer3@mail.com",
-        "is_admin": False,
-        "is_activated": False,
-    },
-    "a": {
-        "fullname": "Gus Fring",
-        "password": "a",
-        "phone_number": "11111",
-        "email": "a@a.a",
-        "is_admin": True,
-        "is_activated": True,
-    },  # for quick testing
-    "v": {
-        "fullname": "Hank Schrader",
-        "password": "v",
-        "phone_number": "11111",
-        "email": "v@v.v",
-        "is_admin": False,
-        "is_activated": True,
-    },  # for quick testing
+  "admin": {
+    "fullname": "Homer Simpsons",
+    "password": "d2cdf18f2676375dc4f0f6bda15ad3198fc5ef67961ba4a15f45e5ec70726228",
+    "phone_number": "11111",
+    "email": "admin@mail.com",
+    "is_admin": True,
+    "is_activated": True,
+    "salt": "80306a615dcab5952ea15e3369ed7196"
+  },
+  "volunteer1": {
+    "fullname": "Lisa Simpsons",
+    "password": "3c7ff0ad540f6971a970b1121626c91d787ab2a21fff82ce3fe116decfa8e453",
+    "phone_number": "5028382739",
+    "email": "volunteer1@mail.com",
+    "is_admin": False,
+    "is_activated": True,
+    "salt": "1a51efcd45db38f7ab3814594e94a141"
+  },
+  "volunteer2": {
+    "fullname": "Peter Griffin",
+    "password": "acb5b70881ce130457ddf24c818a48b52f13e1f063c4845cee90f03a9c533706",
+    "phone_number": "9027346729",
+    "email": "volunteer2@mail.com",
+    "is_admin": False,
+    "is_activated": True,
+    "salt": "00782b248ddee3ccc2fcc7975d2f0933"
+  },
+  "volunteer3": {
+    "fullname": "Brian Griffin",
+    "password": "3a5f51060a72e282117bb2551f00d134c2c429da7791e65e4301304c3ea3801c",
+    "phone_number": "11111",
+    "email": "volunteer3@mail.com",
+    "is_admin": False,
+    "is_activated": False,
+    "salt": "05f7b58fc331c1743fcd0516e0aefd3e"
+  },
+  "a": {
+    "fullname": "Gus Fring",
+    "password": "84aab79d024d555c3e049da68da19bc6e6c2bc7b37a6308596dea7620eab778f",
+    "phone_number": "11111",
+    "email": "a@a.a",
+    "is_admin": True,
+    "is_activated": True,
+    "salt": "b13b214a2241462e9479b2704b99e65d"
+  },
+  "v": {
+    "fullname": "Hank Schrader",
+    "password": "f2f82dd7fd56621f0ad05249a32f9d3743ef915aae6e5bcd2b06486e03026353",
+    "phone_number": "11111",
+    "email": "v@v.v",
+    "is_admin": False,
+    "is_activated": True,
+    "salt": "942e02e419c6fec198e4a9513d62cfab"
+  },
+  "test": {
+    "password": "8094586435e1981fa0622edfd3401274804aa7b8685d31d323e66daf33c0532c",
+    "fullname": "Test",
+    "phone_number": "11111",
+    "email": "test@f.com",
+    "is_admin": False,
+    "is_activated": True,
+    "salt": "c72d035a6b87c81e15cfaf806dbca845"
+  }
 }
 
 dummy_camps = {
@@ -144,15 +159,12 @@ def overwrite_json(object, file):
     with open(file, "w") as json_file:
         json.dump(object, json_file, indent=2)
 
-
-for username, user_info in dummy_users.items():
-    
-    salt = secrets.token_hex(16)
-    hashed_password = hashlib.sha256((initial_password + salt).encode('utf-8')).hexdigest()
-
-    
-    user_info["password"] = hashed_password
-    user_info["salt"] = salt
+# initial_password = "111"
+# for username, user_info in dummy_users.items():
+#     salt = secrets.token_hex(16)
+#     hashed_password = hashlib.sha256((initial_password + salt).encode('utf-8')).hexdigest()
+#     user_info["password"] = hashed_password
+#     user_info["salt"] = salt
 
 
 overwrite_json(dummy_users, 'users.json')
