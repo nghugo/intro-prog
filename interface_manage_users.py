@@ -1,4 +1,6 @@
 import pandas as pd
+import hashlib
+import secrets
 
 from users import Users
 from interface_helper import input_until_valid, input_until_valid_email, input_until_valid_name
@@ -52,6 +54,10 @@ class InterfaceManageUsers:
 			is_valid=lambda user_input: user_input != "",
 			validation_message="Password cannot be empty"
 			)
+		
+		salt = secrets.token_hex(16)
+		hashed_password = hashlib.sha256((password + salt).encode('utf-8')).hexdigest()
+
 		fullname = input_until_valid_name(
 			input_message="Enter the full name of the new user:",
 			validation_message="User's full name can only contain letters and spaces. Please re-enter."
@@ -75,6 +81,8 @@ class InterfaceManageUsers:
 			is_valid=lambda user_input: user_input == "t" or user_input == "f",
 			validation_message="Unrecognized input. Please specify if the new user is activated (t/f):\n[t] True\n[f] False"
 		)
+
+
 		confirm = input_until_valid(
 			input_message=f"Please confirm details of the new user (y/n):\
 				\n->Username: {username} (please note: username CANNOT be changed)\
@@ -91,7 +99,8 @@ class InterfaceManageUsers:
 		if confirm == "y":
 			success = Users.add_user(
 				username=username, 
-				password=password, 
+				salt=salt,
+				password=hashed_password, 
 				fullname=fullname, 
 				email=email,phone_number=phone_number, 
 				is_admin=is_admin == "t", 
@@ -184,12 +193,29 @@ class InterfaceManageUsers:
 					user_input.isdigit() and len(user_input) >= 5),
 				validation_message=f"Unrecognized input. Please specify the new phone number (5+ digits or leave empty)"
 			)
+		elif field == "password":
+			plain_text_password = input_until_valid(f"Please enter the new password:") 
+			salt = users[username]["salt"]
+			hashed_password = hashlib.sha256((plain_text_password + salt).encode('utf-8')).hexdigest()
+			value = hashed_password
 		else:
 			value = input_until_valid(f"Please enter the new value for the {field} field:")
 
+		if field == "username":
+			prev_value = username
+		elif field == "password":
+			prev_value = "[HIDDEN]"
+		else:
+			prev_value = users[username][field]
+
 		confirm = input_until_valid(
-			input_message=f"Please confirm details of the user modification (y/n):\n->Username: {username}\n->Field: {field}\n->Previous Value: {
-				users[username][field] if field != "username" else username}\n->New Value: {value}\n[y] Yes\n[n] No (abort)",
+			input_message=f"Please confirm details of the user modification (y/n):\
+				\n->Username: {username}\
+				\n->Field: {field}\
+				\n->Previous Value: {prev_value}\
+				\n->New Value: {value if field != "password" else plain_text_password}\
+				\n[y] Yes\
+				\n[n] No (abort)",
 			is_valid=lambda user_input: user_input == "y" or user_input == "n",
 			validation_message="Unrecognized input. Please confirm details of the user modification (y/n):\n[y] Yes\n[n] No (abort)"
 		)

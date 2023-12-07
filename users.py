@@ -1,5 +1,7 @@
 import os.path
 import json
+import hashlib
+import binascii
 
 class Users:
 	
@@ -19,7 +21,7 @@ class Users:
 				return json_load
 
 	@staticmethod
-	def add_user(username, password, fullname, email, phone_number, is_admin, is_activated):
+	def add_user(username, password, fullname, email, phone_number, is_admin, is_activated, salt):
 		"""
 		Adds user to users.json. 
 		Halts and returns False if username already exists.
@@ -38,10 +40,32 @@ class Users:
 			"email": email,
 			"is_admin": is_admin,
 			"is_activated": is_activated,
+			"salt":salt
 		}
 		with open("users.json", "w") as json_file:
 			json.dump(data, json_file, indent=2)
 		return True
+	
+	@staticmethod
+	def verify_password(username, password):
+		'''
+		Verifies if the provided password matches the stored password for the given username.
+    	Returns True if the password is correct, otherwise False.
+			
+		'''
+		users = Users.load_users()
+		if username in users:
+			stored_salt = users[username]["salt"]
+			stored_password_hash = users[username]["password"]
+
+			input_password_hash = hashlib.sha256((password + stored_salt).encode('utf-8')).hexdigest()
+
+			return input_password_hash == stored_password_hash
+		
+		return False
+
+     
+    
 
 	@staticmethod
 	def delete_user(username):
@@ -95,6 +119,10 @@ class Users:
 		print("\nCurrent values of the selected user:")
 		print(f"-> username: {username} (not modifiable)")
 		for field, val in user_obj.items():
+			if field == "salt":
+				continue
+			if field == "password":
+				val = "[HIDDEN]"
 			print(f"-> {field}: {val} {'(only modifiable by admin via manage users section)' if field in ['is_admin', 'is_activated'] else ''}")
 	
 	

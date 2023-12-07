@@ -39,7 +39,7 @@ class InterfaceMain:
 		users = Users.load_users()
 		if (users  # check that the users dictionary (from persistent storage) is not empty
 	  		and username in users  # check if the specified username matches a user
-			and users[username]['password'] == password  # check against password associated with the username
+			and Users.verify_password(username,password)  # check against password associated with the username
 			and users[username]['is_admin'] == is_admin  # check if user is of correct type (admin vs volunteer)
 		):
 			if not users[username]["is_activated"]:
