@@ -70,29 +70,11 @@ class InterfaceManageRefugees:
 
 	def prompt_add_refugee(self):
 		existing_ids = load_refugees().keys()
-		print(f"Existing refugee IDs: {", ".join(existing_ids) if existing_ids else "None found."}")
-		refugee_id = input_until_valid(
-			input_message="Enter a unique id to identify this refugee (different from above list), or leave empty to auto-generate:",
-			is_valid=lambda user_input: user_input == "" or user_input not in existing_ids,
-			validation_message="Refugee id already exists. Please try another id."
-		)
-		if refugee_id == "":
-			refugee_id = uuid.uuid4().hex
-		fullname = input_until_valid_name(
-			input_message="Enter the full name of the refugee/ representitive of the family:",
-			validation_message="Full name can only contain letters and spaces. Please re-enter."
-		)
-		number_of_members = int(input_until_valid(
-			input_message="Enter the number of members in the refugee family:",
-			is_valid=lambda user_input: user_input.isdigit() and int(user_input) >= 1 and int(user_input) <= 100,
-			validation_message="Number of family members must be a positive integer (1-100 inclusive). Please re-enter."
-		))
-		
-		# Done: make sure a volunteer is only able to add refugees to the camps that they have access rights to
 
+		# Done: volunteer is only able to add refugees to the camps that they have access rights to
 		filtered_camps = Camp.load_camps_user_has_access_to(self.current_user.username)
 		filtered_camps_ids = filtered_camps.keys()
-
+		
 		camp_id = input_until_valid(
 			input_message=f"Enter camp ID for this refugee, or leave empty to abort:\
 				\n(Note: Camps accessible by you are: {", ".join(filtered_camps_ids) if filtered_camps_ids else "None found"})",
@@ -102,6 +84,37 @@ class InterfaceManageRefugees:
 		if camp_id == "":
 			print("Refugee creation aborted.")
 			return
+
+		camp_total_num_members = get_num_families_and_members_by_camp()[camp_id]["num_members"]
+		max_capacity = filtered_camps[camp_id]["max_capacity"]
+		remaining_spaces = max(max_capacity - camp_total_num_members, 0)
+		
+		if not remaining_spaces:
+			print(f"The camp {camp_id} is already at maximum capacity ({max_capacity}). No refugees can be added.")
+			return
+		print(f"Note -> Remaining space(s) in {camp_id}: {remaining_spaces}")
+		
+		print(f"Existing refugee IDs: {", ".join(existing_ids) if existing_ids else "None found."}")
+		refugee_id = input_until_valid(
+			input_message="Enter a unique id to identify this refugee (different from above list), or leave empty to auto-generate:",
+			is_valid=lambda user_input: user_input == "" or user_input not in existing_ids,
+			validation_message="Refugee id already exists. Please try another id."
+		)
+		if refugee_id == "":
+			refugee_id = uuid.uuid4().hex
+		
+		fullname = input_until_valid_name(
+			input_message="Enter the full name of the refugee/ representitive of the family:",
+			validation_message="Full name can only contain letters and spaces. Please re-enter."
+		)
+		
+		print(f"Note -> Remaining space(s) in {camp_id}: {remaining_spaces}")
+		number_of_members = int(input_until_valid(
+			input_message="Enter the number of members in the refugee family:",
+			is_valid=lambda user_input: user_input.isdigit() and int(user_input) >= 1 and int(user_input) <= remaining_spaces,
+			validation_message=f"Number of family members must be a positive integer (1-{remaining_spaces} inclusive). Please re-enter."
+		))
+			
 		medical_condition = input_until_valid(
 			input_message="Enter medical condition:",
 			is_valid=lambda user_input: user_input.strip() != "",
@@ -214,6 +227,9 @@ class InterfaceManageRefugees:
 	def prompt_modify_refugee(self):
 		accessible_refugees = get_accessible_refugees(self.current_user.username)
 		self.succint_print_all_refugees_user_has_access_to()
+
+		filtered_camps = Camp.load_camps_user_has_access_to(self.current_user.username)
+		filtered_camps_ids = filtered_camps.keys()
 		
 		refugee_id = input_until_valid(
 			input_message="Enter the refugee ID of the refugee profile to modify or leave empty to abort:",
@@ -242,14 +258,24 @@ class InterfaceManageRefugees:
 				validation_message="Full name can only contain letters and spaces. Please re-enter."
 			)
 		elif field == "number_of_members":
+			
+			camp_id = accessible_refugees[refugee_id]["camp_id"]
+
+			camp_total_num_members = get_num_families_and_members_by_camp()[camp_id]["num_members"]
+			max_capacity = filtered_camps[camp_id]["max_capacity"]
+			
+			remaining_spaces = max(max_capacity - camp_total_num_members, 0)
+
+			current_family_num_members = int(accessible_refugees[refugee_id]["number_of_members"])
+			
+			print(f"Note -> Remaining space(s) in {camp_id}: {remaining_spaces} ; Current number of members in the family: {current_family_num_members}")
+
 			value = int(input_until_valid(
-			input_message="Enter the number of members in the refugee family:",
-			is_valid=lambda user_input: user_input.isdigit() and int(user_input) >= 1 and int(user_input) <= 100,
-			validation_message="Number of family members must be a positive integer (1-100 inclusive). Please re-enter."
+			input_message=f"Enter the new number of members in the refugee family (1-{remaining_spaces + current_family_num_members} inclusive):",
+			is_valid=lambda user_input: user_input.isdigit() and int(user_input) >= 1 and int(user_input) <= remaining_spaces + current_family_num_members,
+			validation_message=f"Number of family members must be a positive integer (1-{remaining_spaces + current_family_num_members} inclusive). Please re-enter."
 		))
 		elif field == "camp_id":
-			filtered_camps = Camp.load_camps_user_has_access_to(self.current_user.username)
-			filtered_camps_ids = filtered_camps.keys()
 
 			value = input_until_valid(
 				input_message=f"Enter camp ID for this refugee, or leave empty to abort:\
