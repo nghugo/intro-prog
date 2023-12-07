@@ -11,7 +11,12 @@
   },
   "planY": {
     "description": "This is a new description@",
-    "location": "Dublin",
+    "location": "UK",
+    "start_date": "13/04/2001"
+  },
+  "planX": {
+    "description": "desc",
+    "location": "Brazil",
     "start_date": "13/04/2001"
   }
 }
