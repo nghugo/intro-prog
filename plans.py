@@ -2,7 +2,6 @@ import os.path
 import json
 
 from db_relocate import update_all_plan_values_in_camps
-from interface_helper import is_future_date
 
 class Plans:
 	def __init__(self):
@@ -24,7 +23,7 @@ class Plans:
 				return json_load
 
 	@staticmethod	
-	def add_plan(plan_name, description, location, start_date, end_date):
+	def add_plan(plan_name, description, location, start_date):
 		"""
 		Adds plans to plans.json. 
 		Halts and returns False if plan_name already exists.
@@ -36,19 +35,10 @@ class Plans:
 		if plan_name in data:  # reject, as plan name collides with that of an existing plan
 			return False
 		
-		if is_future_date(end_date) is True:
-			status = "Active"
-			return status
-		else:
-			status = "Ended"
-			return status
-		
 		data[plan_name] = {
             "description" : description,
             "location" : location,
-            "start_date" : start_date,
-			"end_date" : end_date,
-			"status" : status
+            "start_date" : start_date
 		}
 		with open("plans.json", "w") as json_file:
 			json.dump(data, json_file, indent=2)
