@@ -1,50 +1,65 @@
 {
   "admin": {
     "fullname": "Homer Simpsons",
-    "password": "111",
+    "password": "d2cdf18f2676375dc4f0f6bda15ad3198fc5ef67961ba4a15f45e5ec70726228",
     "phone_number": "11111",
     "email": "admin@mail.com",
     "is_admin": true,
-    "is_activated": true
+    "is_activated": true,
+    "salt": "80306a615dcab5952ea15e3369ed7196"
   },
   "volunteer1": {
     "fullname": "Lisa Simpsons",
-    "password": "111",
+    "password": "3c7ff0ad540f6971a970b1121626c91d787ab2a21fff82ce3fe116decfa8e453",
     "phone_number": "5028382739",
     "email": "volunteer1@mail.com",
     "is_admin": false,
-    "is_activated": true
+    "is_activated": true,
+    "salt": "1a51efcd45db38f7ab3814594e94a141"
   },
   "volunteer2": {
     "fullname": "Peter Griffin",
-    "password": "111",
+    "password": "acb5b70881ce130457ddf24c818a48b52f13e1f063c4845cee90f03a9c533706",
     "phone_number": "9027346729",
     "email": "volunteer2@mail.com",
     "is_admin": false,
-    "is_activated": true
+    "is_activated": true,
+    "salt": "00782b248ddee3ccc2fcc7975d2f0933"
   },
   "volunteer3": {
     "fullname": "Brian Griffin",
-    "password": "111",
+    "password": "3a5f51060a72e282117bb2551f00d134c2c429da7791e65e4301304c3ea3801c",
     "phone_number": "11111",
     "email": "volunteer3@mail.com",
     "is_admin": false,
-    "is_activated": false
+    "is_activated": false,
+    "salt": "05f7b58fc331c1743fcd0516e0aefd3e"
   },
   "a": {
     "fullname": "Gus Fring",
-    "password": "a",
+    "password": "b3932fc5878291b8b32fc9933f33d4151b7c3163848b9030c634d0d2482116c1",
     "phone_number": "11111",
     "email": "a@a.a",
     "is_admin": true,
-    "is_activated": true
+    "is_activated": true,
+    "salt": "b13b214a2241462e9479b2704b99e65d"
   },
   "v": {
     "fullname": "Hank Schrader",
-    "password": "v",
+    "password": "7be2054f71bc8fbd9fc175b8014e5392fc55e678eb5e78784de1650fcb7a3762",
     "phone_number": "11111",
     "email": "v@v.v",
     "is_admin": false,
-    "is_activated": true
+    "is_activated": true,
+    "salt": "942e02e419c6fec198e4a9513d62cfab"
+  },
+  "test": {
+    "password": "8094586435e1981fa0622edfd3401274804aa7b8685d31d323e66daf33c0532c",
+    "fullname": "Test",
+    "phone_number": "11111",
+    "email": "test@f.com",
+    "is_admin": false,
+    "is_activated": true,
+    "salt": "c72d035a6b87c81e15cfaf806dbca845"
   }
 }
