@@ -119,7 +119,10 @@ class Users:
 		print("\nCurrent values of the selected user:")
 		print(f"-> username: {username} (not modifiable)")
 		for field, val in user_obj.items():
-			if field not in {"salt"}:
-				print(f"-> {field}: {val} {'(only modifiable by admin via manage users section)' if field in ['is_admin', 'is_activated'] else ''}")
+			if field == "salt":
+				continue
+			if field == "password":
+				val = "[HIDDEN]"
+			print(f"-> {field}: {val} {'(only modifiable by admin via manage users section)' if field in ['is_admin', 'is_activated'] else ''}")
 	
 	

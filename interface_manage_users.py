@@ -195,15 +195,27 @@ class InterfaceManageUsers:
 			)
 		elif field == "password":
 			plain_text_password = input_until_valid(f"Please enter the new password:") 
-			salt = users[self.current_user.username]["salt"]
+			salt = users[username]["salt"]
 			hashed_password = hashlib.sha256((plain_text_password + salt).encode('utf-8')).hexdigest()
 			value = hashed_password
 		else:
 			value = input_until_valid(f"Please enter the new value for the {field} field:")
 
+		if field == "username":
+			prev_value = username
+		elif field == "password":
+			prev_value = "[HIDDEN]"
+		else:
+			prev_value = users[username][field]
+
 		confirm = input_until_valid(
-			input_message=f"Please confirm details of the user modification (y/n):\n->Username: {username}\n->Field: {field}\n->Previous Value: {
-				users[username][field] if field != "username" else username}\n->New Value: {value}\n[y] Yes\n[n] No (abort)",
+			input_message=f"Please confirm details of the user modification (y/n):\
+				\n->Username: {username}\
+				\n->Field: {field}\
+				\n->Previous Value: {prev_value}\
+				\n->New Value: {value if field != "password" else plain_text_password}\
+				\n[y] Yes\
+				\n[n] No (abort)",
 			is_valid=lambda user_input: user_input == "y" or user_input == "n",
 			validation_message="Unrecognized input. Please confirm details of the user modification (y/n):\n[y] Yes\n[n] No (abort)"
 		)

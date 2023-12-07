@@ -58,8 +58,20 @@ class InterfaceVolunteerUserDetails:
 		else:  # field == "password"
 			value = input_until_valid(f"Enter the new value for the {field} field:")
 
+		if field == "username":
+			prev_value = self.current_user.username
+		elif field == "password":
+			prev_value = "[HIDDEN]"
+		else:
+			prev_value = users[self.current_user.username][field]
+
 		confirm = input_until_valid(
-			input_message=f"Please confirm details of your user detail modification (y/n):\n->Field: {field}\n->Previous Value: {users[self.current_user.username][field] if field != "username" else self.current_user.username}\n->New Value: {value}\n[y] Yes\n[n] No (abort)",
+			input_message=f"Please confirm details of the user detail modification (y/n):\
+				\n->Field: {field}\
+				\n->Previous Value: {prev_value}\
+				\n->New Value: {value if field != "password" else plain_text_password}\
+				\n[y] Yes\
+				\n[n] No (abort)",
 			is_valid=lambda user_input: user_input == "y" or user_input == "n",
 			validation_message="Unrecognized input. Please confirm details of the user modification (y/n):\n[y] Yes\n[n] No (abort)"
 		)
@@ -78,8 +90,11 @@ class InterfaceVolunteerUserDetails:
 		print("--- Your details are as follows ---")
 		print(f'{"username":16}{self.current_user.username}')
 		for field, value in users[self.current_user.username].items():
-			if field not in {"salt"}:
-				print(f'{field:16}{value}')
+			if field == "salt":
+				continue
+			if field == "password":
+				value = "[HIDDEN]"
+			print(f'{field:16}{value}')
 		print("--- End of your details ---")
 		input("Press Enter to continue...")
 
