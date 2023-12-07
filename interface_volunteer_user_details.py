@@ -75,11 +75,11 @@ class InterfaceVolunteerUserDetails:
 
 	def list_my_details(self):
 		users = Users.load_users()
-		print("--- Your details are follows ---")
+		print("--- Your details are as follows ---")
 		print(f'{"username":16}{self.current_user.username}')
 		for field, value in users[self.current_user.username].items():
-			# print(field, ":", value)
-			print(f'{field:16}{value}')
+			if field not in {"salt"}:
+				print(f'{field:16}{value}')
 		print("--- End of your details ---")
 		input("Press Enter to continue...")
 
