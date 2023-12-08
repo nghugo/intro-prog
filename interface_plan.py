@@ -75,11 +75,11 @@ class InterfacePlan:
 
 		confirm = input_until_valid(
 			input_message = f"Please confirm details of the new plan (y/n):\
-				\nPlan name: {plan_name}\
-				\nPlan Description: {description}\
-				\nPlan Location: {location}\
-				\nPlan Start Date: {start_date}\
-				\nPlan End Date: {end_date}",
+				\n-> Plan name: {plan_name}\
+				\n-> Plan Description: {description}\
+				\n-> Plan Location: {location}\
+				\n-> Plan Start Date: {start_date}\
+				\n-> Plan End Date: {end_date}",
 			is_valid=lambda user_input: user_input == "y" or user_input == "n",
 			validation_message="Unrecognized input. Please confirm details of the new user (y/n):\n[y] Yes\n[n] No (abort)"
 			)
@@ -232,6 +232,7 @@ class InterfacePlan:
 
 		if attribute == "plan_name":
 			test = Plans.modify_plan_name(plan_name = plan_name, new_name = new_value)
+			plan_name = new_value  # update plan name
 		else:
 			test = Plans.modify_plan(plan_name = plan_name, field = attribute, new_value = new_value)
 		
