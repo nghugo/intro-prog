@@ -346,7 +346,7 @@ class InterfacePlan:
 	def prompt_delete_plan(self):
 
 		plan_data = Plans.load_plans()
-		self.prompt_list_active_plans()
+		self.prompt_list_all_plans()
 
 		plan_name = input_until_valid(
 			input_message= "Please enter the plan_name you would like to delete, or leave empty to abort:",
