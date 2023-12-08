@@ -169,9 +169,9 @@ class InterfacePlan:
 			print(f"-> {field}: {val}")
 		
 		attribute = input_until_valid(
-			input_message = "Enter the attribute (plan_name/description/location/start_date) to modify:",
-			is_valid = lambda user_input: user_input in {"plan_name", "description", "location", "start_date"},
-			validation_message = "Unrecognized input. Please enter a valid field (plan_name/description/location/start_date)."
+			input_message = "Enter the attribute (plan_name/description/location/start_date/end_date) to modify:",
+			is_valid = lambda user_input: user_input in {"plan_name", "description", "location", "start_date", "end_date"},
+			validation_message = "Unrecognized input. Please enter a valid field (plan_name/description/location/start_date/end_date)."
 			)
 
 			# TODO: also add the code for updating camp that plan is under (update their plan_name from previous value to newer value)
@@ -287,5 +287,7 @@ class InterfacePlan:
 			self.prompt_list_ended_plans()
 		else:
 			print(f'Failed to end {plan_name}')
+
+
 		
 	
