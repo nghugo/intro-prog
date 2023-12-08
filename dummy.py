@@ -70,18 +70,18 @@ dummy_users = {
 
 dummy_camps = {
   "camp1": {
+    "humanitarian_plan_in": "planB",
     "location": "London",
     "max_capacity": 20,
-    "humanitarian_plan_in": "planB",
     "volunteers_in_charge": [
       "volunteer1",
       "v"
     ]
   },
   "camp2": {
+    "humanitarian_plan_in": "planA",
     "location": "UCL Engineering Building",
     "max_capacity": 224,
-    "humanitarian_plan_in": "planA",
     "volunteers_in_charge": [
       "volunteer1",
       "volunteer2",
@@ -89,43 +89,43 @@ dummy_camps = {
     ]
   },
   "camp3": {
+    "humanitarian_plan_in": "planA",
     "location": "JBS Haldane Student Hub",
     "max_capacity": 30,
-    "humanitarian_plan_in": "planA",
     "volunteers_in_charge": [
       "v"
     ]
   },
   "camp4": {
+    "humanitarian_plan_in": "planA",
     "location": "Birkbeck",
     "max_capacity": 10,
-    "humanitarian_plan_in": "planA",
     "volunteers_in_charge": [
       "volunteer2"
     ]
   },
   "camp5": {
+    "humanitarian_plan_in": "planB",
     "location": "Euston Station",
     "max_capacity": 13,
-    "humanitarian_plan_in": "planB",
     "volunteers_in_charge": [
       "volunteer1",
       "v"
     ]
   },
   "camp6": {
+    "humanitarian_plan_in": "Ukraine war",
     "location": "Kyiv",
     "max_capacity": 130,
-    "humanitarian_plan_in": "Ukraine war",
     "volunteers_in_charge": [
       "volunteer1",
       "v"
     ]
   },
   "camp7": {
+    "humanitarian_plan_in": "Ukraine war",
     "location": "Outside Kyiv",
     "max_capacity": 120,
-    "humanitarian_plan_in": "Ukraine war",
     "volunteers_in_charge": [
       "volunteer2",
       "v"
