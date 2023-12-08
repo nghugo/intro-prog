@@ -1,7 +1,7 @@
 import pandas as pd
 from datetime import datetime
 
-from interface_helper import input_until_valid, is_valid_date
+from interface_helper import input_until_valid, is_valid_date, is_future_date
 from plans import Plans
 from data_validator import DataValidator
 
@@ -20,7 +20,7 @@ class InterfacePlan:
 				\n[5] Immediately end a humanitarian plan\
 				\n[6] Reactivate a humanitarian plan\
 				\n[7] Delete a humanitarian plan",
-			is_valid=lambda user_input: user_input.isdigit() and int(user_input) > 0 and int(user_input) <= 5,
+			is_valid=lambda user_input: user_input.isdigit() and int(user_input) > 0 and int(user_input) <= 6,
 			validation_message="Unrecognized input. Please choose from the above list."
 		)
 		if option == "1":
@@ -288,6 +288,57 @@ class InterfacePlan:
 		else:
 			print(f'Failed to end {plan_name}')
 
+	def prompt_reactivate_plan(self):
+		self.prompt_list_ended_plans()
+		plans = Plans.load_plans()
+		ended_plans = {key: value for key, value in plans.items() if value.get("status") == "Ended"}
+		ended_plan_keys = ended_plans.keys()
+		# Promps input from user
+		plan_name = input_until_valid(
+			input_message="Enter the plan you want to reactivate or leave empty to abort:",
+			is_valid = lambda user_input: user_input == "" or user_input in ended_plan_keys,
+			validation_message= "This plan is already active or does not exist. Please re-enter a plan name from the ended plans listed above, or leave empty to abort."
+		)
+		
+		if plan_name == "":
+			print("User modification aborted.")
+			return  # returns from method to abort current method
+		
+		print("\nCurrent values of the plan you are reactivating:")
+		print(f"-> plan_name: {plan_name}")
+		selected_plan = Plans.load_plans()[plan_name]
+		for field, val in selected_plan.items():
+			if field != "end_date" and field != "status":
+				print(f"-> {field}: {val}")
+		for field, val in selected_plan.items():
+			if field == "end_date":
+				print(f"-> date that plan was closed: {val}")
+		
+		now = datetime.now()
+		new_value = input_until_valid(
+		input_message = f"\nEnter the plan's new end date in the format dd/mm/yyyy. This must be a date in the future (Today's date is {now.strftime('%d/%m/%Y')}):",
+		is_valid = lambda end_date: is_future_date(end_date),
+		validation_message = "Invalid date entered. Please re-enter a date in the future and ensure the format is dd/mm/yyyy."
+		)
+
+		confirm = input_until_valid(
+			input_message = f"Please confirm you want to reactivate {plan_name} by changing end_date from previous value to new value:\n |{Plans.load_plans()[plan_name]["end_date"]}| --> |{new_value}| \n[y] Yes\n[n] No (abort)",
+			is_valid = lambda user_input: user_input == "y" or user_input == "n",
+			validation_message = "Unrecognized input. Please confirm (y/n):\n[y] Yes\n[n] No (abort)"
+		)
+
+		if confirm == "n":
+			print(f"Plan reactivation aborted.")
+			return
+		
+		test = Plans.modify_plan(plan_name = plan_name, field = "end_date", new_value = new_value)
+		
+		if test:
+			print(f"You've successfully reactivated the following plan: {plan_name} now ending on {new_value}\
+				\nHere is a list of your active plans:")
+			self.prompt_list_active_plans()
+		else:
+			print(f'Failed to end {plan_name}')
 
 		
 	
