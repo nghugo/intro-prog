@@ -13,7 +13,7 @@ class InterfacePlan:
 			
 			input_message = f"\n<homepage/manage-plans>\nPlease choose a plan management option below:\
 				\n[1] CANCEL\
-				\n[2] List all plans\
+				\n[2] List plans (active/ended/all)\
 				\n[3] Create new humanitarian plan\
 				\n[4] Modify a humanitarian plan\
 				\n[5] Immediately end a humanitarian plan\
@@ -92,16 +92,63 @@ class InterfacePlan:
 
 
 	def prompt_list_plans(self):
-		print("--- Plans are as follows ---")
+		option = input_until_valid(
+			
+			input_message = f"\n<homepage/manage-plans/list-plans>\nPlease choose an option below:\
+				\n[1] CANCEL\
+				\n[2] List active plans\
+				\n[3] List ended plans\
+				\n[4] List all plans",
+			is_valid=lambda user_input: user_input.isdigit() and int(user_input) > 0 and int(user_input) <= 4,
+			validation_message="Unrecognized input. Please choose from the above list."
+		)
+		if option == "1":
+			return  # option 1 is cancel, so just return
+		if option == "2":
+			self.prompt_list_active_plans()
+		if option == "3":
+			self.prompt_list_ended_plans()
+		if option == "4":
+			self.prompt_list_all_plans()
+	
+	def prompt_list_active_plans(self):
+		plans = Plans.load_plans()
+		active_plans = {key: value for key, value in plans.items() if value.get("status") == "Active"}
+		if active_plans:
+			print("--- Active plans are as follows ---")
+			active_plans_df = pd.DataFrame.from_dict(active_plans).transpose()
+			print(active_plans_df)
+			print("--- End of plans list ---")
+		else:
+			print("--- No active plans logged on system ---")
+		input("Press Enter to continue...")
+
+	def prompt_list_ended_plans(self):
+		plans = Plans.load_plans()
+		ended_plans = {key: value for key, value in plans.items() if value.get("status") == "Ended"}
+		if ended_plans:
+			print("--- Ended plans are as follows ---")
+			ended_plans_df = pd.DataFrame.from_dict(ended_plans).transpose()
+			print(ended_plans_df)
+			print("--- End of plans list ---")
+		else:
+			print("--- No ended plans logged on system ---")
+		input("Press Enter to continue...")
+		
+	def prompt_list_all_plans(self):
 		# create pandas dataframe from dictionary
 		plans = Plans.load_plans()
-		plans_df = pd.DataFrame.from_dict(plans).transpose()
-		print(plans_df)
-		print("--- End of plans list ---")
+		if plans:
+			print("--- All plans are as follows ---")
+			plans_df = pd.DataFrame.from_dict(plans).transpose()
+			print(plans_df)
+			print("--- End of plans list ---")
+		else:
+			print("--- No plans logged on system. Please add a plan ---")
 		input("Press Enter to continue...")
 	
 	def prompt_modify_plan(self):
-		self.prompt_list_plans()
+		self.prompt_list_all_plans()
 		plan_keys = Plans.load_plans().keys()
 		# Promps input from user
 		plan_name = input_until_valid(
