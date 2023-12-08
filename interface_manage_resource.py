@@ -263,6 +263,8 @@ class InterfaceManageResource:
                 print(f' |{resource}: current amount {amount}. warnning level: {warnning_amount}')
         print("-"*25+"Warnning"+"-"*25+'\n')
 
+        
+
                 
 
 
@@ -280,7 +282,7 @@ class InterfaceManageResource:
             left_aligned = text.ljust(width)
             left_border = border_char + left_aligned + padding_char*(70-len(text)) +border_char
             print(left_border)
-        print('||'+' '*14+'the warnning level of day time is '+str(resources.warnning_days)+'.'+' '*16+'||')
+        print('||'+' '*17+'the warnning level of day time is '+str(resources.warnning_days)+'.'+' '*18+'||')
         print('-'*29+'warnning level'+'-'*29)
 
 
@@ -289,48 +291,15 @@ class InterfaceManageResource:
         for camp_id in self.resources:
             if InterfaceManageResource.Test_underthreshold(camp_id):
                 InterfaceManageResource.helper_print_warnning(camp_id)
-
+            
         InterfaceManageResource.print_warnning_level_helper()
-        change = input_until_valid(input_message="Do you want to current warnning factors? (Press 'enter' to return) \n[y] Yes\n[n] No (abort)",
-                                        is_valid = lambda user_input: user_input == "y" or user_input == "n",
-                                        validation_message="Unrecognized input. Please confirm (y/n):\n[y] Yes\n[n] No (abort)")
-        
-        if change == "":
-            return
 
-        print("reset factors (Press 'Enter to go retrieve')")
-        resource_reset = CampResources()
-        factor_reset_amounts = {}
-        for resource in resource_reset.resource_factor().keys():
-            reset = input_until_valid(input_message= resource +": ", is_valid=lambda user_input: user_input.isdigit() and int(user_input)>=0 or user_input == "",
-                                       validation_message="Please input Non-negative intergers.or press enter to exit directly ")
-            if reset == "":
-                return
-            factor_reset_amounts[resource] = int(reset)
-        reset = input_until_valid(input_message= "Warnning days: ", is_valid=lambda user_input: user_input.isdigit() and int(user_input)>=0 or user_input == "",
-                                       validation_message="Please input possitive intergers.or press enter to exit directly ")
-        if reset == "":
+        
+        confirm = input_until_valid(input_message="Please press 'enter' to return to former page. ",
+                                        is_valid = lambda user_input: user_input == "",
+                                        validation_message="Unrecognized input. Please press 'enter' to return to former page.")
+        
+        if confirm == "":
             return
-        factor_reset_amounts["warnning_days"] = int(reset)
-       
-        print(factor_reset_amounts)
-        confirm = input_until_valid(input_message="please confirm your reset warnning factors. \n" +" \n[y] Yes\n[n] No (abort)",
-                                        is_valid = lambda user_input: user_input == "y" or user_input == "n",
-                                        validation_message="Unrecognized input. Please confirm (y/n):\n[y] Yes\n[n] No (abort)")
-        if confirm == "n":
-            print(f"Edition aborted.")
-            return
-        
-        test = CampResources.reset_factor(factor_reset_amounts)
-
-        if test:
-            print(f"You've changed the warnning factors successfully!")
-        else:
-            print(f'Failed to change.')
-        
-        
     
-resource = InterfaceManageResource('admin')
-resource.prompt_resource_warning()
-        
 

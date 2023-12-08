@@ -12,7 +12,7 @@
         "medical_packets": 0,
         "water_packets": 0,
         "shelter_packets": 0,
-        "clothing_packets": 0,
+        "clothing_packets": 2,
         "sanitation_packets": 0
     },
     "camp3": {

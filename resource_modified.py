@@ -101,18 +101,4 @@ class CampResources:
             "sanitation_packets": self.factor_sanitation
         }
         return factors
-    
-    @classmethod   
-    def reset_factor(factor_diction):
-        CampResources.factor_food = factor_diction["food_packets"]
-        CampResources.factor_medical = factor_diction["medical_packets"]
-        CampResources.factor_water = factor_diction["water_packets"]
-        CampResources.factor_shelter = factor_diction["shelter_packets"]
-        CampResources.factor_clothing = factor_diction["clothing_packets"]
-        CampResources.factor_sanitation = factor_diction["sanitation_packets"]
-        CampResources.warnning_days = factor_diction["warnning_days"]
 
-dic = {'food_packets': 2, 'medical_packets': 3, 'water_packets': 1, 'shelter_packets': 1, 'clothing_packets': 1, 'sanitation_packets': 1, 'warnning_days': 1}
-
-print(CampResources.factor_medical)
-#circular import problems
