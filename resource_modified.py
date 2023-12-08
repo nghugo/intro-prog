@@ -22,6 +22,7 @@ class CampResources:
             print(f"Resources for {camp_id}:")
             for resource, amount in camp_resources.items():
                 print(f"-> {resource}: {amount}")
+            return True # return True when resources are avaliable 
         else:
             return False
     
