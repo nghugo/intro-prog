@@ -28,15 +28,20 @@ class InterfaceVolunteerUserDetails:
 		Users.print_current_user_values(self.current_user.username)
 		users = Users.load_users()
 		field = input_until_valid(
-			input_message="Enter the field (password/fullname/email/phone_number) to modify, or leave empty to abort:",
-			is_valid=lambda user_input: user_input == "" or user_input in {"password", "fullname", "email", "phone_number"},
-			validation_message="Unrecognized input. Please enter a valid field (password/fullname/email/phone_number)."
+			input_message="Enter the field (username/password/fullname/email/phone_number) to modify, or leave empty to abort:",
+			is_valid=lambda user_input: user_input == "" or user_input in {"username", "password", "fullname", "email", "phone_number"},
+			validation_message="Unrecognized input. Please enter a valid field (username/password/fullname/email/phone_number)."
 		)
 		if field == "":
 			print("User modification aborted.")
 			return
-		
-		if field == "phone_number":
+		if field == "username":
+			value = input_until_valid(
+				input_message=f"Enter the new username",
+				is_valid=lambda user_input: user_input not in users,
+				validation_message=f"Username already taken. Please enter a different username."
+			)
+		elif field == "phone_number":
 			value = input_until_valid(
 				input_message=f"Enter the new phone number (5+ digits or leave empty)",
 				is_valid=lambda user_input: (user_input == "") or (

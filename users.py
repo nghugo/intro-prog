@@ -64,8 +64,6 @@ class Users:
 		
 		return False
 
-     
-    
 
 	@staticmethod
 	def delete_user(username):
@@ -85,9 +83,8 @@ class Users:
 			json.dump(data, json_file, indent=2)
 		return True
 		
-
-	@staticmethod
-	def modify_user(username, field, new_value):
+	@classmethod
+	def modify_user(cls, username, field, new_value):
 		"""
 		Overwrites the value in the field of a user in users.json.
 		Halts and returns False if username is not existing or if the field is not found in users.json (prevents typo)
@@ -103,10 +100,9 @@ class Users:
 
 		if field != "username":
 			data[username][field] = new_value
-		
-		# NOTE: removed ability to change username, as it needs to be kept unchanged for authentication
-		# else:  # changing username needs to be handled differently than other fields, as they are on different levels
-		# 	data[new_value] = data.pop(username)
+		else:  # changing username needs to be handled differently than other fields, as they are on different levels
+			data[new_value] = data.pop(username)
+			cls.remap_volunteers_of_camps(username, new_value)  # also cascade update the volunteer list
 
 		with open("users.json", "w") as json_file:
 			json.dump(data, json_file, indent=2)
@@ -117,7 +113,7 @@ class Users:
 		users = cls.load_users()
 		user_obj = users[username]
 		print("\nCurrent values of the selected user:")
-		print(f"-> username: {username} (not modifiable)")
+		print(f"-> username: {username}")
 		for field, val in user_obj.items():
 			if field == "salt":
 				continue
@@ -125,4 +121,15 @@ class Users:
 				val = "[HIDDEN]"
 			print(f"-> {field}: {val} {'(only modifiable by admin via manage users section)' if field in ['is_admin', 'is_activated'] else ''}")
 	
-	
+		
+	@staticmethod
+	def remap_volunteers_of_camps(from_volunteer, to_volunteer):
+		""" Remaps volunteer value in all camps"""
+		with open("camps.json", "r") as camp_json:
+			camps = json.load(camp_json)
+			for camp_id in camps:
+				vic_list = camps[camp_id]["volunteers_in_charge"]
+				vic_list = [volunteer if volunteer != from_volunteer else to_volunteer for volunteer in vic_list ]
+				camps[camp_id]["volunteers_in_charge"] = vic_list
+		with open('camps.json', 'w') as file:
+			json.dump(camps, file, indent=2)
