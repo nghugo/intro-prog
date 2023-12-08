@@ -43,7 +43,7 @@ dummy_users = {
   },
   "a": {
     "fullname": "Gus Fring",
-    "password": "84aab79d024d555c3e049da68da19bc6e6c2bc7b37a6308596dea7620eab778f",
+    "password": "234df68fd1d98e9642de27a17cd850a34ab1f8c48f5dba100751c624263ec675",
     "phone_number": "11111",
     "email": "a@a.a",
     "is_admin": True,
@@ -104,21 +104,27 @@ dummy_camps = {
 }
 
 dummy_plans = {
-    "Ukraine war": {
-        "description": "Helping victims of Ukraine war",
-        "location": "kyiv",
-        "start_date": "24/12/2022"
-    },
-    "planA": {
-        "description": "UCL campaign for refugee education",
-        "location": "ucl",
-        "start_date": "25/09/2023"
-    },
-    "planB": {
-        "description": "Helping Asylum Seekers and refugees in London since 2023",
-        "location": "london",
-        "start_date": "05/01/2023"
-    }
+  "Ukraine war": {
+    "description": "Helping victims of Ukraine war",
+    "location": "kyiv",
+    "start_date": "24/12/2022",
+    "end_date": "12/01/2024",
+    "status": "Active"
+  },
+  "planA": {
+    "description": "UCL campaign for refugee education",
+    "location": "ucl",
+    "start_date": "25/09/2023",
+    "end_date": "12/01/2024",
+    "status": "Active"
+  },
+  "planB": {
+    "description": "Helping Asylum Seekers and refugees in London since 2023",
+    "location": "london",
+    "start_date": "05/01/2023",
+    "end_date": "12/01/2024",
+    "status": "Active"
+  }
 }
 
 dummy_refugees = {
@@ -218,6 +224,4 @@ def overwrite_json(object, file):
 #     hashed_password = hashlib.sha256((initial_password + salt).encode('utf-8')).hexdigest()
 #     user_info["password"] = hashed_password
 #     user_info["salt"] = salt
-
-
-overwrite_json(dummy_users, 'users.json')
+# overwrite_json(dummy_users, 'users.json')

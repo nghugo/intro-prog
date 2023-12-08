@@ -29,6 +29,10 @@ def is_valid_date(date_input):
 	except ValueError:
 		return False
 
+# Returns true when date is after today, returns false if date is today or before.
+def is_future_date(date_input):
+	date_input_datetime = datetime.strptime(date_input, '%d/%m/%Y')
+	return date_input_datetime > datetime.now()
 
 def is_valid_name(name_input):
 	if (not isinstance(name_input, str) 
@@ -36,7 +40,6 @@ def is_valid_name(name_input):
 		or name_input.strip() == ""):
 		return False
 	return True
-
 
 def input_until_valid_name(input_message, validation_message):
 	name = input_until_valid(

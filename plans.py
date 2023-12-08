@@ -2,6 +2,7 @@ import os.path
 import json
 
 from db_relocate import update_all_plan_values_in_camps
+from interface_helper import is_future_date
 
 class Plans:
 	def __init__(self):
@@ -23,7 +24,7 @@ class Plans:
 				return json_load
 
 	@staticmethod	
-	def add_plan(plan_name, description, location, start_date):
+	def add_plan(plan_name, description, location, start_date, end_date):
 		"""
 		Adds plans to plans.json. 
 		Halts and returns False if plan_name already exists.
@@ -35,10 +36,16 @@ class Plans:
 		if plan_name in data:  # reject, as plan name collides with that of an existing plan
 			return False
 		
+		# Sets status based on end_date
+		status = Plans.status_checker(end_date)
+
+		
 		data[plan_name] = {
             "description" : description,
             "location" : location,
-            "start_date" : start_date
+            "start_date" : start_date,
+			"end_date" : end_date,
+			"status" : status
 		}
 		with open("plans.json", "w") as json_file:
 			json.dump(data, json_file, indent=2)
@@ -77,8 +84,16 @@ class Plans:
 		# also reject if field is not already defined in plans.json (prevents typo)
 		if plan_name not in data or (field != "plan_name" and field not in data[plan_name]):
 			return False
+		
+		# Checks if new end date set is in the past or future, and updates status accordingly
+		if field == "end_date":
+			data[plan_name][field] = new_value
+			data[plan_name]["status"] = Plans.status_checker(new_value)
+			with open("plans.json", "w") as json_file:
+				json.dump(data, json_file, indent=2)
+			return True
 
-		if field != "plan_name":
+		if field != "plan_name" and field != "end_date":
 			data[plan_name][field] = new_value
 			with open("plans.json", "w") as json_file:
 				json.dump(data, json_file, indent=2)
@@ -101,4 +116,24 @@ class Plans:
 		# Open file in write mode and make changes to data
 		with open("plans.json", "w") as json_file:
 			json.dump(data, json_file, indent=2)
+		return True
+
+	def status_checker(end_date):
+		status = ""
+		if is_future_date(end_date) is True:
+			status = "Active"
+		else:
+			status = "Ended"
+		return status
+
+	@staticmethod
+	def delete_plan(plan_name):
+		data = Plans.load_plans()
+		if plan_name not in data:
+			return False
+		
+		data.pop(plan_name)
+		with open('plans.json','w') as file:
+			json.dump(data,file,indent=2)
+
 		return True
