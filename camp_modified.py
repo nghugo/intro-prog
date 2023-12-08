@@ -215,7 +215,6 @@ class Camp:
 			if users[username]["is_admin"] or username in camps[camp_id]["volunteers_in_charge"]:
 				return True
 		return False
-			
 
 
 

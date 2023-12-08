@@ -159,10 +159,10 @@ class InterfaceManageUsers:
 		Users.print_current_user_values(username)
 
 		field = input_until_valid(
-			input_message="Enter the field (password/fullname/email/phone_number/is_admin/is_activated) to modify, or leave empty to abort:",
+			input_message="Enter the field (username/password/fullname/email/phone_number/is_admin/is_activated) to modify, or leave empty to abort:",
 			is_valid=lambda user_input: user_input in {
-				"", "password", "fullname", "email", "phone_number", "is_admin", "is_activated"},
-			validation_message="Unrecognized input. Please enter a valid field (password/email/phone_number/is_admin/is_activated)."
+				"", "username", "password", "fullname", "email", "phone_number", "is_admin", "is_activated"},
+			validation_message="Unrecognized input. Please enter a valid field (username/password/email/phone_number/is_admin/is_activated)."
 		)
 		if field == "":
 			print("User modification aborted.")
@@ -179,6 +179,12 @@ class InterfaceManageUsers:
 				validation_message=f"Unrecognized input. Please specify the new value for the {field} field (t/f):\n[t] True\n[f] False"
 			)
 			value = True if value == "t" else False
+		elif field == "username":
+			value = input_until_valid(
+				input_message=f"Enter the new username",
+				is_valid=lambda user_input: user_input not in users,
+				validation_message=f"Username already taken. Please enter a different username."
+			)
 		elif field == "fullname":
 			value = input_until_valid_name(
 				input_message = "Please enter the new full name",
@@ -222,6 +228,9 @@ class InterfaceManageUsers:
 		if confirm == "y":
 			# modify persistent store and reload current_user if username matches
 			Users.modify_user(username, field, value)
+			if field == "username" and self.current_user.username == username:
+				self.current_user.set_username(value)
+
 			print("Successfully modified user.")
 		else:
 			print("User modification aborted.")
