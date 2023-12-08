@@ -31,7 +31,7 @@ def is_valid_date(date_input):
 
 # Returns true when date is after today, returns false if date is today or before.
 def is_future_date(date_input):
-	date_input_datetime = datetime.strptime(date_input, '%m/%d/%Y')
+	date_input_datetime = datetime.strptime(date_input, '%d/%m/%Y')
 	return date_input_datetime > datetime.now()
 
 def is_valid_name(name_input):
