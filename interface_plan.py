@@ -20,7 +20,7 @@ class InterfacePlan:
 				\n[5] Immediately end a humanitarian plan\
 				\n[6] Reactivate a humanitarian plan\
 				\n[7] Delete a humanitarian plan",
-			is_valid=lambda user_input: user_input.isdigit() and int(user_input) > 0 and int(user_input) <= 6,
+			is_valid=lambda user_input: user_input.isdigit() and int(user_input) > 0 and int(user_input) <= 7,
 			validation_message="Unrecognized input. Please choose from the above list."
 		)
 		if option == "1":
@@ -35,6 +35,8 @@ class InterfacePlan:
 			self.prompt_immediate_end_plan()
 		if option == "6":
 			self.prompt_reactivate_plan()
+		if option == "7":
+			self.prompt_delete_plan()
 
 	def prompt_create_plan(self):
 		
@@ -340,5 +342,31 @@ class InterfacePlan:
 		else:
 			print(f'Failed to end {plan_name}')
 
+	def prompt_delete_plan(self):
+
+		plan_data = Plans.load_plans()
+		self.prompt_list_active_plans()
+
+		plan_name = input_until_valid(
+			input_message= "Please enter the plan_name you would like to delete, or leave empty to abort:",
+			is_valid = lambda user_input: user_input == "" or user_input in plan_data,
+			validation_message = "The plan_name you entered does not exist. Please re-enter or leave empty to abort."
+		)
+		
+		if plan_name == "":
+			print("Plan deletion aborted.")
+			return
+
+		confirm = input_until_valid(
+			input_message = f"Please confirm you want to delete this plan (y/n):\n->plan_name: {plan_name}\n[y] Yes\n[n] No (abort)",
+			is_valid = lambda user_input: user_input == "y" or user_input == "n",
+			validation_message = "Unrecognized input. Please confirm to delete the plan (y/n):\n[y] Yes\n[n] No (abort)"
+		)
+		if confirm == "n":
+			print("Plan deletion aborted.")
+			return
+		
+		test = Plans.delete_plan(plan_name = plan_name)
+		print(f"Successfully deleted {plan_name}" if test else f"Failed to delete {plan_name}")
 		
 	

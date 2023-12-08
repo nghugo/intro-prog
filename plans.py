@@ -125,3 +125,15 @@ class Plans:
 		else:
 			status = "Ended"
 		return status
+
+	@staticmethod
+	def delete_plan(plan_name):
+		data = Plans.load_plans()
+		if plan_name not in data:
+			return False
+		
+		data.pop(plan_name)
+		with open('plans.json','w') as file:
+			json.dump(data,file,indent=2)
+
+		return True
