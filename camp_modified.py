@@ -215,8 +215,18 @@ class Camp:
 			if users[username]["is_admin"] or username in camps[camp_id]["volunteers_in_charge"]:
 				return True
 		return False
-			
-
+	
+	@staticmethod
+	def remap_volunteers_of_camps(from_volunteer, to_volunteer):
+		""" Remaps volunteer value in all camps"""
+		with open("camps.json", "r") as camp_json:
+			camps = json.load(camp_json)
+			for camp_id in camps:
+				vic_list = camps[camp_id]["volunteers_in_charge"]
+				vic_list = [volunteer if volunteer != from_volunteer else to_volunteer for volunteer in vic_list ]
+				camps[camp_id]["volunteers_in_charge"] = vic_list
+		with open('camps.json', 'w') as file:
+			json.dump(camps, file, indent=2)
 
 
 
