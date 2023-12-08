@@ -240,6 +240,26 @@ dummy_resources = {
     "first_aid_packets": 0,
     "baby_packets": 0,
     "sanitation_packets": 0
+  },
+  "camp6": {
+    "food_packets": 0,
+    "medical_packets": 0,
+    "water_packets": 0,
+    "shelter_packets": 0,
+    "clothing_packets": 0,
+    "first_aid_packets": 0,
+    "baby_packets": 0,
+    "sanitation_packets": 0
+  },
+  "camp7": {
+    "food_packets": 0,
+    "medical_packets": 0,
+    "water_packets": 0,
+    "shelter_packets": 0,
+    "clothing_packets": 0,
+    "first_aid_packets": 0,
+    "baby_packets": 0,
+    "sanitation_packets": 0
   }
 }
 
