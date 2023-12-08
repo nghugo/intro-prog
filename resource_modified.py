@@ -36,9 +36,9 @@ class CampResources:
     def display_resources(self, camp_id):
         if camp_id in self.resources:
             camp_resources = self.resources[camp_id]
-            print(f"Resources for camp {camp_id}:")
+            print(f"Resources for {camp_id}:")
             for resource, amount in camp_resources.items():
-                print(f"{resource}: {amount}")
+                print(f"-> {resource}: {amount}")
         else:
             return False
         

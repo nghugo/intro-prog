@@ -9,6 +9,7 @@ from refugees import load_refugees,get_num_families_and_members_by_camp
 from collections import defaultdict
 import pandas as pd
 
+
 class InterfaceManageResource:
     """class used for manage option related to manage resource.
     """
@@ -126,36 +127,44 @@ class InterfaceManageResource:
         df_camp = pd.DataFrame({'camp name': column_names})
         print(df_camp)
 
-    def prompt_display_specific_camp(self):
-        users = Users.load_users()
-        is_admin = users[self.current_user.username]["is_admin"]
-        if is_admin:
-            camp_id = input_until_valid(input_message="Enter the camp name: ", is_valid=lambda user_input: (user_input == "") or (user_input in self.resources), 
-                            validation_message="unrecognized camp. Please enter a new one: ")
-            
-            if camp_id == "":
-                print("display viewing aborted.")
-                return
+	def prompt_display_specific_camp(self):
+		users = Users.load_users()
+		is_admin = users[self.current_user.username]["is_admin"]
 
-            resource_sepecific_camp = CampResources()
-            resource_sepecific_camp.display_resources(camp_id)
-            print("-------end of resource details--------")
-            input("Press Enter to return to the previous window...")
-        else:
-            camp_data = Camp.loadCampData()
-            camp_id = input_until_valid(input_message="Enter the camp name: ", 
-                            is_valid=lambda user_input: (user_input == "") or (self.validate_input_camp(user_input,self.current_user.username)), 
-                            validation_message="unrecognized camp or camp not accessible. Please enter a new one: ")
-            
-            if camp_id == "":
-                print("display viewing aborted.")
-                return
+		filtered_camps = Camp.load_camps_user_has_access_to(self.current_user.username)
+		message_key = "\nExisting camp(s):" if is_admin else "Camp(s) you have access rights to:"
+		message_value = ", ".join(list(filtered_camps.keys())) if filtered_camps else "None found"
+		print(f"{message_key} {message_value}")
 
-            resource_sepecific_camp = CampResources()
-            resource_sepecific_camp.display_resources(camp_id)
-            print("-------end of resource details--------")
-            input("Press Enter to return to the previous window...")
-        
+		if is_admin:
+			camp_id = input_until_valid(
+				input_message = "Enter the camp name, or leave empty to abort: ", 
+				is_valid = lambda user_input: (user_input == "") or (user_input in self.resources), 
+				validation_message = "Unrecognized camp. Please enter a new one, or leave empty to abort: ")
+			
+			if camp_id == "":
+				print("Aborted displaying resources.")
+				return
+
+			resource_sepecific_camp = CampResources()
+			resource_sepecific_camp.display_resources(camp_id)
+			print("-------End of resource details--------")
+			input("Press Enter to continue...")
+		else:
+			camp_id = input_until_valid(
+				input_message = "Enter the camp name, or leave empty to abort: ", 
+				is_valid = lambda user_input: (user_input == "") or (user_input in filtered_camps), 
+				validation_message = "Unrecognized camp or camp not accessible. Please enter a new one or leave empty to abort: ")
+			
+			if camp_id == "":
+				print("Aborted displaying resources.")
+				return
+
+			resource_sepecific_camp = CampResources()
+			resource_sepecific_camp.display_resources(camp_id)
+			print("-------End of resource details--------")
+			input("Press Enter to continue...")
+		
 
     def prompt_change_resources(self,method='update'):
         #todo:if required to display the campid volunteer incharge first:
@@ -220,14 +229,14 @@ class InterfaceManageResource:
             else:
                 print(f'Failed to change {edition_resource}')
 
-            exit_confirm = input_until_valid(input_message="do you want to edit other resource information?\n[y] Yes\n[n] No (abort)",
-                                        is_valid = lambda user_input: user_input == "y" or user_input == "n",
-                                        validation_message="Unrecognized input. Please confirm (y/n):\n[y] Yes\n[n] No (abort)")
-            
-            if exit_confirm == 'y':
-                not_exit = True
-            else:
-                not_exit = False
+			exit_confirm = input_until_valid(input_message="Do you want to edit other resource amounts?\n[y] Yes\n[n] No (abort)",
+										is_valid = lambda user_input: user_input == "y" or user_input == "n",
+										validation_message="Unrecognized input. Please confirm (y/n):\n[y] Yes\n[n] No (abort)")
+			
+			if exit_confirm == 'y':
+				not_exit = True
+			else:
+				not_exit = False
 
     @staticmethod 
     def calculate_threshold(resource_name,camp_id):
