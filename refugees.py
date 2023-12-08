@@ -25,6 +25,7 @@ def get_accessible_refugees(username):
                         if Camp.user_has_access(camp_id = refugee_values["camp_id"], username = username)}
     return accessible_refugees
 
+
 def get_num_families_and_members_by_camp():
     """Returns the a dict with camp_id as key and nested dict as value
         The nested dict is:

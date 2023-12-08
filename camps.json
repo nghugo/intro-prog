@@ -12,5 +12,11 @@
     "max_capacity": "10",
     "humanitarian_plan_in": "planA",
     "volunteers_in_charge": []
+  },
+  "camp3": {
+    "location": "USA",
+    "max_capacity": "20",
+    "humanitarian_plan_in": "Ukraine war",
+    "volunteers_in_charge": []
   }
 }

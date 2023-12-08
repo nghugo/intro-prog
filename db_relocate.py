@@ -49,3 +49,4 @@ def update_all_plan_values_in_camps(from_plan, to_plan):
     except:
         print("\nError relocating camps by plan\n")
 
+

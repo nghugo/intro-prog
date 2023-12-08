@@ -74,8 +74,6 @@ class Camp:
             "water_packets": 0,
             "shelter_packets": 0,
             "clothing_packets": 0,
-            "first_aid_packets": 0,
-            "baby_packets": 0,
             "sanitation_packets": 0,
         }
 
@@ -216,7 +214,5 @@ class Camp:
 				return True
 		return False
 			
-
-
 
 

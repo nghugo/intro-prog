@@ -1,5 +1,4 @@
 from interface_main import InterfaceMain
-
 # [START] dummy data - - - - - - - - - - - - - - - - - - - -
 # from dummy import overwrite_json, dummy_users, dummy_camps, dummy_plans, dummy_refugees
 # overwrite_json(dummy_users, "users.json")
