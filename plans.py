@@ -36,12 +36,14 @@ class Plans:
 		if plan_name in data:  # reject, as plan name collides with that of an existing plan
 			return False
 		
+		status = ""
+
 		if is_future_date(end_date) is True:
 			status = "Active"
-			return status
+
 		else:
 			status = "Ended"
-			return status
+
 		
 		data[plan_name] = {
             "description" : description,
