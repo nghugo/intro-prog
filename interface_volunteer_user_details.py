@@ -72,9 +72,9 @@ class InterfaceVolunteerUserDetails:
 
 		confirm = input_until_valid(
 			input_message=f"Please confirm details of the user detail modification (y/n):\
-				\n->Field: {field}\
-				\n->Previous Value: {prev_value}\
-				\n->New Value: {value if field != "password" else plain_text_password}\
+				\n-> Field: {field}\
+				\n-> Previous Value: {prev_value}\
+				\n-> New Value: {value if field != "password" else plain_text_password}\
 				\n[y] Yes\
 				\n[n] No (abort)",
 			is_valid=lambda user_input: user_input == "y" or user_input == "n",
