@@ -1,8 +1,9 @@
 import json
 
 from interface_helper import input_until_valid
-# from refugee import get_num_families_and_members_by_camp
-# from resources_modified import Resources
+from refugees import get_num_families_and_members_by_camp
+from resource_modified import CampResources
+
 
 class InterfaceGenerateReports:
 
@@ -30,8 +31,7 @@ class InterfaceGenerateReports:
 		if option == "5":
 			self.generate_camps_in_specific_plan_report()
 		if option == "6":
-			pass
-			#self.generate_camp_report()
+			self.generate_camp_report()
 	
 	
 	@staticmethod
@@ -75,12 +75,11 @@ class InterfaceGenerateReports:
 		print("--- End of Report for All Plans ---\n")
 		input("Press Enter to continue...")
 
-
 	@staticmethod
 	def generate_camp_report():
 		with open('camps.json', 'r') as file:
 			camps_data = json.load(file)
-		resources_obj = Resources()  # Initialising resouces here 
+		resources_obj = CampResources()  # Initialise with CampResources
 
 		while True:
 			print("\nAvailable plans: " + ", ".join(camps_data.keys()))
@@ -90,12 +89,14 @@ class InterfaceGenerateReports:
 				print("Operation aborted.")
 				break
 
+			camp_data = camps_data.get(camp_name, None)  # Get camp data
+
 			if camp_data:
 				report = f"--- Report for {camp_name} ---\n"
 				report += f"Location: {camp_data.get('location', 'N/A')}\n"
 				report += f"Max capacity: {camp_data.get('max_capacity', 'N/A')}\n"
 
-				# Getting refugee info
+				# refugee info
 				refugee_stats = get_num_families_and_members_by_camp()
 				camp_refugee_data = refugee_stats.get(camp_name, {"num_families": 0, "num_members": 0})
 				report += f"Number of Families: {camp_refugee_data['num_families']}\n"
@@ -105,20 +106,19 @@ class InterfaceGenerateReports:
 				if not resources_obj.display_resources(camp_name):
 					report += "Resources: None available\n"
 				
+				
 				report += f"Humanitarian Plan: {camp_data.get('humanitarian_plan_in', 'N/A')}\n"
 				volunteerString = ', '.join(camp_data.get('volunteers_in_charge', []))
 				report += f"Volunteers in Charge: {volunteerString if volunteerString else 'Currently none'}\n"
 				print(report)
-
-				camp_data = camps_data.get(camp_name, {})
-			
 			else:
 				print(f"\nNo data available for camp: {camp_name}. Please enter an existing camp name or leave empty to abort.")
-			continue
+				continue  
 
-			print("--- End of report for {camp_name} ---\n")
+			print(f"--- End of report for {camp_name} ---\n")
 			input("Press Enter to continue...")
 			break
+
 		
 	@staticmethod
 	def generate_camps_in_specific_plan_report():
