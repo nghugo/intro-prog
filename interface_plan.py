@@ -18,8 +18,8 @@ class InterfacePlan:
 				\n[3] Create new humanitarian plan\
 				\n[4] Modify a humanitarian plan\
 				\n[5] Immediately end a humanitarian plan\
-				\n[6] Delete a humanitarian plan\
-				\n[7] TODO",
+				\n[6] Reactivate a humanitarian plan\
+				\n[7] Delete a humanitarian plan",
 			is_valid=lambda user_input: user_input.isdigit() and int(user_input) > 0 and int(user_input) <= 5,
 			validation_message="Unrecognized input. Please choose from the above list."
 		)
@@ -33,6 +33,8 @@ class InterfacePlan:
 			self.prompt_modify_plan()
 		if option == "5":
 			self.prompt_immediate_end_plan()
+		if option == "6":
+			self.prompt_reactivate_plan()
 
 	def prompt_create_plan(self):
 		
@@ -204,6 +206,13 @@ class InterfacePlan:
 			validation_message = "Invalid date format. Please re-enter the date in the format dd/mm/yyyy."
 		)
 
+		elif attribute == "end_date":
+			new_value = input_until_valid(
+			input_message = "\nEnter the plan's new end date in the format dd/mm/yyyy:",
+			is_valid = lambda end_date: is_valid_date(end_date),
+			validation_message = "Invalid date format. Please re-enter the date in the format dd/mm/yyyy."
+		)
+
 		else:  
 			# TODO: location -> implement country checks from hashset
 			print(f"\nCurrent {attribute} value: {self.prompt_list_plans()[plan_name][attribute]}")
@@ -279,7 +288,4 @@ class InterfacePlan:
 		else:
 			print(f'Failed to end {plan_name}')
 		
-
-
-
-		
+	
