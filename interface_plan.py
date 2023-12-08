@@ -69,7 +69,7 @@ class InterfacePlan:
 		)
 		end_date = input_until_valid(
 			input_message = "\nEnter the plan end date in the format dd/mm/yyyy: \nNote:\nFor active plans please enter a future date. \nIf this is an old plan, you can archive it by adding its end date.",
-			is_valid = lambda end_date: is_valid_date(end_date),
+			is_valid = lambda end_date: is_valid_date(end_date) and end_date > start_date,
 			validation_message = "Invalid date format. Please re-enter the date in the format dd/mm/yyyy."
 		)
 
@@ -160,6 +160,8 @@ class InterfacePlan:
 			validation_message= "This plan does not exist. Please re-enter plan name from the list above, create a new plan with this name, or leave empty to abort."
 		)
 		
+		selected_plan = Plans.load_plans()[plan_name]
+		
 		if plan_name == "":
 			print("User modification aborted.")
 			return  # returns from method to abort current method
@@ -204,15 +206,15 @@ class InterfacePlan:
 		elif attribute == "start_date":
 			new_value = input_until_valid(
 			input_message = "\nEnter the plan's new start date in the format dd/mm/yyyy:",
-			is_valid = lambda start_date: is_valid_date(start_date),
-			validation_message = "Invalid date format. Please re-enter the date in the format dd/mm/yyyy."
+			is_valid = lambda start_date: is_valid_date(start_date) and start_date < selected_plan["end_date"],
+			validation_message = "Invalid date format. Please re-enter the date in the format dd/mm/yyyy and ensure start_date is not after end_date."
 		)
 
 		elif attribute == "end_date":
 			new_value = input_until_valid(
 			input_message = "\nEnter the plan's new end date in the format dd/mm/yyyy:",
-			is_valid = lambda end_date: is_valid_date(end_date),
-			validation_message = "Invalid date format. Please re-enter the date in the format dd/mm/yyyy."
+			is_valid = lambda end_date: is_valid_date(end_date) and end_date > selected_plan["start_date"],
+			validation_message = "Invalid date format. Please re-enter the date in the format dd/mm/yyyy and ensure end_date is not before start_date."
 		)
 
 		else:  
