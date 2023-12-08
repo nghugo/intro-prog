@@ -24,7 +24,7 @@ class Plans:
 				return json_load
 
 	@staticmethod	
-	def add_plan(plan_name, description, location, start_date, end_date):
+	def add_plan(plan_name, description, country, start_date, end_date):
 		"""
 		Adds plans to plans.json. 
 		Halts and returns False if plan_name already exists.
@@ -42,7 +42,7 @@ class Plans:
 		
 		data[plan_name] = {
             "description" : description,
-            "location" : location,
+            "country" : country,
             "start_date" : start_date,
 			"end_date" : end_date,
 			"status" : status

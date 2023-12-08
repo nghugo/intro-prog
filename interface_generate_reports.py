@@ -53,7 +53,7 @@ class InterfaceGenerateReports:
 			plan_data = plans_data[plan_name]
 			print(f"\n--- Report for {plan_name} Plan ---")
 			report = f"Description: {plan_data.get('description', 'N/A')}\n"
-			report += f"Location: {plan_data.get('location', 'N/A')}\n"
+			report += f"Country: {plan_data.get('country', 'N/A')}\n"
 			report += f"Start Date: {plan_data.get('start_date', 'N/A')}\n"
 			print(report)
 			input("Press Enter to continue...")
@@ -69,7 +69,7 @@ class InterfaceGenerateReports:
 		for plan_name, plan_data in plans_data.items():
 			report = f"\nPlan Name: {plan_name}\n"
 			report += f"Description: {plan_data.get('description', 'N/A')}\n"
-			report += f"Location: {plan_data.get('location', 'N/A')}\n"
+			report += f"Country: {plan_data.get('country', 'N/A')}\n"
 			report += f"Start Date: {plan_data.get('start_date', 'N/A')}\n"
 			print(report)
 		print("--- End of Report for All Plans ---\n")

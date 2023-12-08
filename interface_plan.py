@@ -57,10 +57,10 @@ class InterfacePlan:
 			is_valid = lambda description: description != "",
 			validation_message = "Plan description cannot be empty. Please enter a plan description."
 		)
-		location = input_until_valid(
-			input_message = "\nEnter location of the emergency (This should be a country name e.g. Belgium):",
-			is_valid = lambda location: DataValidator.validate_country(location) is True,
-			validation_message = "Location must be a valid country. Please re-enter the location of the emergency."
+		country = input_until_valid(
+			input_message = "\nEnter country of the emergency (This should be a country name e.g. Belgium):",
+			is_valid = lambda country: DataValidator.validate_country(country) is True,
+			validation_message = "Country must be a valid country. Please re-enter the country of the emergency."
 		)
 		start_date = input_until_valid(
 			input_message = "\nEnter the plan start date in the format dd/mm/yyyy:",
@@ -77,7 +77,7 @@ class InterfacePlan:
 			input_message = f"Please confirm details of the new plan (y/n):\
 				\n-> Plan name: {plan_name}\
 				\n-> Plan Description: {description}\
-				\n-> Plan Location: {location}\
+				\n-> Plan Country: {country}\
 				\n-> Plan Start Date: {start_date}\
 				\n-> Plan End Date: {end_date}",
 			is_valid=lambda user_input: user_input == "y" or user_input == "n",
@@ -86,7 +86,7 @@ class InterfacePlan:
 		if confirm == "y":
 			plans = Plans()
 			success = plans.add_plan(
-				plan_name=plan_name, description=description, location=location, start_date=start_date, end_date=end_date)
+				plan_name=plan_name, description=description, country=country, start_date=start_date, end_date=end_date)
 			if success:
 				print(f"Plan for {plan_name} successfully added.")
 			else:
@@ -173,9 +173,9 @@ class InterfacePlan:
 			print(f"-> {field}: {val}")
 		
 		attribute = input_until_valid(
-			input_message = "Enter the attribute (plan_name/description/location/start_date/end_date) to modify:",
-			is_valid = lambda user_input: user_input in {"plan_name", "description", "location", "start_date", "end_date"},
-			validation_message = "Unrecognized input. Please enter a valid field (plan_name/description/location/start_date/end_date)."
+			input_message = "Enter the attribute (plan_name/description/country/start_date/end_date) to modify:",
+			is_valid = lambda user_input: user_input in {"plan_name", "description", "country", "start_date", "end_date"},
+			validation_message = "Unrecognized input. Please enter a valid field (plan_name/description/country/start_date/end_date)."
 			)
 
 			# TODO: also add the code for updating camp that plan is under (update their plan_name from previous value to newer value)
@@ -196,11 +196,11 @@ class InterfacePlan:
 			validation_message = "Plan description cannot be empty. Please enter a plan description."
 		)
 		
-		elif attribute == "location":
+		elif attribute == "country":
 			new_value = input_until_valid(
-			input_message = "\nEnter the new location of the emergency (This should be a country name e.g. Belgium):",
-			is_valid = lambda location: DataValidator.validate_country(location) is True,
-			validation_message = "Location must be a valid country. Please re-enter the location of the emergency."
+			input_message = "\nEnter the new country of the emergency (This should be a country name e.g. Belgium):",
+			is_valid = lambda country: DataValidator.validate_country(country) is True,
+			validation_message = "Country must be a valid country. Please re-enter the country of the emergency."
 		)
 		
 		elif attribute == "start_date":
@@ -218,7 +218,6 @@ class InterfacePlan:
 		)
 
 		else:  
-			# TODO: location -> implement country checks from hashset
 			print(f"\nCurrent {attribute} value: {self.prompt_list_plans()[plan_name][attribute]}")
 			new_value = input_until_valid(f"Enter the new value for the {attribute}:")
 

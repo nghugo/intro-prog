@@ -1,6 +1,4 @@
 import json
-import secrets
-import hashlib
 
 # password for most users are 111
 # exceptions: user a has password a, and user v has password v
@@ -138,21 +136,21 @@ dummy_camps = {
 dummy_plans = {
   "Ukraine war": {
     "description": "Helping victims of Ukraine war",
-    "location": "Ukraine",
+    "country": "Ukraine",
     "start_date": "24/12/2022",
     "end_date": "12/01/2024",
     "status": "Active"
   },
   "planA": {
     "description": "UCL campaign for refugee education",
-    "location": "United Kingdom",
+    "country": "United Kingdom",
     "start_date": "25/09/2023",
     "end_date": "12/01/2024",
     "status": "Active"
   },
   "planB": {
     "description": "Helping Asylum Seekers and refugees in London since 2023",
-    "location": "United Kingdom",
+    "country": "United Kingdom",
     "start_date": "05/01/2023",
     "end_date": "12/01/2024",
     "status": "Active"
@@ -249,11 +247,3 @@ dummy_resources = {
 def overwrite_json(object, file):
     with open(file, "w") as json_file:
         json.dump(object, json_file, indent=2)
-
-# initial_password = "111"
-# for username, user_info in dummy_users.items():
-#     salt = secrets.token_hex(16)
-#     hashed_password = hashlib.sha256((initial_password + salt).encode('utf-8')).hexdigest()
-#     user_info["password"] = hashed_password
-#     user_info["salt"] = salt
-# overwrite_json(dummy_users, 'users.json')
