@@ -75,13 +75,24 @@ class InterfaceCamp:
 		self.print_existing_or_accessible_camps()
 
 		camp_id = input_until_valid(
-		input_message = "Please enter the new camp ID (must be different from existing IDs)",
-		is_valid = lambda user_input: user_input != "" and user_input not in camp_data,
-		validation_message = "This camp_id already exists or cannot be empty."
-	)
+			input_message = "Please enter the new camp ID (must be different from existing IDs)",
+			is_valid = lambda user_input: user_input != "" and user_input not in camp_data,
+			validation_message = "This camp_id already exists or cannot be empty."
+		)
+
+		plans = Plans.load_plans()
+		print(f"\nExisting plans(s): {", ".join(plans) if plans else 'None found'}")
+		humanitarian_plan_in = input_until_valid(
+			input_message= "Please enter the humanitarian plan this camp belongs to. Choose from the above list, or leave empty to abort.",
+			is_valid = lambda user_input: user_input == "" or user_input in plans,
+			validation_message = "Invalid value. Please enter the name of the humanitarian plan from the above list, or leave empty to abort."
+		)
+		if humanitarian_plan_in == "":
+			print("Camp creation aborted.")
+			return
 	
 		location = input_until_valid(
-			input_message = "Enter the country this camp is located in",
+			input_message = f"Enter the location this camp is located in (within {plans[humanitarian_plan_in]["country"]} as specified in {humanitarian_plan_in})",
 			is_valid = lambda user_input: user_input != "" and type(user_input) == str,
 			validation_message = "This cannot be empty. Please enter the camp location"
 		)    # TODO: location -> implement checks
@@ -92,23 +103,13 @@ class InterfaceCamp:
 			validation_message = "Camp max_capacity must be a positive integer. Please re-enter."
 		)
 
-		plan_keys = Plans.load_plans().keys()
-		print(f"\nExisting plans(s): {", ".join(plan_keys) if plan_keys else 'None found'}")
-		humanitarian_plan_in = input_until_valid(
-			input_message= "Please enter the humanitarian plan this camp belongs to. Choose from the above list, or leave empty to abort.",
-			is_valid = lambda user_input: user_input == "" or user_input in plan_keys,
-			validation_message = "Invalid value. Please enter the name of the humanitarian plan from the above list, or leave empty to abort."
-		)
-		if humanitarian_plan_in == "":
-			print("Camp creation aborted.")
-			return
 
 		confirm = input_until_valid(
 			input_message = f"Please confirm details of the new camp (y/n):\
 				\n->Camp ID: {camp_id}\
-				\n->Location: {location}\
-				\n->Max capacity: {max_capacity}\
 				\n->Associated humanitarian plan: {humanitarian_plan_in}\
+				\n->Max capacity: {max_capacity}\
+				\n->Location: {location}\
 				\n[y] Yes\
 				\n[n] No (abort)",
 			is_valid = lambda user_input: user_input == "y" or user_input == "n",
@@ -190,9 +191,9 @@ class InterfaceCamp:
 		
 		if is_admin:
 			attribute = input_until_valid(
-				input_message = "Enter the attribute (camp_id/location/max_capacity/humanitarian_plan_in) to modify:",
+				input_message = "Enter the attribute (camp_id/humanitarian_plan_in/location/max_capacity) to modify:",
 				is_valid = lambda user_input: user_input in {"camp_id", "location", "max_capacity", "humanitarian_plan_in"},
-				validation_message = "Unrecognized input. Please enter a valid field (camp_methodid/location/max_capacity/humanitarian_plan_in)."
+				validation_message = "Unrecognized input. Please enter a valid field (camp_id/humanitarian_plan_in/location/max_capacity)."
 			)
 		else:
 			attribute = input_until_valid(
@@ -231,10 +232,13 @@ class InterfaceCamp:
 				is_valid = lambda user_input: user_input == "" or user_input in plan_keys,
 				validation_message = "Humanitarian plan must be chosen from the above list. Please re-enter or leave empty to abort."
 			)
-
+		elif attribute == "location":
+			plans = Plans.load_plans()
+			humanitarian_plan_in = filtered_camps[camp_id]["humanitarian_plan_in"]
+			print(f"\nCurrent location: {filtered_camps[camp_id]["location"]}")
+			new_value = input_until_valid(f"Enter the new value for the location (within {plans[humanitarian_plan_in]["country"]} as specified in {humanitarian_plan_in}):")
+			
 		else:  
-			# TODO: location -> implement country checks from hashset
-			# TODO: humanitarian plan (admin check implemented already, see is_admin above) -> implement checks from loaded plans
 			print(f"\nCurrent {attribute} value: {filtered_camps[camp_id][attribute]}")
 			new_value = input_until_valid(f"Enter the new value for the {attribute}:")
 

@@ -1,6 +1,4 @@
 import json
-import secrets
-import hashlib
 
 # password for most users are 111
 # exceptions: user a has password a, and user v has password v
@@ -71,56 +69,88 @@ dummy_users = {
 }
 
 dummy_camps = {
-    "camp1": {
-        "location": "China",
-        "max_capacity": 20,
-        "humanitarian_plan_in": "planA",
-        "volunteers_in_charge": ["volunteer1", "v"]
-    },
-    "camp2": {
-        "location": "Ukraine",
-        "max_capacity": 224,
-        "humanitarian_plan_in": "planB",
-        "volunteers_in_charge": ["volunteer1", "volunteer2", "v"]
-    },
-    "camp3": {
-        "location": "UK",
-        "max_capacity": 30,
-        "humanitarian_plan_in": "planC",
-        "volunteers_in_charge": ["v"]
-    },
-    "camp4": {
-        "location": "China",
-        "max_capacity": 10,
-        "humanitarian_plan_in": "planA",
-        "volunteers_in_charge": ["volunteer2"]
-    },
-    "camp5": {
-        "location": "Ukraine",
-        "max_capacity": 13,
-        "humanitarian_plan_in": "planB",
-        "volunteers_in_charge": ["volunteer1", "v"]
-    }
+  "camp1": {
+    "humanitarian_plan_in": "planB",
+    "location": "London",
+    "max_capacity": 20,
+    "volunteers_in_charge": [
+      "volunteer1",
+      "v"
+    ]
+  },
+  "camp2": {
+    "humanitarian_plan_in": "planA",
+    "location": "UCL Engineering Building",
+    "max_capacity": 224,
+    "volunteers_in_charge": [
+      "volunteer1",
+      "volunteer2",
+      "v"
+    ]
+  },
+  "camp3": {
+    "humanitarian_plan_in": "planA",
+    "location": "JBS Haldane Student Hub",
+    "max_capacity": 30,
+    "volunteers_in_charge": [
+      "v"
+    ]
+  },
+  "camp4": {
+    "humanitarian_plan_in": "planA",
+    "location": "Birkbeck",
+    "max_capacity": 10,
+    "volunteers_in_charge": [
+      "volunteer2"
+    ]
+  },
+  "camp5": {
+    "humanitarian_plan_in": "planB",
+    "location": "Euston Station",
+    "max_capacity": 13,
+    "volunteers_in_charge": [
+      "volunteer1",
+      "v"
+    ]
+  },
+  "camp6": {
+    "humanitarian_plan_in": "Ukraine war",
+    "location": "Kyiv",
+    "max_capacity": 130,
+    "volunteers_in_charge": [
+      "volunteer1",
+      "v"
+    ]
+  },
+  "camp7": {
+    "humanitarian_plan_in": "Ukraine war",
+    "location": "Outside Kyiv",
+    "max_capacity": 120,
+    "volunteers_in_charge": [
+      "volunteer2",
+      "v"
+    ]
+  }
 }
 
 dummy_plans = {
   "Ukraine war": {
     "description": "Helping victims of Ukraine war",
-    "location": "kyiv",
+    "country": "Ukraine",
     "start_date": "24/12/2022",
     "end_date": "12/01/2024",
     "status": "Active"
   },
   "planA": {
     "description": "UCL campaign for refugee education",
-    "location": "ucl",
+    "country": "United Kingdom",
     "start_date": "25/09/2023",
     "end_date": "12/01/2024",
     "status": "Active"
   },
   "planB": {
     "description": "Helping Asylum Seekers and refugees in London since 2023",
-    "location": "london",
+    "country": "United Kingdom",
     "start_date": "05/01/2023",
     "end_date": "12/01/2024",
     "status": "Active"
@@ -217,11 +247,3 @@ dummy_resources = {
 def overwrite_json(object, file):
     with open(file, "w") as json_file:
         json.dump(object, json_file, indent=2)
-
-# initial_password = "111"
-# for username, user_info in dummy_users.items():
-#     salt = secrets.token_hex(16)
-#     hashed_password = hashlib.sha256((initial_password + salt).encode('utf-8')).hexdigest()
-#     user_info["password"] = hashed_password
-#     user_info["salt"] = salt
-# overwrite_json(dummy_users, 'users.json')
