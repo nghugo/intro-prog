@@ -1,4 +1,5 @@
 import pandas as pd
+from datetime import datetime
 
 from interface_helper import input_until_valid, is_valid_date
 from plans import Plans
@@ -31,7 +32,7 @@ class InterfacePlan:
 		if option == "4":
 			self.prompt_modify_plan()
 		if option == "5":
-			pass
+			self.prompt_immediate_end_plan()
 
 	def prompt_create_plan(self):
 		
@@ -88,8 +89,6 @@ class InterfacePlan:
 				print(f"Failed to add plan for {plan_name}")
 		else:
 			print(f"Aborted plan creation.")
-
-
 
 	def prompt_list_plans(self):
 		option = input_until_valid(
@@ -154,7 +153,7 @@ class InterfacePlan:
 		plan_name = input_until_valid(
 			input_message="Enter the plan you want to modify or leave empty to abort:",
 			is_valid = lambda user_input: user_input == "" or user_input in plan_keys,
-			validation_message= "This plan does not exist. Please re-enter plan name, create a new plan with this name, or leave empty to abort."
+			validation_message= "This plan does not exist. Please re-enter plan name from the list above, create a new plan with this name, or leave empty to abort."
 		)
 		
 		if plan_name == "":
@@ -217,7 +216,7 @@ class InterfacePlan:
 		)
 
 		if confirm == "n":
-			print(f"Camp information modification aborted.")
+			print(f"Plan information modification aborted.")
 			return
 
 		if attribute == "plan_name":
@@ -227,7 +226,60 @@ class InterfacePlan:
 		
 		if test:
 			print(f"You've changed the {attribute} successfully! Your changes can now be seen:")
+			print(f"-> plan_name: {plan_name}")
+			selected_plan = Plans.load_plans()[plan_name]
+			for field, val in selected_plan.items():
+				print(f"-> {field}: {val}")
 		else:
 			print(f'Failed to change {attribute}')
-		self.prompt_list_plans()
+
+	def prompt_immediate_end_plan(self):
+		self.prompt_list_active_plans()
+		plans = Plans.load_plans()
+		active_plans = {key: value for key, value in plans.items() if value.get("status") == "Active"}
+		active_plan_keys = active_plans.keys()
+		# Promps input from user
+		plan_name = input_until_valid(
+			input_message="Enter the plan you want to immediately end or leave empty to abort:",
+			is_valid = lambda user_input: user_input == "" or user_input in active_plan_keys,
+			validation_message= "This plan has already ended or does not exist. Please re-enter a plan name from the active plans listed above, or leave empty to abort."
+		)
+		
+		if plan_name == "":
+			print("User modification aborted.")
+			return  # returns from method to abort current method
+		
+		print("\nCurrent values of the plan you are ending:")
+		print(f"-> plan_name: {plan_name}")
+		selected_plan = Plans.load_plans()[plan_name]
+		for field, val in selected_plan.items():
+			if field != "end_date" and field != "status":
+				print(f"-> {field}: {val}")
+		for field, val in selected_plan.items():
+			if field == "end_date":
+				print(f"-> original end date: {val}")
+		
+		confirm = input_until_valid(
+			input_message = f"Please confirm you want to end {plan_name}\n[y] Yes\n[n] No (abort)",
+			is_valid = lambda user_input: user_input == "y" or user_input == "n",
+			validation_message = "Unrecognized input. Please confirm (y/n):\n[y] Yes\n[n] No (abort)"
+		)
+
+		if confirm == "n":
+			print(f"Plan termination aborted.")
+			return
+		
+		now = datetime.now()
+		test = Plans.modify_plan(plan_name = plan_name, field = "end_date", new_value = now.strftime('%d/%m/%Y'))
+		
+		if test:
+			print(f"You've successfully ended the following plan: {plan_name}\
+				\nHere is a list of your ended plans:")
+			self.prompt_list_ended_plans()
+		else:
+			print(f'Failed to end {plan_name}')
+		
+
+
+
 		
