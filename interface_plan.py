@@ -70,7 +70,7 @@ class InterfacePlan:
 		end_date = input_until_valid(
 			input_message = "\nEnter the plan end date in the format dd/mm/yyyy: \nNote:\nFor active plans please enter a future date. \nIf this is an old plan, you can archive it by adding its end date.",
 			is_valid = lambda end_date: is_valid_date(end_date) and end_date > start_date,
-			validation_message = "Invalid date format. Please re-enter the date in the format dd/mm/yyyy."
+			validation_message = "Invalid date format or date. Please re-enter the date in the format dd/mm/yyyy and ensure it is after the plan start date."
 		)
 
 		confirm = input_until_valid(
