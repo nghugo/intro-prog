@@ -95,7 +95,7 @@ class InterfaceCamp:
 			input_message = f"Enter the location this camp is located in (within {plans[humanitarian_plan_in]["country"]} as specified in {humanitarian_plan_in})",
 			is_valid = lambda user_input: user_input != "" and type(user_input) == str,
 			validation_message = "This cannot be empty. Please enter the camp location"
-		)    # TODO: location -> implement checks
+		)
 
 		max_capacity = input_until_valid(
 			input_message = "Enter the camp max_capacity",
@@ -128,18 +128,24 @@ class InterfaceCamp:
 
 	def prompt_delete_camp(self):
 
-		camp_data = Camp.loadCampData()
+		camps = Camp.loadCampData()
 		self.print_existing_or_accessible_camps()
 
 		camp_id = input_until_valid(
 			input_message= "Please enter the camp_id you would like to delete, or leave empty to abort:",
-			is_valid = lambda user_input: user_input == "" or user_input in camp_data,
+			is_valid = lambda user_input: user_input == "" or user_input in camps,
 			validation_message = "The camp_id you entered does not exist. Please re-enter or leave empty to abort."
 		)
 		
 		if camp_id == "":
 			print("Camp deletion aborted.")
 			return
+		
+		print("Camp to delete:")
+		selected_camp = camps[camp_id]
+		print(f"-> Camp ID: {camp_id}")
+		for attr, val in selected_camp.items():
+			print(f"-> {attr}: {val}")
 
 		confirm = input_until_valid(
 			input_message = f"Please confirm you want to delete this camp (y/n):\n->camp_id: {camp_id}\n[y] Yes\n[n] No (abort)",
@@ -162,7 +168,7 @@ class InterfaceCamp:
 		camp_id = input_until_valid(
 			input_message = "Please enter the camp_id of the camp you would like to change camp details of, or leave empty to abort",
 			is_valid = lambda user_input: user_input == "" or user_input in filtered_camps,
-			validation_message= "You do not have access rights to this camp_id, or it does not exist. Please re-enter or leave empty to abort."
+			validation_message= "This camp_id does not exist or you do not have access rights to it. Please re-enter or leave empty to abort."
 		)   
 		
 		if camp_id == "":
@@ -202,18 +208,12 @@ class InterfaceCamp:
 				validation_message = "Unrecognized input. Please enter a valid field (camp_id/location/max_capacity)."
 			)
 
-
 		if attribute == "camp_id":
 			new_value = input_until_valid(
 				input_message = f"Please enter the new value for {attribute}",
-				is_valid = lambda user_input: user_input not in list(filtered_camps.keys()),
-				validation_message = f"This camp_id is already taken. Please enter another camp_id."
+				is_valid = lambda user_input: user_input != "" and user_input not in list(filtered_camps.keys()),
+				validation_message = f"This camp_id must not be already taken or empty. Please enter another camp_id."
 			)
-
-			# Tightly coupled code but gotta make do
-			# TODO: also add the code for relocating refugees (update their camp_id from previous value to newer value)
-			# TODO: also add the code for relocating resources (update their camp_id from previous value to newer value)
-
 
 		elif attribute == "max_capacity":
 			current_population_size = get_num_families_and_members_by_camp()[camp_id]["num_members"]

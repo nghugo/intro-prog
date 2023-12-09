@@ -1,5 +1,6 @@
 import json
 import uuid
+import pandas as pd
 
 
 from interface_helper import input_until_valid, input_until_valid_name
@@ -48,9 +49,9 @@ class InterfaceManageRefugees:
 				\n[1] CANCEL\
 				\n[2] List all refugee profiles under all camps you have access rights to\
 				\n[3] List all refugee profiles under a specific camp\
-				\n[3] Add a refugee profile\
-				\n[4] Edit a refugee profile\
-				\n[5] Delete a refugee profile",
+				\n[4] Add a refugee profile\
+				\n[5] Edit a refugee profile\
+				\n[6] Delete a refugee profile",
 			is_valid=lambda user_input: user_input.isdigit() and int(user_input) > 0 and int(user_input) <= 5,
 			validation_message="Unrecognized input. Please choose from the above list."
 		)
@@ -72,13 +73,13 @@ class InterfaceManageRefugees:
 		existing_ids = load_refugees().keys()
 
 		# Done: volunteer is only able to add refugees to the camps that they have access rights to
-		filtered_camps = Camp.load_camps_user_has_access_to(self.current_user.username)
-		filtered_camps_ids = filtered_camps.keys()
+		accessible_camps = Camp.load_camps_user_has_access_to(self.current_user.username)
+		accessible_camps_ids = accessible_camps.keys()
 		
 		camp_id = input_until_valid(
 			input_message=f"Enter camp ID for this refugee, or leave empty to abort:\
-				\n(Note: Camps accessible by you are: {", ".join(filtered_camps_ids) if filtered_camps_ids else "None found"})",
-			is_valid=lambda user_input: user_input == "" or user_input in filtered_camps_ids,
+				\n(Note: Camps accessible by you are: {", ".join(accessible_camps_ids) if accessible_camps_ids else "None found"})",
+			is_valid=lambda user_input: user_input == "" or user_input in accessible_camps_ids,
 			validation_message="Camp ID not found. Please choose from the above list of camp IDs, or leave empty to abort."
 		)
 		if camp_id == "":
@@ -86,7 +87,7 @@ class InterfaceManageRefugees:
 			return
 
 		camp_total_num_members = get_num_families_and_members_by_camp()[camp_id]["num_members"]
-		max_capacity = filtered_camps[camp_id]["max_capacity"]
+		max_capacity = accessible_camps[camp_id]["max_capacity"]
 		remaining_spaces = max(max_capacity - camp_total_num_members, 0)
 		
 		if not remaining_spaces:
@@ -159,18 +160,19 @@ class InterfaceManageRefugees:
 			print("None found")
 		else:
 			refugee_count_dict = get_num_families_and_members_by_camp()
-			for camp, refugee_id_values in accessible_refugees_sep_by_camp.items():
-				refugee_count = refugee_count_dict[camp]
-				self.print_refugees_one_camp_helper(camp, refugee_id_values, refugee_count)
+			for camp_id, refugee_id_values in accessible_refugees_sep_by_camp.items():
+				refugee_count = refugee_count_dict[camp_id]
+				self.print_refugees_one_camp_helper(camp_id, refugee_id_values, refugee_count)
 				
 		print("\n--- End of refugee list ---")
 		input("Press Enter to continue...")
 
 	@staticmethod
-	def print_refugees_one_camp_helper(camp, refugee_id_values, refugee_count):
-		print(f"\n{{{camp}}} (total families: {refugee_count["num_families"]}, total members: {refugee_count["num_members"]})")
+	def print_refugees_one_camp_helper(camp_id, refugee_id_values, refugee_count):
+		camp_max_capacity = Camp.loadCampData()[camp_id]["max_capacity"]
+		print(f"\n{{{camp_id}}} (total members: {refugee_count["num_members"]}, remaining capacity: {camp_max_capacity - refugee_count["num_members"]})")
 		for refugee_id, refugee_values in refugee_id_values:
-			print(f"\n  {refugee_values["fullname"]} (ID: {refugee_id})")
+			print(f"  {refugee_values["fullname"]} (ID: {refugee_id})")
 			for attr, val in refugee_values.items():
 				if attr != "fullname":
 					print(f"  -> {attr}: {val}")
@@ -187,7 +189,7 @@ class InterfaceManageRefugees:
 		selected_camp = input_until_valid(
 			input_message="Enter the camp ID of the camp under which you want to list all refugees",
 			is_valid = lambda user_input: user_input in accessible_camps or user_input == "",
-			validation_message="Camp ID not found or not accessible by you. Please enter an existing camp ID or leave empty to abort."
+			validation_message="Camp ID does not exist, or you do not have access rights to it. Please enter an existing camp ID or leave empty to abort."
 		)
 		if selected_camp == "":
 			print("Aborted listing refugees under camp.")
@@ -228,8 +230,8 @@ class InterfaceManageRefugees:
 		accessible_refugees = get_accessible_refugees(self.current_user.username)
 		self.succint_print_all_refugees_user_has_access_to()
 
-		filtered_camps = Camp.load_camps_user_has_access_to(self.current_user.username)
-		filtered_camps_ids = filtered_camps.keys()
+		accessible_camps = Camp.load_camps_user_has_access_to(self.current_user.username)
+		accessible_camps_ids = accessible_camps.keys()
 		
 		refugee_id = input_until_valid(
 			input_message="Enter the refugee ID of the refugee profile to modify or leave empty to abort:",
@@ -260,15 +262,13 @@ class InterfaceManageRefugees:
 		elif field == "number_of_members":
 			
 			camp_id = accessible_refugees[refugee_id]["camp_id"]
-
 			camp_total_num_members = get_num_families_and_members_by_camp()[camp_id]["num_members"]
-			max_capacity = filtered_camps[camp_id]["max_capacity"]
-			
+			max_capacity = accessible_camps[camp_id]["max_capacity"]
 			remaining_spaces = max(max_capacity - camp_total_num_members, 0)
 
-			current_family_num_members = int(accessible_refugees[refugee_id]["number_of_members"])
-			
-			print(f"Note -> Remaining space(s) in {camp_id}: {remaining_spaces} ; Current number of members in the family: {current_family_num_members}")
+			print(f"Note:\
+				\n -> Remaining space(s) in {camp_id}: {remaining_spaces} (excluding current family members)\
+				\n -> Current number of members in the family: {current_family_num_members}")
 
 			value = int(input_until_valid(
 			input_message=f"Enter the new number of members in the refugee family (1-{remaining_spaces + current_family_num_members} inclusive):",
@@ -276,16 +276,41 @@ class InterfaceManageRefugees:
 			validation_message=f"Number of family members must be a positive integer (1-{remaining_spaces + current_family_num_members} inclusive). Please re-enter."
 		))
 		elif field == "camp_id":
+			
+			camp_id = accessible_refugees[refugee_id]["camp_id"]
+			refugee_count_dict = get_num_families_and_members_by_camp()
+			
+			current_refugee_num_members = load_refugees()[refugee_id]["number_of_members"]
+			camps_with_space = []
+			spaces_stats_df = pd.DataFrame(columns=['Max Capacity', 'Current Total Members', 'Extra Spaces'])
+			
+			for alt_camp_id in accessible_camps_ids:	
+				alt_camp_total_num_members = refugee_count_dict[alt_camp_id]["num_members"]
+				alt_camp_max_capacity = accessible_camps[alt_camp_id]["max_capacity"]
+				row_name = alt_camp_id if alt_camp_id != camp_id else alt_camp_id+" (current)"
+				spaces_stats_df.loc[row_name] = [alt_camp_max_capacity, alt_camp_total_num_members, alt_camp_max_capacity - alt_camp_total_num_members]
+				alt_camp_remaining_spaces = max(alt_camp_max_capacity - alt_camp_total_num_members, 0)
+				if alt_camp_remaining_spaces >= current_refugee_num_members or alt_camp_id == camp_id:
+					camps_with_space.append(alt_camp_id)
+			
+			print("\nRefugee statistics of camps accessible by you:")
+			print(spaces_stats_df)
+			print(f"(Recall that the current refugee has {current_refugee_num_members} members)")
+
+			camps_without_space = list(set(accessible_camps_ids).difference(set(camps_with_space)))
 
 			value = input_until_valid(
-				input_message=f"Enter camp ID for this refugee, or leave empty to abort:\
-					\n(Note: Camps accessible by you are: {", ".join(filtered_camps_ids) if filtered_camps_ids else "None found"})",
-				is_valid=lambda user_input: user_input == "" or user_input in filtered_camps_ids,
-				validation_message="Camp ID not found. Please choose from the above list of camp IDs, or leave empty to abort."
+				input_message=f"\nNote:\
+					\n(1) Camps accessible by you AND with spaces for refugees: \n  {', '.join(camps_with_space) if camps_with_space else 'None found'}\
+					\n(2) Camps accessible by you, but WITHOUT spaces for refugees: \n  {', '.join(camps_without_space) if camps_without_space else 'None found'}\
+					\nEnter new camp ID from list (1) for this refugee, or leave empty to abort:",
+				is_valid=lambda user_input: user_input == "" or user_input in camps_with_space,
+				validation_message="Camp ID not found. Please choose camp IDs from list (1), or leave empty to abort."
 			)
 			if value == "":
 				print("Refugee modification aborted.")
 				return
+			
 		elif field == "medical_condition":
 			value = input_until_valid(
 				input_message="Enter medical condition:",
