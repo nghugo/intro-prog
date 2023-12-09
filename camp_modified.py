@@ -61,7 +61,7 @@ class Camp:
 		with open("camps.json", "w") as json_file:
 			json.dump(data, json_file, indent=2)
 
-	    #add camp_id to resource:
+		#add camp_id to resource:
 		with open("camp_resources.json", "r") as json_file:
 			data_resource = json.load(json_file)
 
@@ -70,14 +70,14 @@ class Camp:
 
 		data_resource[camp_id] = {  #set all initial value into zero
 			"food_packets": 0,
-            "medical_packets": 0,
-            "water_packets": 0,
-            "shelter_packets": 0,
-            "clothing_packets": 0,
-            "first_aid_packets": 0,
-            "baby_packets": 0,
-            "sanitation_packets": 0,
-        }
+			"medical_packets": 0,
+			"water_packets": 0,
+			"shelter_packets": 0,
+			"clothing_packets": 0,
+			"first_aid_packets": 0,
+			"baby_packets": 0,
+			"sanitation_packets": 0,
+		}
 
 		with open('camp_resources.json', 'w') as json_file:
 			json.dump(data_resource, json_file, indent = 2)
@@ -97,8 +97,27 @@ class Camp:
 		data.pop(camp_id)
 		with open('camps.json','w') as file:
 			json.dump(data,file,indent=2)
-        
-		#not sure about the case when delete camp and there is still resource in
+		
+		# cascade delete refugees of camp
+		with open("refugees.json", "r") as json_file:
+			json_load = json.load(json_file)
+		refugees = json_load
+
+		refugees_to_pop = []
+
+		# for refugee, vals in refugees.items():
+		# 	print(type(refugee))
+		# 	print(refugee)
+
+		for refugee, vals in refugees.items():
+			if vals["camp_id"] == camp_id:
+				refugees_to_pop.append(refugee)
+		for refugee in refugees_to_pop:
+			refugees.pop(refugee)
+		with open('refugees.json', 'w') as file:
+			json.dump(refugees, file, indent=2)
+
+		# cascade delete resources of camp
 		data_resource = CampResources.load_resources()
 		#delete resource in data_resource
 		if camp_id not in data_resource:
@@ -106,7 +125,6 @@ class Camp:
 		data_resource.pop(camp_id)
 		with open('camp_resources.json', 'w') as file:
 			json.dump(data_resource,file,indent=2)
-	
 		return True
 
 
