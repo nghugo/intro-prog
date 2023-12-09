@@ -56,7 +56,11 @@ class InterfaceVolunteerUserDetails:
 		elif field == "email":
 			value=input_until_valid_email("Enter the new email (format: xxx@yyy.zzz with no spaces):")
 		elif field == "password":
-			plain_text_password = input_until_valid(f"Please enter the new password:") 
+			plain_text_password = input_until_valid(
+				input_message=f"Please enter the new password (5+ characters)",
+				is_valid=lambda user_input: len(user_input) >= 5,
+				validation_message=f"Unrecognized input. Please specify the new password (5+ characters)"
+			)
 			salt = users[self.current_user.username]["salt"]
 			hashed_password = hashlib.sha256((plain_text_password + salt).encode('utf-8')).hexdigest()
 			value = hashed_password
