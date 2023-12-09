@@ -1,7 +1,7 @@
 import pandas as pd
 from datetime import datetime
 
-from interface_helper import input_until_valid, is_valid_date, is_future_date
+from interface_helper import input_until_valid, is_valid_date, is_future_date, string_to_date
 from plans import Plans
 from data_validator import DataValidator
 
@@ -160,12 +160,12 @@ class InterfacePlan:
 			validation_message= "This plan does not exist. Please re-enter plan name from the list above, create a new plan with this name, or leave empty to abort."
 		)
 		
-		selected_plan = Plans.load_plans()[plan_name]
-		
 		if plan_name == "":
-			print("User modification aborted.")
-			return  # returns from method to abort current method
+			print("Plan modification aborted.")
+			return  # abort current method
 		
+		selected_plan = Plans.load_plans()[plan_name]
+
 		print("\nCurrent values of the selected plan:")
 		print(f"-> plan_name: {plan_name}")
 		selected_plan = Plans.load_plans()[plan_name]
@@ -181,41 +181,41 @@ class InterfacePlan:
 			# TODO: also add the code for updating camp that plan is under (update their plan_name from previous value to newer value)
 		if attribute == "plan_name":
 			new_value = input_until_valid(
-			input_message = "\nEnter new plan name. This should be the name of the emergency occuring (E.g. Ukraine War) and must be different from existing plans. Leave empty to abort:",
-			is_valid = lambda plan_name: plan_name == "" or plan_name not in plan_keys,
-			validation_message = "Plan name already exists. Please enter a different plan name."
-		)
-		elif plan_name == "":
-			print("Plan creation aborted.")
-			return
+				input_message = "\nEnter new plan name. This should be the name of the emergency occuring (E.g. Ukraine War) and must be different from existing plans. Leave empty to abort:",
+				is_valid = lambda plan_name: plan_name == "" or plan_name not in plan_keys,
+				validation_message = "Plan name already exists. Please enter a different plan name."
+			)
+			if new_value == "":
+				print("Plan modification aborted.")
+				return			
 
 		elif attribute == "description":
 			new_value = input_until_valid(
-			input_message = "\nEnter new plan description:",
-			is_valid = lambda description: description != "",
-			validation_message = "Plan description cannot be empty. Please enter a plan description."
-		)
+				input_message = "\nEnter new plan description:",
+				is_valid = lambda description: description != "",
+				validation_message = "Plan description cannot be empty. Please enter a plan description."
+			)
 		
 		elif attribute == "country":
 			new_value = input_until_valid(
-			input_message = "\nEnter the new country of the emergency (This should be a country name e.g. Belgium):",
-			is_valid = lambda country: DataValidator.validate_country(country) is True,
-			validation_message = "Country must be a valid country. Please re-enter the country of the emergency."
-		)
+				input_message = "\nEnter the new country of the emergency (This should be a country name e.g. Belgium):",
+				is_valid = lambda country: DataValidator.validate_country(country) is True,
+				validation_message = "Country must be a valid country. Please re-enter the country of the emergency."
+			)
 		
 		elif attribute == "start_date":
 			new_value = input_until_valid(
-			input_message = "\nEnter the plan's new start date in the format dd/mm/yyyy:",
-			is_valid = lambda start_date: is_valid_date(start_date) and start_date < selected_plan["end_date"],
-			validation_message = "Invalid date format. Please re-enter the date in the format dd/mm/yyyy and ensure start_date is not after end_date."
-		)
+				input_message = "\nEnter the plan's new start date in the format dd/mm/yyyy:",
+				is_valid = lambda start_date: is_valid_date(start_date) and string_to_date(start_date) <= string_to_date(selected_plan["end_date"]),
+				validation_message = "Invalid date format. Please re-enter the date in the format dd/mm/yyyy and ensure start_date is not after end_date."
+			)
 
 		elif attribute == "end_date":
 			new_value = input_until_valid(
-			input_message = "\nEnter the plan's new end date in the format dd/mm/yyyy:",
-			is_valid = lambda end_date: is_valid_date(end_date) and end_date > selected_plan["start_date"],
-			validation_message = "Invalid date format. Please re-enter the date in the format dd/mm/yyyy and ensure end_date is not before start_date."
-		)
+				input_message = "\nEnter the plan's new end date in the format dd/mm/yyyy:",
+				is_valid = lambda end_date: is_valid_date(end_date) and string_to_date(end_date) >= string_to_date(selected_plan["start_date"]),
+				validation_message = "Invalid date format. Please re-enter the date in the format dd/mm/yyyy and ensure end_date is not before start_date."
+			)
 
 		else:  
 			print(f"\nCurrent {attribute} value: {self.prompt_list_plans()[plan_name][attribute]}")
