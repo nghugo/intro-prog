@@ -102,13 +102,7 @@ class Camp:
 		with open("refugees.json", "r") as json_file:
 			json_load = json.load(json_file)
 		refugees = json_load
-
 		refugees_to_pop = []
-
-		# for refugee, vals in refugees.items():
-		# 	print(type(refugee))
-		# 	print(refugee)
-
 		for refugee, vals in refugees.items():
 			if vals["camp_id"] == camp_id:
 				refugees_to_pop.append(refugee)
