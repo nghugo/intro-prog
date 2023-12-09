@@ -123,9 +123,14 @@ class InterfaceManageResource:
 		message_value = ", ".join(list(filtered_camps.keys())) if filtered_camps else "None found"
 		print(f"{message_key} {message_value}")
 
+		if is_admin:
+			validation_message = "Unrecognized camp. Please enter a new one or leave empty to abort: "
+		else:
+			validation_message = "Unrecognized camp or camp not accessible. Please enter a new one or leave empty to abort: "
+
 		camp_id = input_until_valid(input_message="Enter the camp name or press Enter to abort: ", 
 						is_valid=lambda user_input:(user_input == "") or user_input in filtered_camps, 
-						validation_message="Unrecognized camp or camp not accessible. Please enter a new one or leave empty to abort: ")
+						validation_message=validation_message)
 		
 		if camp_id =="":
 			print("Aborted resource amount modification.")
