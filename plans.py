@@ -3,6 +3,7 @@ import json
 
 from db_relocate import update_all_plan_values_in_camps
 from interface_helper import is_future_date
+from camp_modified import Camp
 
 class Plans:
 	def __init__(self):
@@ -51,22 +52,23 @@ class Plans:
 			json.dump(data, json_file, indent=2)
 		return True
 
+
 	@staticmethod
-	def delete_plan(plan_name):
-		"""
-		Deletes plan from plans.json. 
-		Halts and returns False if plan doesn't exist.
-		Otherwise, returns True indicating success.
-		"""
-		with open("plans.json", "r") as json_file:
-			data = json.load(json_file)
-		
+	def delete_plan(plan_name, username):
+		data = Plans.load_plans()
 		if plan_name not in data:
-			return False  # reject, as plan name does not match that of an existing plan
+			return False
 		
-		del data[plan_name]
-		with open("plans.json", "w") as json_file:
-			json.dump(data, json_file, indent=2)
+		data.pop(plan_name)
+		with open('plans.json','w') as file:
+			json.dump(data,file,indent=2)
+		
+		# cascade delete camps of plan
+		camps = Camp.loadCampData()
+		camp_ids_under_plan = [camp_id for camp_id, vals in camps.items() if vals["humanitarian_plan_in"] == plan_name]
+		for camp_id in camp_ids_under_plan:
+			Camp.delete_camp(camp_id, username)
+
 		return True
 		
 
@@ -126,14 +128,3 @@ class Plans:
 			status = "Ended"
 		return status
 
-	@staticmethod
-	def delete_plan(plan_name):
-		data = Plans.load_plans()
-		if plan_name not in data:
-			return False
-		
-		data.pop(plan_name)
-		with open('plans.json','w') as file:
-			json.dump(data,file,indent=2)
-
-		return True

@@ -368,7 +368,7 @@ class InterfacePlan:
 			print("Plan deletion aborted.")
 			return
 		
-		test = Plans.delete_plan(plan_name = plan_name)
+		test = Plans.delete_plan(plan_name = plan_name, username = self.current_user.username)
 		print(f"Successfully deleted {plan_name}" if test else f"Failed to delete {plan_name}")
 		
 	
