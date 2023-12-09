@@ -29,6 +29,10 @@ def is_valid_date(date_input):
 	except ValueError:
 		return False
 
+def string_to_date(date_input):
+	intStr = date_input.replace("/", "")
+	return datetime.strptime(intStr, "%d%m%Y").date()
+
 # Returns true when date is after today, returns false if date is today or before.
 def is_future_date(date_input):
 	date_input_datetime = datetime.strptime(date_input, '%d/%m/%Y')
