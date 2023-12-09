@@ -6,26 +6,26 @@ from resource_modified import CampResources
 class Camp:
 	"""camp is used for store and modify data regard with camps;
 
-	 :parameter:
-	 --------------------------------
-	 camp_id(str): refer to camp_1,camp_2,camp_3 (don't overlap even in different humanitarian plan);
-	 location(str): detailed location;
-	 max_capacity(int):  flexible and size of the camp which is varied from hundreds to thousands;
-	 occupancy(int): current amount of people settled in
-	 humanitarian_plan_in: the humanitarian plan that the camp is in;
-	 volunteers_in_charge(str_list): a list storing volunteer who in charge of the camp
-	 ### notice: if one volunteer can only charge one camp(of his own),
-	 I am not sure would it be easier to add attribute in volunteer, since storing list in json is some kinda strange
+	:parameter:
+	--------------------------------
+	camp_id(str): refer to camp_1,camp_2,camp_3 (don't overlap even in different humanitarian plan);
+	location(str): detailed location;
+	max_capacity(int):  flexible and size of the camp which is varied from hundreds to thousands;
+	occupancy(int): current amount of people settled in
+	humanitarian_plan_in: the humanitarian plan that the camp is in;
+	volunteers_in_charge(str_list): a list storing volunteer who in charge of the camp
+	### notice: if one volunteer can only charge one camp(of his own),
+	I am not sure would it be easier to add attribute in volunteer, since storing list in json is some kinda strange
 	"""
 
 
 	# attributes
-		# camp_id
-		# location
-		# max_capacity
-		# occupancy (determined by linear scan, not by setting a number)
-		# humanitarian_plan_in
-		# volunteers_in_charge
+	# camp_id
+	# location
+	# max_capacity
+	# occupancy (determined by linear scan, not by setting a number)
+	# humanitarian_plan_in
+	# volunteers_in_charge
 
 
 	@staticmethod
@@ -61,7 +61,7 @@ class Camp:
 		with open("camps.json", "w") as json_file:
 			json.dump(data, json_file, indent=2)
 
-	    #add camp_id to resource:
+		#add camp_id to resource:
 		with open("camp_resources.json", "r") as json_file:
 			data_resource = json.load(json_file)
 
@@ -83,7 +83,7 @@ class Camp:
 		return True
 	
 
-	#edit camp with either id or other attributtes
+	#edit camp with either id or other attributes
 	@staticmethod
 	def delete_camp(camp_id, username):
 		users = Users.load_users()
@@ -195,8 +195,7 @@ class Camp:
 				camps = json.load(camp_json)
 				users = Users.load_users()
 				for camp_id, camp_values in camps.items():
-					if (users[username]["is_admin"]
-		 				or username in camp_values["volunteers_in_charge"]):
+					if (users[username]["is_admin"]or username in camp_values["volunteers_in_charge"]):
 						filtered_camps[camp_id] = camp_values
 				return filtered_camps
 		except FileNotFoundError:

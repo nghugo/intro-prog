@@ -7,7 +7,7 @@ class CampResources:
     #medical packets 1 pack per person
     #water packets 2 packets per person
     #shelter packets 1 packet per person
-    #colthing packets 1 packet per person
+    #clothing packets 1 packet per person
     #baby packets (don't set threshold)
     #sanitation packets 2 pack per person
     
@@ -18,12 +18,12 @@ class CampResources:
     factor_shelter = 1
     factor_clothing = 1
     factor_sanitation = 2
-    warnning_days = 1
+    warning_days = 1
     def __init__(self):
         self.resources = self.load_resources()
-  
+
     @staticmethod
-    # load resources from camp_resouces.json
+    # load resources from camp_resources.json
     def load_resources():
         try:
             with open('camp_resources.json', 'r') as file:
@@ -32,7 +32,7 @@ class CampResources:
             resources = {}
         return resources
 
-    # display resources in a specfic camp
+    # display resources in a specific camp
     def display_resources(self, camp_id):
         if camp_id in self.resources:
             camp_resources = self.resources[camp_id]
@@ -87,7 +87,7 @@ class CampResources:
         #medical packets 1 pack per person
         #water packets 2 packets per person
         #shelter packets 1 packet per person
-        #colthing packets 1 packet per person
+        #clothing packets 1 packet per person
         #baby packets (don't set threshold)
         #sanitation packets 2 pack per person
 

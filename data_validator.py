@@ -6,11 +6,11 @@ class DataValidator:
     def validate_country(country_name):
         #load data from country.json
         with open('countries.json', 'r') as file:
-          countries = json.load(file)
+            countries = json.load(file)
 
         for country in countries:
             if country['name'] == country_name:
-              return True
+                return True
 
         return False
 

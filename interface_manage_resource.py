@@ -10,6 +10,7 @@ from collections import defaultdict
 import pandas as pd
 
 
+
 class InterfaceManageResource:
     """class used for manage option related to manage resource.
     """
@@ -25,7 +26,7 @@ class InterfaceManageResource:
                     \n[3] List all resource profiles under a specific camp\
                     \n[4] Update resources of a specific camp\
                     \n[5] Add resources to a specific camp\
-                    \n[6] Limited resources warnning",
+                    \n[6] Limited resources warning",
                 is_valid=lambda user_input: user_input.isdigit() and int(user_input) > 0 and int(user_input) <= 6,
                 validation_message="Unrecognized input. Please choose from the above list.")
         
@@ -67,11 +68,11 @@ class InterfaceManageResource:
     def prompt_display_all_camps(self):
         print('the information of resources of all camps is display as below:')
         df = pd.DataFrame(self.resources)
-        df_tranpose = df.transpose()
-        print(df_tranpose)
+        df_transpose = df.transpose()
+        print(df_transpose)
         print("----------------------------------end table-------------------------------------")
         enter = input_until_valid("Press Enter to go back: ",is_valid=lambda user_input:user_input=="",
-                                  validation_message="Please press enter to go back")
+                                validation_message="Please press enter to go back")
         if enter == "":
             return
         
@@ -82,16 +83,16 @@ class InterfaceManageResource:
         camp_data = Camp.loadCampData()
         is_admin = users[current_user]["is_admin"]
         if camp_id in camp_data:
-           if current_user in camp_data[camp_id]["volunteers_in_charge"]:
-               return True
-           elif is_admin:
-               return True
-           else:
-               return False
+            if current_user in camp_data[camp_id]["volunteers_in_charge"]:
+                return True
+            elif is_admin:
+                return True
+            else:
+                return False
         else:
             return False
     #it may remain some problems as I can not use the method in interface_camp  
-    #   
+    
     @staticmethod
     def print_accessible_camp(current_user):
         users = Users.load_users()
@@ -122,7 +123,7 @@ class InterfaceManageResource:
     def print_exist_camp(self):
         """helper method for display all existing camps"""
         df = pd.DataFrame(self.resources)
-        df_tranpose = df.transpose()
+        df_transpose = df.transpose()
         column_names = df.columns.tolist()
         df_camp = pd.DataFrame({'camp name': column_names})
         print(df_camp)
@@ -145,8 +146,8 @@ class InterfaceManageResource:
                 print("Aborted displaying resources.")
                 return
 
-            resource_sepecific_camp = CampResources()
-            resource_sepecific_camp.display_resources(camp_id)
+            resource_specific_camp = CampResources()
+            resource_specific_camp.display_resources(camp_id)
             print("-------End of resource details--------")
             input("Press Enter to continue...")
         else:
@@ -159,15 +160,15 @@ class InterfaceManageResource:
                 print("Aborted displaying resources.")
                 return
             
-            resource_sepecific_camp = CampResources()
-            resource_sepecific_camp.display_resources(camp_id)
+            resource_specific_camp = CampResources()
+            resource_specific_camp.display_resources(camp_id)
             print("-------End of resource details--------")
             input("Press Enter to continue...")
     
     def prompt_change_resources(self,method='update'):
-        #todo:if required to display the campid volunteer incharge first:
+        #todo:if required to display the camp id volunteer in charge first:
         #find how many camps a  volunteer is in charge and print them down.
-        #This is so strange! time cosumming if there exists a lot of data
+        #This is so strange! time consuming if there exists a lot of data
         print("current exist camps:")
         self.print_accessible_camp(self.current_user.username)
         camp_id = input_until_valid(input_message="Enter the camp name or press enter to return to the former page: ", 
@@ -177,14 +178,14 @@ class InterfaceManageResource:
         if camp_id == "":
             print("edition aborted.")
             return
-        if InterfaceManageResource.Test_underthreshold(camp_id):
-            InterfaceManageResource.helper_print_warnning(camp_id)
+        if InterfaceManageResource.Test_under_threshold(camp_id):
+            InterfaceManageResource.helper_print_warning(camp_id)
 
         camp_population = get_num_families_and_members_by_camp()
         num_family = camp_population[camp_id]['num_families']
         num_members = camp_population[camp_id]['num_members']
         df = pd.DataFrame(self.resources).transpose()
-        print("detailed information of "+camp_id+": \nCurrent populatiom: " + str(num_members) +"   Current family numbers: "+str(num_family)+"\n"+"-"*18+"end population details"+"-"*19+"\nCurrent resource details:")
+        print("detailed information of "+camp_id+": \nCurrent population: " + str(num_members) +"   Current family numbers: "+str(num_family)+"\n"+"-"*18+"end population details"+"-"*19+"\nCurrent resource details:")
         print(df.loc[camp_id])
         not_exit = True
         while(not_exit == True):
@@ -242,14 +243,14 @@ class InterfaceManageResource:
         refugee_count_dict = get_num_families_and_members_by_camp()
         num_refugees= refugee_count_dict[camp_id]["num_members"]
         factor = resources.resource_factor()
-        threshold = num_refugees*factor[resource_name]*resources.warnning_days
+        threshold = num_refugees*factor[resource_name]*resources.warning_days
         return threshold
     
     @staticmethod
-    def Test_underthreshold(camp_id):
-        """helper method for determine which camp to warnning
+    def Test_under_threshold(camp_id):
+        """helper method for determine which camp to warning
 
-        return boolean value: true if underthreshold"""
+        return boolean value: true if under threshold"""
         resources = CampResources.load_resources()
         test = False
         for resource in resources[camp_id]:
@@ -258,17 +259,17 @@ class InterfaceManageResource:
         return test
     
     @staticmethod
-    def helper_print_warnning(camp_id):
-        """helper method for print warnning camp details"""
+    def helper_print_warning(camp_id):
+        """helper method for print warning camp details"""
         resources = CampResources.load_resources()
-        print("-"*25+"Warnning"+"-"*25)
-        print(f'Warnning: {camp_id} may face risk of resource shortage.\n  The resource in shortage is:')
+        print("-"*25+"warning"+"-"*25)
+        print(f'warning: {camp_id} may face risk of resource shortage.\n  The resource in shortage is:')
         for resource in resources[camp_id]:
             amount = resources[camp_id][resource]
-            warnning_amount = InterfaceManageResource.calculate_threshold(resource,camp_id)
-            if amount<warnning_amount:
-                print(f' |{resource}: current amount {amount}. warnning level: {warnning_amount}')
-        print("-"*25+"Warnning"+"-"*25+'\n')
+            warning_amount = InterfaceManageResource.calculate_threshold(resource,camp_id)
+            if amount<warning_amount:
+                print(f' |{resource}: current amount {amount}. warning level: {warning_amount}')
+        print("-"*25+"warning"+"-"*25+'\n')
 
         
 
@@ -276,30 +277,30 @@ class InterfaceManageResource:
 
 
     @staticmethod
-    def print_warnning_level_helper():
+    def print_warning_level_helper():
         resources = CampResources()
         factor = resources.resource_factor()
-        print('-'*29+'warnning level'+'-'*29)
+        print('-'*29+'warning level'+'-'*29)
         width = 20
         border_char = "||"
         padding_char = " "
         for resource in factor.keys():
             amount = factor[resource]
-            text = f'The warnning level for {resource} is {amount} per person per day.'
+            text = f'The warning level for {resource} is {amount} per person per day.'
             left_aligned = text.ljust(width)
             left_border = border_char + left_aligned + padding_char*(70-len(text)) +border_char
             print(left_border)
-        print('||'+' '*17+'the warnning level of day time is '+str(resources.warnning_days)+'.'+' '*17+'||')
-        print('-'*29+'warnning level'+'-'*29)
+        print('||'+' '*17+'the warning level of day time is '+str(resources.warning_days)+'.'+' '*17+'||')
+        print('-'*29+'warning level'+'-'*29)
 
 
     def prompt_resource_warning(self):
-        print('warnning for camps facing risk of shortage:\n')
+        print('warning for camps facing risk of shortage:\n')
         for camp_id in self.resources:
-            if InterfaceManageResource.Test_underthreshold(camp_id):
-                InterfaceManageResource.helper_print_warnning(camp_id)
+            if InterfaceManageResource.Test_under_threshold(camp_id):
+                InterfaceManageResource.helper_print_warning(camp_id)
             
-        InterfaceManageResource.print_warnning_level_helper()
+        InterfaceManageResource.print_warning_level_helper()
 
         
         confirm = input_until_valid(input_message="Please press 'enter' to return to former page. ",
