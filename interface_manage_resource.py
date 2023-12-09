@@ -126,49 +126,47 @@ class InterfaceManageResource:
         column_names = df.columns.tolist()
         df_camp = pd.DataFrame({'camp name': column_names})
         print(df_camp)
+        
+    def prompt_display_specific_camp(self):
+        users = Users.load_users()
+        is_admin = users[self.current_user.username]["is_admin"]
+        filtered_camps = Camp.load_camps_user_has_access_to(self.current_user.username)
+        message_key = "\nExisting camp(s):" if is_admin else "Camp(s) you have access rights to:"
+        message_value = ", ".join(list(filtered_camps.keys())) if filtered_camps else "None found"
+        print(f"{message_key} {message_value}")
 
-	def prompt_display_specific_camp(self):
-		users = Users.load_users()
-		is_admin = users[self.current_user.username]["is_admin"]
-
-		filtered_camps = Camp.load_camps_user_has_access_to(self.current_user.username)
-		message_key = "\nExisting camp(s):" if is_admin else "Camp(s) you have access rights to:"
-		message_value = ", ".join(list(filtered_camps.keys())) if filtered_camps else "None found"
-		print(f"{message_key} {message_value}")
-
-		if is_admin:
-			camp_id = input_until_valid(
+        if is_admin:
+            camp_id = input_until_valid(
 				input_message = "Enter the camp name, or leave empty to abort: ", 
 				is_valid = lambda user_input: (user_input == "") or (user_input in self.resources), 
 				validation_message = "Unrecognized camp. Please enter a new one, or leave empty to abort: ")
 			
-			if camp_id == "":
-				print("Aborted displaying resources.")
-				return
+            if camp_id == "":
+                print("Aborted displaying resources.")
+                return
 
-			resource_sepecific_camp = CampResources()
-			resource_sepecific_camp.display_resources(camp_id)
-			print("-------End of resource details--------")
-			input("Press Enter to continue...")
-		else:
-			camp_id = input_until_valid(
+            resource_sepecific_camp = CampResources()
+            resource_sepecific_camp.display_resources(camp_id)
+            print("-------End of resource details--------")
+            input("Press Enter to continue...")
+        else:
+            camp_id = input_until_valid(
 				input_message = "Enter the camp name, or leave empty to abort: ", 
 				is_valid = lambda user_input: (user_input == "") or (user_input in filtered_camps), 
 				validation_message = "Unrecognized camp or camp not accessible. Please enter a new one or leave empty to abort: ")
 			
-			if camp_id == "":
-				print("Aborted displaying resources.")
-				return
-
-			resource_sepecific_camp = CampResources()
-			resource_sepecific_camp.display_resources(camp_id)
-			print("-------End of resource details--------")
-			input("Press Enter to continue...")
-		
-
+            if camp_id == "":
+                print("Aborted displaying resources.")
+                return
+            
+            resource_sepecific_camp = CampResources()
+            resource_sepecific_camp.display_resources(camp_id)
+            print("-------End of resource details--------")
+            input("Press Enter to continue...")
+    
     def prompt_change_resources(self,method='update'):
         #todo:if required to display the campid volunteer incharge first:
-        #find how many camps a volunteer is in charge and print them down.
+        #find how many camps a  volunteer is in charge and print them down.
         #This is so strange! time cosumming if there exists a lot of data
         print("current exist camps:")
         self.print_accessible_camp(self.current_user.username)
@@ -229,14 +227,14 @@ class InterfaceManageResource:
             else:
                 print(f'Failed to change {edition_resource}')
 
-			exit_confirm = input_until_valid(input_message="Do you want to edit other resource amounts?\n[y] Yes\n[n] No (abort)",
+            exit_confirm = input_until_valid(input_message="Do you want to edit other resource amounts?\n[y] Yes\n[n] No (abort)",
 										is_valid = lambda user_input: user_input == "y" or user_input == "n",
 										validation_message="Unrecognized input. Please confirm (y/n):\n[y] Yes\n[n] No (abort)")
 			
-			if exit_confirm == 'y':
-				not_exit = True
-			else:
-				not_exit = False
+            if exit_confirm == 'y':
+                not_exit = True
+            else:
+                not_exit = False
 
     @staticmethod 
     def calculate_threshold(resource_name,camp_id):
@@ -291,7 +289,7 @@ class InterfaceManageResource:
             left_aligned = text.ljust(width)
             left_border = border_char + left_aligned + padding_char*(70-len(text)) +border_char
             print(left_border)
-        print('||'+' '*17+'the warnning level of day time is '+str(resources.warnning_days)+'.'+' '*18+'||')
+        print('||'+' '*17+'the warnning level of day time is '+str(resources.warnning_days)+'.'+' '*17+'||')
         print('-'*29+'warnning level'+'-'*29)
 
 
