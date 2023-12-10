@@ -4,7 +4,7 @@ import pandas as pd
 
 
 from interface_helper import input_until_valid, input_until_valid_name
-from refugees import load_active_refugees, get_accessible_refugees, get_accessible_refugees_sep_by_camp, get_num_families_and_members_by_camp
+from refugees import load_active_refugees, load_ALL_refugees, get_accessible_refugees, get_accessible_refugees_sep_by_camp, get_num_families_and_members_by_camp
 from camp_modified import Camp
 from users import Users
 
@@ -70,7 +70,7 @@ class InterfaceManageRefugees:
 	
 
 	def prompt_add_refugee(self):
-		existing_ids = load_active_refugees().keys()
+		existing_ids = load_ALL_refugees().keys()
 
 		# Done: volunteer is only able to add refugees to the camps that they have access rights to
 		accessible_camps = Camp.load_active_camps_user_has_access_to(self.current_user.username)

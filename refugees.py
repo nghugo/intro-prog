@@ -13,7 +13,7 @@ def load_active_refugees():
     except FileNotFoundError:
         return {}
 
-def load_all_refugees():
+def load_ALL_refugees():
     try:
         with open("refugees.json", "r") as json_file:
             json_load = json.load(json_file)
