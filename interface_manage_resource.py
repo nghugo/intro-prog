@@ -15,13 +15,14 @@ class InterfaceManageResource:
 		
 	def prompt_admin_options(self):
 		option = input_until_valid(
-				input_message = f"\n<homepage/manage-resources>\nPlease choose a resource management option below:\
-					\n[1] CANCEL\
-					\n[2] List all resource profiles under all camps\
-					\n[3] List all resource profiles under a specific camp\
-					\n[4] Allocate resources to a specific camp",
-				is_valid=lambda user_input: user_input.isdigit() and int(user_input) > 0 and int(user_input) <= 4,
-				validation_message="Unrecognized input. Please choose from the above list.")
+			input_message = f"\n<homepage/manage-resources>\
+				\nPlease choose a resource management option below:\
+				\n[1] CANCEL\
+				\n[2] List all resource profiles under all camps\
+				\n[3] List all resource profiles under a specific camp\
+				\n[4] Allocate resources to a specific camp",
+			is_valid=lambda user_input: user_input.isdigit() and int(user_input) > 0 and int(user_input) <= 4,
+			validation_message="Unrecognized input. Please choose from the above list.")
 		
 		if option == "1":
 			return
@@ -35,7 +36,7 @@ class InterfaceManageResource:
 	# @staticmethod
 	# def validate_input_camp(camp_id,current_user): 
 	# 	users = Users.load_users()
-	# 	camp_data = Camp.loadCampData()
+	# 	camp_data = Camp.loadActiveCampData()
 	# 	is_admin = users[current_user]["is_admin"]
 	# 	if camp_id in camp_data:
 	# 		if is_admin or current_user in camp_data[camp_id]["volunteers_in_charge"]:

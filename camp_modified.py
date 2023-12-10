@@ -27,16 +27,33 @@ class Camp:
 		# humanitarian_plan_in
 		# volunteers_in_charge
 
-
 	@staticmethod
-	def loadCampData():
-		"""load all data from camps.json"""
+	def loadALLCampData():
+		"""load all camps under active/inactive plans from camps.json"""
+		
 		with open('camps.json', 'r') as file:
 			try:
 				camp_data = json.load(file)
 			except ValueError:
 				camp_data = {}
-			return camp_data
+			return {key: val for key, val in camp_data.items() if plans[val["humanitarian_plan_in"]]["status"] == "Active"}
+
+	@staticmethod
+	def loadActiveCampData():
+		"""load all camps under active plans from camps.json"""
+
+		with open("plans.json", "r") as json_file:  # https://www.w3schools.com/python/ref_func_open.asp
+			try: 
+				plans = json.load(json_file)
+			except ValueError: 
+				plans = {}
+
+		with open('camps.json', 'r') as file:
+			try:
+				camp_data = json.load(file)
+			except ValueError:
+				camp_data = {}
+			return {key: val for key, val in camp_data.items() if plans[val["humanitarian_plan_in"]]["status"] == "Active"}
 		
 	@staticmethod
 	def addCamp(camp_id, location, max_capacity, humanitarian_plan_in, volunteers_in_charge = None):
@@ -91,7 +108,7 @@ class Camp:
 		users = Users.load_users()
 		if not users[username]['is_admin']:  # only admin gets to delete camp
 			return False
-		data = Camp.loadCampData()
+		data = Camp.loadActiveCampData()
 		if camp_id not in data:
 			return False
 		data.pop(camp_id)
@@ -112,7 +129,7 @@ class Camp:
 			json.dump(refugees, file, indent=2)
 
 		# cascade delete resources of camp
-		data_resource = CampResources.load_resources()
+		data_resource = CampResources.load_all_resources()
 		#delete resource in data_resource
 		if camp_id not in data_resource:
 			return False
@@ -129,7 +146,7 @@ class Camp:
 		user require to be admin or volunteer in charge.
 		:return: boolean value. True if edited, False if not accessible"""
 		users = Users.load_users()
-		camp_data = Camp.loadCampData()
+		camp_data = Camp.loadActiveCampData()
 		if username in users and (users[username]['is_admin'] or username in camp_data[camp_id]["volunteers_in_charge"]):
 			camp_data[new_id] = camp_data.pop(camp_id)
 			with open('camps.json','w') as file:
@@ -142,12 +159,12 @@ class Camp:
 
 	@staticmethod
 	def edit_camp_details(camp_id, attribute, new_value, username):
-		# TODO: data validation of id,attribute, new_attributes
+		# TODO: data validation of id, attribute, new_attributes
 		"""edit the camp information
-				user require to be admin or volunteer in charge.
-				:return: boolean value. True if edited, False if not accessible"""
+		user require to be admin or volunteer in charge.
+		:return: boolean value. True if edited, False if not accessible"""
 		users = Users.load_users()
-		camp_data = Camp.loadCampData()
+		camp_data = Camp.loadActiveCampData()
 
 		if username in users and (users[username]['is_admin'] or username in camp_data[camp_id]["volunteers_in_charge"]):
 			camp_data[camp_id][attribute] = new_value
@@ -164,7 +181,8 @@ class Camp:
 		:parameter: method = "add" or "remove" where add means add volunteer to list and remove means remove volunteer from list"""
 		
 		users = Users.load_users()
-		camp_data = Camp.loadCampData()
+		camp_data = Camp.loadActiveCampData()
+
 		if method == "add":
 			if not users[username]["is_admin"]:
 				return False
@@ -195,37 +213,34 @@ class Camp:
 	def get_volunteer_list(camp_id):
 		# TODO: data validation of id
 		"""get volunteer list of camp_id"""
-		camp_data = Camp.loadCampData()
+		camp_data = Camp.loadActiveCampData()
 		volunteer_list = camp_data[camp_id]["volunteers_in_charge"]
 		return volunteer_list
 
-	@staticmethod
-	def load_camps_user_has_access_to(username):
+	@classmethod
+	def load_camps_user_has_access_to(cls, username):
 		""" If admin, always allow access
 		If volunteer, only allow access if username is in volunteers_in_charge"""
-		try:
-			with open("camps.json", "r") as camp_json:
-				filtered_camps = {}
-				camps = json.load(camp_json)
-				users = Users.load_users()
-				for camp_id, camp_values in camps.items():
-					if (users[username]["is_admin"]
-		 				or username in camp_values["volunteers_in_charge"]):
-						filtered_camps[camp_id] = camp_values
-				return filtered_camps
-		except FileNotFoundError:
-			return {}
+		
+		camps = cls.loadActiveCampData()
+		filtered_camps = {}
+		users = Users.load_users()
+		for camp_id, camp_values in camps.items():
+			if (users[username]["is_admin"]
+				or username in camp_values["volunteers_in_charge"]):
+				filtered_camps[camp_id] = camp_values
+		return filtered_camps
+		
 	
 	@staticmethod
 	def user_has_access(camp_id, username):
 		users = Users.load_users()
-		with open("camps.json", "r") as camp_json:
-			camps = json.load(camp_json)
-			if camp_id not in camps:  # this is to handle deleted camps
-				print("Error: camp_id {camp_id} not in the list of camps {camps}")
-				return False
-			if users[username]["is_admin"] or username in camps[camp_id]["volunteers_in_charge"]:
-				return True
+		camps = cls.loadActiveCampData()
+		if camp_id not in camps:  # this is to handle deleted camps
+			print("Error: camp_id {camp_id} not in the list of camps {camps}")
+			return False
+		if users[username]["is_admin"] or username in camps[camp_id]["volunteers_in_charge"]:
+			return True
 		return False
 
 

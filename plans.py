@@ -64,7 +64,7 @@ class Plans:
 			json.dump(data,file,indent=2)
 		
 		# cascade delete camps of plan
-		camps = Camp.loadCampData()
+		camps = Camp.loadALLCampData()
 		camp_ids_under_plan = [camp_id for camp_id, vals in camps.items() if vals["humanitarian_plan_in"] == plan_name]
 		for camp_id in camp_ids_under_plan:
 			Camp.delete_camp(camp_id, username)

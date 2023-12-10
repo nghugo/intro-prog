@@ -70,7 +70,7 @@ class InterfaceCamp:
 		
 
 	def prompt_add_camp(self):
-		camp_data = Camp.loadCampData()
+		camp_data = Camp.loadActiveCampData()
 
 		self.print_existing_or_accessible_camps()
 
@@ -128,7 +128,7 @@ class InterfaceCamp:
 
 	def prompt_delete_camp(self):
 
-		camps = Camp.loadCampData()
+		camps = Camp.loadActiveCampData()
 		self.print_existing_or_accessible_camps()
 
 		camp_id = input_until_valid(
@@ -265,7 +265,7 @@ class InterfaceCamp:
 		
 			
 	def prompt_edit_volunteer(self):
-		camp_data = Camp.loadCampData()
+		camp_data = Camp.loadActiveCampData()
 		users = Users.load_users()
 		if not users[self.current_user.username]["is_admin"]:
 			print("You are not allowed to edit volunteer list.")

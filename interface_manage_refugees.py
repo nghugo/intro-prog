@@ -4,7 +4,7 @@ import pandas as pd
 
 
 from interface_helper import input_until_valid, input_until_valid_name
-from refugees import load_refugees, get_accessible_refugees, get_accessible_refugees_sep_by_camp, get_num_families_and_members_by_camp
+from refugees import load_active_refugees, get_accessible_refugees, get_accessible_refugees_sep_by_camp, get_num_families_and_members_by_camp
 from camp_modified import Camp
 from users import Users
 
@@ -70,7 +70,7 @@ class InterfaceManageRefugees:
 	
 
 	def prompt_add_refugee(self):
-		existing_ids = load_refugees().keys()
+		existing_ids = load_active_refugees().keys()
 
 		# Done: volunteer is only able to add refugees to the camps that they have access rights to
 		accessible_camps = Camp.load_camps_user_has_access_to(self.current_user.username)
@@ -140,7 +140,7 @@ class InterfaceManageRefugees:
 				"camp_id": camp_id,
 				"medical_condition": medical_condition,
 			}
-			recorded_refugees = load_refugees()
+			recorded_refugees = load_active_refugees()
 			recorded_refugees[refugee_id] = refugee_infomation
 			with open("refugees.json", "w") as json_file:
 				json.dump(recorded_refugees, json_file, indent=2)
@@ -169,7 +169,7 @@ class InterfaceManageRefugees:
 
 	@staticmethod
 	def print_refugees_one_camp_helper(camp_id, refugee_id_values, refugee_count):
-		camp_max_capacity = Camp.loadCampData()[camp_id]["max_capacity"]
+		camp_max_capacity = Camp.loadActiveCampData()[camp_id]["max_capacity"]
 		print(f"\n{{{camp_id}}} (total members: {refugee_count["num_members"]}, remaining capacity: {camp_max_capacity - refugee_count["num_members"]})")
 		for refugee_id, refugee_values in refugee_id_values:
 			print(f"  {refugee_values["fullname"]} (ID: {refugee_id})")
@@ -280,7 +280,7 @@ class InterfaceManageRefugees:
 			camp_id = accessible_refugees[refugee_id]["camp_id"]
 			refugee_count_dict = get_num_families_and_members_by_camp()
 			
-			current_refugee_num_members = load_refugees()[refugee_id]["number_of_members"]
+			current_refugee_num_members = load_active_refugees()[refugee_id]["number_of_members"]
 			camps_with_space = []
 			spaces_stats_df = pd.DataFrame(columns=['Max Capacity', 'Current Total Members', 'Extra Spaces'])
 			
@@ -334,7 +334,7 @@ class InterfaceManageRefugees:
 			print("Refugee modification aborted.")
 			return
 	
-		recorded_refugees = load_refugees()			
+		recorded_refugees = load_active_refugees()			
 		refugee_obj = recorded_refugees[refugee_id]
 		refugee_obj[field] = value  # update refugee object's field to new value
 		recorded_refugees[refugee_id] = refugee_obj
@@ -368,8 +368,8 @@ class InterfaceManageRefugees:
 	
 		refugee_fullname = accessible_refugees[refugee_id]["fullname"]
 
-		with open("refugees.json", "r") as json_file:
-			data = json.load(json_file)
+		
+		data = load_active_refugees()
 		del data[refugee_id]
 		with open("refugees.json", "w") as json_file:
 			json.dump(data, json_file, indent=2)
