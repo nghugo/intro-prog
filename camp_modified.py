@@ -140,7 +140,6 @@ class Camp:
 
 	@staticmethod
 	def edit_camp_id(camp_id, new_id, username):
-		# TODO: data validation either here or in admin/volunteer interface
 		"""edit the camp_id
 		user require to be admin or volunteer in charge.
 		:return: boolean value. True if edited, False if not accessible"""
@@ -158,7 +157,6 @@ class Camp:
 
 	@staticmethod
 	def edit_camp_details(camp_id, attribute, new_value, username):
-		# TODO: data validation of id, attribute, new_attributes
 		"""edit the camp information
 		user require to be admin or volunteer in charge.
 		:return: boolean value. True if edited, False if not accessible"""
@@ -209,7 +207,6 @@ class Camp:
 	@staticmethod
 	#getter method
 	def get_volunteer_list(camp_id):
-		# TODO: data validation of id
 		"""get volunteer list of camp_id"""
 		camp_data = Camp.loadActiveCampData()
 		volunteer_list = camp_data[camp_id]["volunteers_in_charge"]

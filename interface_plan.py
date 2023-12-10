@@ -178,7 +178,6 @@ class InterfacePlan:
 			validation_message = "Unrecognized input. Please enter a valid field (plan_name/description/country/start_date/end_date)."
 			)
 
-			# TODO: also add the code for updating camp that plan is under (update their plan_name from previous value to newer value)
 		if attribute == "plan_name":
 			new_value = input_until_valid(
 				input_message = "\nEnter new plan name. This should be the name of the emergency occuring (E.g. Ukraine War) and must be different from existing plans. Leave empty to abort:",

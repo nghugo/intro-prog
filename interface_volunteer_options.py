@@ -15,7 +15,7 @@ class InterfaceVolunteerOptions:
 		self.interface_camp = InterfaceCamp(self.current_user)
 		self.interface_manage_resource = InterfaceManageResource(self.current_user)
 
-	def prompt_volunteer_options(self):  # TODO: implement handling for the other option values
+	def prompt_volunteer_options(self):
 		users = Users.load_users()
 		option = input_until_valid(			
 			input_message = f"\n<homepage>\nPlease choose an option: (logged in as {users[self.current_user.username]['fullname']} ({self.current_user.username}) - {'admin' if users[self.current_user.username]['is_admin'] else 'volunteer'})\
@@ -23,8 +23,7 @@ class InterfaceVolunteerOptions:
 				\n[2] Manage my user account\
 				\n[3] Manage camps\
 				\n[4] Manage refugee profiles\
-				\n[5] Manage resources\
-				\n[6] TODO placeholder",
+				\n[5] Manage resources",
 			is_valid=lambda user_input: user_input.isdigit() and int(user_input) > 0 and int(user_input) <= 6,
 			validation_message="Unrecognized input. Please choose from the above list."
 		)

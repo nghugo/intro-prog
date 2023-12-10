@@ -21,7 +21,4 @@ class DataValidator:
         result = bool(re.match(pattern, name)) and len(name)>1
         return result
 
-    @staticmethod
-    def validate_date(date):
-        #todo: validate date
-        pass
+

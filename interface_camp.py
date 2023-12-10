@@ -50,11 +50,9 @@ class InterfaceCamp:
 		option = input_until_valid(
 			input_message = f"\n<homepage/manage-camps>\nPlease choose an operation on camps below:\
 				\n[1] CANCEL\
-				\n[2] List all camps that you have access rights to\
-				\n[3] Edit camp details\
-				\n[4] TODO\
-				\n[5] TODO",
-			is_valid = lambda user_input: user_input.isdigit() and int(user_input) > 0 and int(user_input) <= 5,
+				\n[2] List all camps that you have access rights to (under active plans)\
+				\n[3] Edit camp details",
+			is_valid = lambda user_input: user_input.isdigit() and int(user_input) > 0 and int(user_input) <= 3,
 			validation_message = "Unrecognized input. Please choose from the above list."
 		)
 		if option == "1":
@@ -339,7 +337,7 @@ class InterfaceCamp:
 		user_is_admin = users[self.current_user.username]["is_admin"]
 		filtered_active_camps = Camp.load_active_camps_user_has_access_to(self.current_user.username)
 		
-		print("--- Camps are as follows ---" if user_is_admin else "--- Camps you have access rights to are as follows ---")
+		print("--- Camps are as follows ---" if user_is_admin else "--- Camps you have access rights to AND under active plans are as follows ---")
 		filtered_active_camps_df = pd.DataFrame.from_dict(filtered_active_camps).transpose()  # use pandas for pretty print
 		print(filtered_active_camps_df if not filtered_active_camps_df.empty else "None found")
 		print("--- End of camps list ---")
