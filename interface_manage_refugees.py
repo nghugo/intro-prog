@@ -21,7 +21,7 @@ class InterfaceManageRefugees:
 			input_message = f"\n<homepage/manage-refugees>\nPlease choose a refugee management option below:\
 				\n[1] CANCEL\
 				\n[2] List all refugee profiles under all camps (in active plans)\
-				\n[3] List all refugee profiles under a specific camp (in active plans)\
+				\n[3] List all refugee profiles under a specific camp (in an active plan)\
 				\n[4] Add a refugee profile\
 				\n[5] Edit a refugee profile\
 				\n[6] Delete a refugee profile",
