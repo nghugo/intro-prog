@@ -230,8 +230,8 @@ class InterfaceManageRefugees:
 		accessible_refugees = get_accessible_refugees(self.current_user.username)
 		self.succint_print_all_refugees_user_has_access_to()
 
-		accessible_camps = Camp.load_ALL_camps_user_has_access_to(self.current_user.username)
-		accessible_camps_ids = accessible_camps.keys()
+		accessible_active_camps = Camp.load_active_camps_user_has_access_to(self.current_user.username)
+		accessible_active_camps_ids = accessible_active_camps.keys()
 		
 		refugee_id = input_until_valid(
 			input_message="Enter the refugee ID of the refugee profile to modify or leave empty to abort:",
@@ -263,8 +263,10 @@ class InterfaceManageRefugees:
 			
 			camp_id = accessible_refugees[refugee_id]["camp_id"]
 			camp_total_num_members = get_num_families_and_members_by_camp()[camp_id]["num_members"]
-			max_capacity = accessible_camps[camp_id]["max_capacity"]
+			max_capacity = accessible_active_camps[camp_id]["max_capacity"]
 			remaining_spaces = max(max_capacity - camp_total_num_members, 0)
+
+			current_family_num_members = accessible_refugees[refugee_id]["number_of_members"]
 
 			print(f"Note:\
 				\n -> Remaining space(s) in {camp_id}: {remaining_spaces} (excluding current family members)\
@@ -284,25 +286,25 @@ class InterfaceManageRefugees:
 			camps_with_space = []
 			spaces_stats_df = pd.DataFrame(columns=['Max Capacity', 'Current Total Members', 'Extra Spaces'])
 			
-			for alt_camp_id in accessible_camps_ids:	
+			for alt_camp_id in accessible_active_camps_ids:	
 				alt_camp_total_num_members = refugee_count_dict[alt_camp_id]["num_members"]
-				alt_camp_max_capacity = accessible_camps[alt_camp_id]["max_capacity"]
+				alt_camp_max_capacity = accessible_active_camps[alt_camp_id]["max_capacity"]
 				row_name = alt_camp_id if alt_camp_id != camp_id else alt_camp_id+" (current)"
 				spaces_stats_df.loc[row_name] = [alt_camp_max_capacity, alt_camp_total_num_members, alt_camp_max_capacity - alt_camp_total_num_members]
 				alt_camp_remaining_spaces = max(alt_camp_max_capacity - alt_camp_total_num_members, 0)
 				if alt_camp_remaining_spaces >= current_refugee_num_members or alt_camp_id == camp_id:
 					camps_with_space.append(alt_camp_id)
 			
-			print("\nRefugee statistics of camps accessible by you:")
+			print("\nRefugee statistics of camp(s) under active plan(s) accessible by you:")
 			print(spaces_stats_df)
 			print(f"(Recall that the current refugee has {current_refugee_num_members} members)")
 
-			camps_without_space = list(set(accessible_camps_ids).difference(set(camps_with_space)))
+			camps_without_space = list(set(accessible_active_camps_ids).difference(set(camps_with_space)))
 
 			value = input_until_valid(
 				input_message=f"\nNote:\
-					\n(1) Camps accessible by you AND with spaces for refugees: \n  {', '.join(camps_with_space) if camps_with_space else 'None found'}\
-					\n(2) Camps accessible by you, but WITHOUT spaces for refugees: \n  {', '.join(camps_without_space) if camps_without_space else 'None found'}\
+					\n(1) Camp(s) under active plan(s) accessible by you AND with spaces for refugees: \n  {', '.join(camps_with_space) if camps_with_space else 'None found'}\
+					\n(2) Camp(s) under active plan(s) accessible by you, but WITHOUT spaces for refugees: \n  {', '.join(camps_without_space) if camps_without_space else 'None found'}\
 					\nEnter new camp ID from list (1) for this refugee, or leave empty to abort:",
 				is_valid=lambda user_input: user_input == "" or user_input in camps_with_space,
 				validation_message="Camp ID not found. Please choose camp IDs from list (1), or leave empty to abort."
