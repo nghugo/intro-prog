@@ -3,7 +3,17 @@ import json
 
 from camp_modified import Camp
 
-def load_refugees():
+def load_active_refugees():
+    try:
+        active_camps = Camp.loadActiveCampData()
+        
+        with open("refugees.json", "r") as json_file:
+            json_load = json.load(json_file)
+            return {key: val for key, val in json_load.items() if val["camp_id"] in active_camps}
+    except FileNotFoundError:
+        return {}
+
+def load_ALL_refugees():
     try:
         with open("refugees.json", "r") as json_file:
             json_load = json.load(json_file)
@@ -20,7 +30,7 @@ def get_accessible_refugees_sep_by_camp(username) -> dict:
 
 
 def get_accessible_refugees(username):
-    all_refugees = load_refugees()
+    all_refugees = load_active_refugees()
     accessible_refugees = {refugee_id: refugee_values for refugee_id, refugee_values in all_refugees.items() 
                         if Camp.user_has_access(camp_id = refugee_values["camp_id"], username = username)}
     return accessible_refugees
@@ -31,7 +41,7 @@ def get_num_families_and_members_by_camp():
             {"num_families": int f,
             "num_members" int m}
     """
-    all_refugees = load_refugees()
+    all_refugees = load_active_refugees()
     num_refugees_by_camp = defaultdict(lambda: defaultdict(int))
     for refugee_values in all_refugees.values():
         num_refugees_by_camp[refugee_values["camp_id"]]["num_families"] += 1

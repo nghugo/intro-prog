@@ -18,8 +18,8 @@ class InterfaceCamp:
 		option = input_until_valid(
 			input_message = f"\n<homepage/manage-camps>\nPlease choose an operation on camps below:\
 				\n[1] CANCEL\
-				\n[2] List all camps (under any plan)\
-				\n[3] List all camps under a plan\
+				\n[2] List all camps (under any active plan)\
+				\n[3] List all camps under a specific active plan\
 				\n[4] Add a camp\
 				\n[5] Delete a camp\
 				\n[6] Edit camp details\
@@ -30,7 +30,7 @@ class InterfaceCamp:
 		if option == "1":
 			return  # CANCEL
 		if option == "2":
-			self.list_all_camps_user_has_access_to()
+			self.list_active_camps_user_has_access_to()
 		if option == "3":
 			self.prompt_list_all_camps_under_specific_plan()
 			pass  # list all camps under a plan
@@ -60,7 +60,7 @@ class InterfaceCamp:
 		if option == "1":
 			return  # CANCEL
 		if option == "2":
-			self.list_all_camps_user_has_access_to()
+			self.list_active_camps_user_has_access_to()
 		if option == "3":
 			self.prompt_edit_camp_details()
 		if option == "4":
@@ -70,9 +70,9 @@ class InterfaceCamp:
 		
 
 	def prompt_add_camp(self):
-		camp_data = Camp.loadCampData()
+		camp_data = Camp.loadALLCampData()
 
-		self.print_existing_or_accessible_camps()
+		self.print_existing_or_accessible_ALL_camps()
 
 		camp_id = input_until_valid(
 			input_message = "Please enter the new camp ID (must be different from existing IDs)",
@@ -80,8 +80,8 @@ class InterfaceCamp:
 			validation_message = "This camp_id already exists or cannot be empty."
 		)
 
-		plans = Plans.load_plans()
-		print(f"\nExisting plans(s): {", ".join(plans) if plans else 'None found'}")
+		plans = Plans.load_active_plans()
+		print(f"\nExisting active plan(s): {", ".join(plans) if plans else 'None found'}")
 		humanitarian_plan_in = input_until_valid(
 			input_message= "Please enter the humanitarian plan this camp belongs to. Choose from the above list, or leave empty to abort.",
 			is_valid = lambda user_input: user_input == "" or user_input in plans,
@@ -128,8 +128,8 @@ class InterfaceCamp:
 
 	def prompt_delete_camp(self):
 
-		camps = Camp.loadCampData()
-		self.print_existing_or_accessible_camps()
+		camps = Camp.loadActiveCampData()
+		self.print_existing_or_accessible_active_camps()
 
 		camp_id = input_until_valid(
 			input_message= "Please enter the camp_id you would like to delete, or leave empty to abort:",
@@ -162,12 +162,12 @@ class InterfaceCamp:
 
 	def prompt_edit_camp_details(self):
 		
-		filtered_camps = Camp.load_camps_user_has_access_to(self.current_user.username)
-		self.print_existing_or_accessible_camps()
+		filtered_active_camps = Camp.load_active_camps_user_has_access_to(self.current_user.username)
+		self.print_existing_or_accessible_active_camps()
 
 		camp_id = input_until_valid(
 			input_message = "Please enter the camp_id of the camp you would like to change camp details of, or leave empty to abort",
-			is_valid = lambda user_input: user_input == "" or user_input in filtered_camps,
+			is_valid = lambda user_input: user_input == "" or user_input in filtered_active_camps,
 			validation_message= "This camp_id does not exist or you do not have access rights to it. Please re-enter or leave empty to abort."
 		)   
 		
@@ -180,7 +180,7 @@ class InterfaceCamp:
 		
 		print("\nCurrent values of the selected camp:")
 		print(f"-> camp_id: {camp_id}")
-		selected_camp = filtered_camps[camp_id]
+		selected_camp = filtered_active_camps[camp_id]
 		for field, val in selected_camp.items():
 			# do not print "volunteers_in_charge", since this method does not handle it
 			if field == "volunteers_in_charge" and not is_admin:
@@ -211,7 +211,7 @@ class InterfaceCamp:
 		if attribute == "camp_id":
 			new_value = input_until_valid(
 				input_message = f"Please enter the new value for {attribute}",
-				is_valid = lambda user_input: user_input != "" and user_input not in list(filtered_camps.keys()),
+				is_valid = lambda user_input: user_input != "" and user_input not in list(filtered_active_camps.keys()),
 				validation_message = f"This camp_id must not be already taken or empty. Please enter another camp_id."
 			)
 
@@ -225,25 +225,25 @@ class InterfaceCamp:
 				validation_message = "Camp max_capacity must be a positive integer that is no smaller than the current population size. Please re-enter."
 			)
 		elif attribute == "humanitarian_plan_in":
-			plan_keys = Plans.load_plans().keys()
-			print(f"\nExisting plans(s): {", ".join(plan_keys) if plan_keys else 'None found'}")
+			plan_keys = Plans.load_active_plans().keys()
+			print(f"\nExisting active plan(s): {", ".join(plan_keys) if plan_keys else 'None found'}")
 			new_value = input_until_valid(
 				input_message= "Enter the humanitarian plan this camp belongs to. Choose from the above list, or leave empty to abort.",
 				is_valid = lambda user_input: user_input == "" or user_input in plan_keys,
 				validation_message = "Humanitarian plan must be chosen from the above list. Please re-enter or leave empty to abort."
 			)
 		elif attribute == "location":
-			plans = Plans.load_plans()
-			humanitarian_plan_in = filtered_camps[camp_id]["humanitarian_plan_in"]
-			print(f"\nCurrent location: {filtered_camps[camp_id]["location"]}")
+			plans = Plans.load_active_plans()
+			humanitarian_plan_in = filtered_active_camps[camp_id]["humanitarian_plan_in"]
+			print(f"\nCurrent location: {filtered_active_camps[camp_id]["location"]}")
 			new_value = input_until_valid(f"Enter the new value for the location (within {plans[humanitarian_plan_in]["country"]} as specified in {humanitarian_plan_in}):")
 			
 		else:  
-			print(f"\nCurrent {attribute} value: {filtered_camps[camp_id][attribute]}")
+			print(f"\nCurrent {attribute} value: {filtered_active_camps[camp_id][attribute]}")
 			new_value = input_until_valid(f"Enter the new value for the {attribute}:")
 
 		confirm = input_until_valid(
-			input_message = f"Please confirm you want to change {attribute} from previous value:\n {camp_id if attribute == "camp_id" else filtered_camps[camp_id][attribute]} to {new_value} \n[y] Yes\n[n] No (abort)",
+			input_message = f"Please confirm you want to change {attribute} from previous value:\n {camp_id if attribute == "camp_id" else filtered_active_camps[camp_id][attribute]} to {new_value} \n[y] Yes\n[n] No (abort)",
 			is_valid = lambda user_input: user_input == "y" or user_input == "n",
 			validation_message = "Unrecognized input. Please confirm (y/n):\n[y] Yes\n[n] No (abort)"
 		)
@@ -265,12 +265,12 @@ class InterfaceCamp:
 		
 			
 	def prompt_edit_volunteer(self):
-		camp_data = Camp.loadCampData()
+		camp_data = Camp.loadActiveCampData()
 		users = Users.load_users()
 		if not users[self.current_user.username]["is_admin"]:
 			print("You are not allowed to edit volunteer list.")
 
-		self.print_existing_or_accessible_camps()
+		self.print_existing_or_accessible_active_camps()
 
 		camp_id = input_until_valid(
 			input_message = "Please enter the camp_id of the camp you would like to amend the volunteers in, or leave empty to abort:",
@@ -334,24 +334,24 @@ class InterfaceCamp:
 			print(f"Failed to {method} {volunteer}!")
 			
 			
-	def list_all_camps_user_has_access_to(self):
+	def list_active_camps_user_has_access_to(self):
 		users = Users.load_users()
 		user_is_admin = users[self.current_user.username]["is_admin"]
-		filtered_camps = Camp.load_camps_user_has_access_to(self.current_user.username)
+		filtered_active_camps = Camp.load_active_camps_user_has_access_to(self.current_user.username)
 		
 		print("--- Camps are as follows ---" if user_is_admin else "--- Camps you have access rights to are as follows ---")
-		filtered_camps_df = pd.DataFrame.from_dict(filtered_camps).transpose()  # use pandas for pretty print
-		print(filtered_camps_df if not filtered_camps_df.empty else "None found")
+		filtered_active_camps_df = pd.DataFrame.from_dict(filtered_active_camps).transpose()  # use pandas for pretty print
+		print(filtered_active_camps_df if not filtered_active_camps_df.empty else "None found")
 		print("--- End of camps list ---")
 		input("Press Enter to continue...")
 	
 	def prompt_list_all_camps_under_specific_plan(self):
 		""" This is intended for admin only """
 		
-		filtered_camps = Camp.load_camps_user_has_access_to(self.current_user.username)
+		filtered_active_camps = Camp.load_active_camps_user_has_access_to(self.current_user.username)
 
-		plan_keys = Plans.load_plans().keys()
-		print(f"\nExisting plans(s): {", ".join(plan_keys) if plan_keys else 'None found'}")
+		plan_keys = Plans.load_active_plans().keys()
+		print(f"\nExisting active plan(s): {", ".join(plan_keys) if plan_keys else 'None found'}")
 		selected_plan = input_until_valid(
 			input_message= "Please enter the humanitarian plan to view camps under, or leave empty to abort.",
 			is_valid = lambda user_input: user_input == "" or user_input in plan_keys,
@@ -362,23 +362,35 @@ class InterfaceCamp:
 			return
 		
 		print(f"--- Camps under {selected_plan} are as follows ---")
-		filtered_camps_df = pd.DataFrame.from_dict(filtered_camps).transpose()  # use pandas for pretty print
-		filtered_camps_df = filtered_camps_df[filtered_camps_df["humanitarian_plan_in"] == selected_plan]  # filter by humanitarian_plan_in
-		print(filtered_camps_df if not filtered_camps_df.empty else "None found")
+		filtered_active_camps_df = pd.DataFrame.from_dict(filtered_active_camps).transpose()  # use pandas for pretty print
+		filtered_active_camps_df = filtered_active_camps_df[filtered_active_camps_df["humanitarian_plan_in"] == selected_plan]  # filter by humanitarian_plan_in
+		print(filtered_active_camps_df if not filtered_active_camps_df.empty else "None found")
 		print("--- End of camps list ---")
 		input("Press Enter to continue...")
 
 	
-	def print_existing_or_accessible_camps(self):
+	def print_existing_or_accessible_active_camps(self):
 		"""All existing camps if user is admin type
 		Accessible camps if user is volunteer type """
 		
 		users = Users.load_users()
 		is_admin =  users[self.current_user.username]["is_admin"]
-		filtered_camps = Camp.load_camps_user_has_access_to(self.current_user.username)
+		filtered_active_camps = Camp.load_active_camps_user_has_access_to(self.current_user.username)
+
+		message_key = "\nExisting camp(s) under active an plan:" if is_admin else "Camp(s) you have access rights to:"
+		message_value = ", ".join(list(filtered_active_camps.keys())) if filtered_active_camps else "None found"
+		print(f"{message_key} {message_value}")
+	
+	def print_existing_or_accessible_ALL_camps(self):
+		"""All existing camps if user is admin type
+		Accessible camps if user is volunteer type """
+		
+		users = Users.load_users()
+		is_admin =  users[self.current_user.username]["is_admin"]
+		filtered_ALL_camps = Camp.load_ALL_camps_user_has_access_to(self.current_user.username)
 
 		message_key = "\nExisting camp(s):" if is_admin else "Camp(s) you have access rights to:"
-		message_value = ", ".join(list(filtered_camps.keys())) if filtered_camps else "None found"
+		message_value = ", ".join(list(filtered_ALL_camps.keys())) if filtered_ALL_camps else "None found"
 		print(f"{message_key} {message_value}")
 
 	

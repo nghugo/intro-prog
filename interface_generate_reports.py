@@ -1,5 +1,7 @@
 import json
 
+
+from plans import Plans
 from interface_helper import input_until_valid
 from refugees import get_num_families_and_members_by_camp
 from resource_modified import CampResources
@@ -132,7 +134,7 @@ class InterfaceGenerateReports:
 
 		camp_data = camps_data.get(camp_name, None)  # Get camp data
 
-		print(f"--- Report for {camp_name} ---\n")
+		print(f"\n--- Report for {camp_name} ---\n")
 
 		print(f"Location: {camp_data.get('location', 'N/A')}")
 		print(f"Max capacity: {camp_data.get('max_capacity', 'N/A')}")
@@ -142,8 +144,10 @@ class InterfaceGenerateReports:
 		camp_refugee_data = refugee_stats.get(camp_name, {"num_families": 0, "num_members": 0})
 		print(f"Number of Families: {camp_refugee_data['num_families']}")
 		print(f"Total Number of Members: {camp_refugee_data['num_members']}")
-		
-		print(f"Humanitarian Plan: {camp_data.get('humanitarian_plan_in', 'N/A')}")
+
+		plans = Plans.load_all_plans()
+		humanitarian_plan_in = camp_data.get('humanitarian_plan_in', 'N/A')
+		print(f"Humanitarian Plan: {humanitarian_plan_in} ({plans[humanitarian_plan_in]["status"]})")
 		volunteerString = ', '.join(camp_data.get('volunteers_in_charge', []))
 		print(f"Volunteers in Charge: {volunteerString if volunteerString else 'Currently none'}")
 		
@@ -186,7 +190,6 @@ class InterfaceGenerateReports:
 	# 				report = f"\nCamp Name: {camp_name}\n"
 	# 				report += f"Location: {camp_data.get('location', 'N/A')}\n"
 	# 				report += f"Max capacity: {camp_data.get('max_capacity', 'N/A')}\n"
-	# 				report += f"Occupancy: {camp_data.get('occupancy', 'N/A')}\n"
 	# 				volunteerString = ', '.join(camp_data.get('volunteers_in_charge', []))
 	# 				report += f"Volunteers in Charge: {volunteerString if volunteerString else 'Currently none'}"
 	# 				print(report)
@@ -207,12 +210,14 @@ class InterfaceGenerateReports:
 			print("\n--- Report for all plans ---")
 			report = ""
 
+			plans = Plans.load_all_plans()			
+
 			for camp_name, camp_data in camps_data.items():
+				humanitarian_plan_in = camp_data.get('humanitarian_plan_in', 'N/A')
 				report += f"Camp Name: {camp_name}\n"
 				report += f"Location: {camp_data.get('location', 'N/A')}\n"
 				report += f"Max capacity: {camp_data.get('max_capacity', 'N/A')}\n"
-				report += f"Occupancy: {camp_data.get('occupancy', 'N/A')}\n"
-				report += f"Humanitarian Plan: {camp_data.get('humanitarian_plan_in', 'N/A')}\n"
+				report += f"Humanitarian Plan: {humanitarian_plan_in} ({plans[humanitarian_plan_in]["status"]})\n"
 				volunteerString = ', '.join(camp_data.get('volunteers_in_charge', []))
 				report += f"Volunteer in Charge: {volunteerString if volunteerString != "" else "Currently none"}\n"
 				report += "\n"  # newline for spacing

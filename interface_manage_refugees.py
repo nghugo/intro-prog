@@ -4,7 +4,7 @@ import pandas as pd
 
 
 from interface_helper import input_until_valid, input_until_valid_name
-from refugees import load_refugees, get_accessible_refugees, get_accessible_refugees_sep_by_camp, get_num_families_and_members_by_camp
+from refugees import load_active_refugees, load_ALL_refugees, get_accessible_refugees, get_accessible_refugees_sep_by_camp, get_num_families_and_members_by_camp
 from camp_modified import Camp
 from users import Users
 
@@ -20,8 +20,8 @@ class InterfaceManageRefugees:
 			
 			input_message = f"\n<homepage/manage-refugees>\nPlease choose a refugee management option below:\
 				\n[1] CANCEL\
-				\n[2] List all refugee profiles under all camps\
-				\n[3] List all refugee profiles under a specific camp\
+				\n[2] List all refugee profiles under all camps (in active plans)\
+				\n[3] List all refugee profiles under a specific camp (in an active plan)\
 				\n[4] Add a refugee profile\
 				\n[5] Edit a refugee profile\
 				\n[6] Delete a refugee profile",
@@ -70,15 +70,15 @@ class InterfaceManageRefugees:
 	
 
 	def prompt_add_refugee(self):
-		existing_ids = load_refugees().keys()
+		existing_ids = load_ALL_refugees().keys()
 
 		# Done: volunteer is only able to add refugees to the camps that they have access rights to
-		accessible_camps = Camp.load_camps_user_has_access_to(self.current_user.username)
+		accessible_camps = Camp.load_active_camps_user_has_access_to(self.current_user.username)
 		accessible_camps_ids = accessible_camps.keys()
 		
 		camp_id = input_until_valid(
 			input_message=f"Enter camp ID for this refugee, or leave empty to abort:\
-				\n(Note: Camps accessible by you are: {", ".join(accessible_camps_ids) if accessible_camps_ids else "None found"})",
+				\n(Note: Camp(s) under active plan(s) accessible by you are: {", ".join(accessible_camps_ids) if accessible_camps_ids else "None found"})",
 			is_valid=lambda user_input: user_input == "" or user_input in accessible_camps_ids,
 			validation_message="Camp ID not found. Please choose from the above list of camp IDs, or leave empty to abort."
 		)
@@ -140,7 +140,7 @@ class InterfaceManageRefugees:
 				"camp_id": camp_id,
 				"medical_condition": medical_condition,
 			}
-			recorded_refugees = load_refugees()
+			recorded_refugees = load_active_refugees()
 			recorded_refugees[refugee_id] = refugee_infomation
 			with open("refugees.json", "w") as json_file:
 				json.dump(recorded_refugees, json_file, indent=2)
@@ -169,7 +169,7 @@ class InterfaceManageRefugees:
 
 	@staticmethod
 	def print_refugees_one_camp_helper(camp_id, refugee_id_values, refugee_count):
-		camp_max_capacity = Camp.loadCampData()[camp_id]["max_capacity"]
+		camp_max_capacity = Camp.loadActiveCampData()[camp_id]["max_capacity"]
 		print(f"\n{{{camp_id}}} (total members: {refugee_count["num_members"]}, remaining capacity: {camp_max_capacity - refugee_count["num_members"]})")
 		for refugee_id, refugee_values in refugee_id_values:
 			print(f"  {refugee_values["fullname"]} (ID: {refugee_id})")
@@ -180,9 +180,9 @@ class InterfaceManageRefugees:
 
 	def prompt_verbose_print_all_refugees_under_camp(self):
 		users = Users.load_users()
-		accessible_camps = Camp.load_camps_user_has_access_to(self.current_user.username)
+		accessible_camps = Camp.load_active_camps_user_has_access_to(self.current_user.username)
 		if users[self.current_user.username]["is_admin"]:
-			print(f"Existing camps: {", ".join(accessible_camps.keys() if accessible_camps else "None found")}")
+			print(f"Existing camp(s) under active plan(s): {", ".join(accessible_camps.keys() if accessible_camps else "None found")}")
 		else:
 			print(f"The camps that you have access to are: {", ".join(accessible_camps.keys() if accessible_camps else "None found")}")
 
@@ -214,9 +214,9 @@ class InterfaceManageRefugees:
 		users = Users.load_users()
 
 		if users[self.current_user.username]["is_admin"]:
-			print("\nExisting refugees:")
+			print("\nExisting refugees under camps of active plans:")
 		else:
-			print("\nExisting refugees under camps that have access rights to:")
+			print("\nExisting refugees under camps of active plans that have access rights to:")
 		
 		for camp, refugee_id_values in accessible_refugees_sep_by_camp.items():
 			print(f"{camp}:")
@@ -230,8 +230,8 @@ class InterfaceManageRefugees:
 		accessible_refugees = get_accessible_refugees(self.current_user.username)
 		self.succint_print_all_refugees_user_has_access_to()
 
-		accessible_camps = Camp.load_camps_user_has_access_to(self.current_user.username)
-		accessible_camps_ids = accessible_camps.keys()
+		accessible_active_camps = Camp.load_active_camps_user_has_access_to(self.current_user.username)
+		accessible_active_camps_ids = accessible_active_camps.keys()
 		
 		refugee_id = input_until_valid(
 			input_message="Enter the refugee ID of the refugee profile to modify or leave empty to abort:",
@@ -263,8 +263,10 @@ class InterfaceManageRefugees:
 			
 			camp_id = accessible_refugees[refugee_id]["camp_id"]
 			camp_total_num_members = get_num_families_and_members_by_camp()[camp_id]["num_members"]
-			max_capacity = accessible_camps[camp_id]["max_capacity"]
+			max_capacity = accessible_active_camps[camp_id]["max_capacity"]
 			remaining_spaces = max(max_capacity - camp_total_num_members, 0)
+
+			current_family_num_members = accessible_refugees[refugee_id]["number_of_members"]
 
 			print(f"Note:\
 				\n -> Remaining space(s) in {camp_id}: {remaining_spaces} (excluding current family members)\
@@ -280,29 +282,29 @@ class InterfaceManageRefugees:
 			camp_id = accessible_refugees[refugee_id]["camp_id"]
 			refugee_count_dict = get_num_families_and_members_by_camp()
 			
-			current_refugee_num_members = load_refugees()[refugee_id]["number_of_members"]
+			current_refugee_num_members = load_active_refugees()[refugee_id]["number_of_members"]
 			camps_with_space = []
 			spaces_stats_df = pd.DataFrame(columns=['Max Capacity', 'Current Total Members', 'Extra Spaces'])
 			
-			for alt_camp_id in accessible_camps_ids:	
+			for alt_camp_id in accessible_active_camps_ids:	
 				alt_camp_total_num_members = refugee_count_dict[alt_camp_id]["num_members"]
-				alt_camp_max_capacity = accessible_camps[alt_camp_id]["max_capacity"]
+				alt_camp_max_capacity = accessible_active_camps[alt_camp_id]["max_capacity"]
 				row_name = alt_camp_id if alt_camp_id != camp_id else alt_camp_id+" (current)"
 				spaces_stats_df.loc[row_name] = [alt_camp_max_capacity, alt_camp_total_num_members, alt_camp_max_capacity - alt_camp_total_num_members]
 				alt_camp_remaining_spaces = max(alt_camp_max_capacity - alt_camp_total_num_members, 0)
 				if alt_camp_remaining_spaces >= current_refugee_num_members or alt_camp_id == camp_id:
 					camps_with_space.append(alt_camp_id)
 			
-			print("\nRefugee statistics of camps accessible by you:")
+			print("\nRefugee statistics of camp(s) under active plan(s) accessible by you:")
 			print(spaces_stats_df)
 			print(f"(Recall that the current refugee has {current_refugee_num_members} members)")
 
-			camps_without_space = list(set(accessible_camps_ids).difference(set(camps_with_space)))
+			camps_without_space = list(set(accessible_active_camps_ids).difference(set(camps_with_space)))
 
 			value = input_until_valid(
 				input_message=f"\nNote:\
-					\n(1) Camps accessible by you AND with spaces for refugees: \n  {', '.join(camps_with_space) if camps_with_space else 'None found'}\
-					\n(2) Camps accessible by you, but WITHOUT spaces for refugees: \n  {', '.join(camps_without_space) if camps_without_space else 'None found'}\
+					\n(1) Camp(s) under active plan(s) accessible by you AND with spaces for refugees: \n  {', '.join(camps_with_space) if camps_with_space else 'None found'}\
+					\n(2) Camp(s) under active plan(s) accessible by you, but WITHOUT spaces for refugees: \n  {', '.join(camps_without_space) if camps_without_space else 'None found'}\
 					\nEnter new camp ID from list (1) for this refugee, or leave empty to abort:",
 				is_valid=lambda user_input: user_input == "" or user_input in camps_with_space,
 				validation_message="Camp ID not found. Please choose camp IDs from list (1), or leave empty to abort."
@@ -334,7 +336,7 @@ class InterfaceManageRefugees:
 			print("Refugee modification aborted.")
 			return
 	
-		recorded_refugees = load_refugees()			
+		recorded_refugees = load_active_refugees()			
 		refugee_obj = recorded_refugees[refugee_id]
 		refugee_obj[field] = value  # update refugee object's field to new value
 		recorded_refugees[refugee_id] = refugee_obj
@@ -368,8 +370,8 @@ class InterfaceManageRefugees:
 	
 		refugee_fullname = accessible_refugees[refugee_id]["fullname"]
 
-		with open("refugees.json", "r") as json_file:
-			data = json.load(json_file)
+		
+		data = load_active_refugees()
 		del data[refugee_id]
 		with open("refugees.json", "w") as json_file:
 			json.dump(data, json_file, indent=2)

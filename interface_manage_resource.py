@@ -15,13 +15,14 @@ class InterfaceManageResource:
 		
 	def prompt_admin_options(self):
 		option = input_until_valid(
-				input_message = f"\n<homepage/manage-resources>\nPlease choose a resource management option below:\
-					\n[1] CANCEL\
-					\n[2] List all resource profiles under all camps\
-					\n[3] List all resource profiles under a specific camp\
-					\n[4] Allocate resources to a specific camp",
-				is_valid=lambda user_input: user_input.isdigit() and int(user_input) > 0 and int(user_input) <= 4,
-				validation_message="Unrecognized input. Please choose from the above list.")
+			input_message = f"\n<homepage/manage-resources>\
+				\nPlease choose a resource management option below:\
+				\n[1] CANCEL\
+				\n[2] List all resource profiles under all camps (in active plans)\
+				\n[3] List all resource profiles under a specific camp (in an active plan)\
+				\n[4] Allocate resources to a specific camp",
+			is_valid=lambda user_input: user_input.isdigit() and int(user_input) > 0 and int(user_input) <= 4,
+			validation_message="Unrecognized input. Please choose from the above list.")
 		
 		if option == "1":
 			return
@@ -35,7 +36,7 @@ class InterfaceManageResource:
 	# @staticmethod
 	# def validate_input_camp(camp_id,current_user): 
 	# 	users = Users.load_users()
-	# 	camp_data = Camp.loadCampData()
+	# 	camp_data = Camp.loadActiveCampData()
 	# 	is_admin = users[current_user]["is_admin"]
 	# 	if camp_id in camp_data:
 	# 		if is_admin or current_user in camp_data[camp_id]["volunteers_in_charge"]:
@@ -59,7 +60,7 @@ class InterfaceManageResource:
 			self.prompt_update_resources()
 	
 	def prompt_display_all_camps(self):
-		print('Resources for all camps:')
+		print('Resources for all camp(s) under active plan(s):')
 		df = pd.DataFrame(self.resources)
 		df_tranpose = df.to_string()  # to_string: prevent table truncation
 		print(df_tranpose)
@@ -78,8 +79,8 @@ class InterfaceManageResource:
 		users = Users.load_users()
 		is_admin = users[self.current_user.username]["is_admin"]
 
-		filtered_camps = Camp.load_camps_user_has_access_to(self.current_user.username)
-		message_key = "\nExisting camp(s):" if is_admin else "Camp(s) you have access rights to:"
+		filtered_camps = Camp.load_active_camps_user_has_access_to(self.current_user.username)
+		message_key = "\nExisting camp(s) under active plan(s):" if is_admin else "Camp(s) you have access rights to:"
 		message_value = ", ".join(list(filtered_camps.keys())) if filtered_camps else "None found"
 		print(f"{message_key} {message_value}")
 
@@ -118,9 +119,9 @@ class InterfaceManageResource:
 		users = Users.load_users()
 		is_admin =  users[self.current_user.username]["is_admin"]
 
-		filtered_camps = Camp.load_camps_user_has_access_to(self.current_user.username)
-		message_key = "\nExisting camp(s):" if is_admin else "Camp(s) you have access rights to:"
-		message_value = ", ".join(list(filtered_camps.keys())) if filtered_camps else "None found"
+		filtered_ALL_camps = Camp.load_active_camps_user_has_access_to(self.current_user.username)
+		message_key = "\nExisting camp(s) under active plan(s):" if is_admin else "Camp(s) you have access rights to:"
+		message_value = ", ".join(list(filtered_ALL_camps.keys())) if filtered_ALL_camps else "None found"
 		print(f"{message_key} {message_value}")
 
 		if is_admin:
@@ -129,7 +130,7 @@ class InterfaceManageResource:
 			validation_message = "Unrecognized camp or camp not accessible. Please enter a new one or leave empty to abort: "
 
 		camp_id = input_until_valid(input_message="Enter the camp name or press Enter to abort: ", 
-						is_valid=lambda user_input:(user_input == "") or user_input in filtered_camps, 
+						is_valid=lambda user_input:(user_input == "") or user_input in filtered_ALL_camps, 
 						validation_message=validation_message)
 		
 		if camp_id =="":
