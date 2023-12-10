@@ -101,8 +101,8 @@ class InterfaceGenerateReports:
 				with open(file_name, 'w') as file:
 					file.write(report)
 				print(f"Report for {plan_name} has been saved to {file_name}")
-			else:
-				print(report)  
+			
+			print(report)  
 			input("Press Enter to continue...")
 
 			
