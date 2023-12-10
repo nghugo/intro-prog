@@ -154,7 +154,7 @@ class InterfaceGenerateReports:
 		print()  # newline
 		
 		# Displaying resources in stock
-		if not resources_obj.display_resources(camp_name):
+		if not resources_obj.display_ALL_resources(camp_name):
 			print("Resources: None available")
 
 		print(f"\n--- End of report for {camp_name} ---\n")

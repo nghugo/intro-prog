@@ -128,7 +128,7 @@ class Camp:
 			json.dump(refugees, file, indent=2)
 
 		# cascade delete resources of camp
-		data_resource = CampResources.load_all_resources()
+		data_resource = CampResources.load_ALL_resources()
 		#delete resource in data_resource
 		if camp_id not in data_resource:
 			return False
