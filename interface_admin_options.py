@@ -30,12 +30,13 @@ class InterfaceAdminOptions:
 			input_message = f"\n<homepage>\nPlease choose an option: (logged in as {users[self.current_user.username]['fullname']} ({self.current_user.username}) - {'admin' if users[self.current_user.username]['is_admin'] else 'volunteer'})\
 				\n[1] Log out\
 				\n[2] Manage my user account\
-				\n[3] Manage users (volunteers, admins)\
+				\n[3] Manage users (volunteers/admins)\
 				\n[4] Manage humanitarian plans\
-				\n[5] Manage camps and volunteers\
-				\n[6] Manage refugee profiles\
-				\n[7] Manage resources\
-				\n[8] Generate a report (active/ended plans and camps)",
+				\n[5] Manage camps and volunteers (*) \
+				\n[6] Manage refugee profiles (*) \
+				\n[7] Manage resources (*) \
+				\n[8] Generate a report (all entities under active/ended plans) \
+				\nPlease note: options annotated with (*) are only for entities under active plans",
 			is_valid=lambda user_input: user_input.isdigit() and int(user_input) > 0 and int(user_input) <= 8,
 			validation_message="Unrecognized input. Please choose from the above list."
 		)
