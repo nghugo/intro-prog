@@ -11,7 +11,6 @@ class Camp:
 	 camp_id(str): refer to camp_1,camp_2,camp_3 (don't overlap even in different humanitarian plan);
 	 location(str): detailed location;
 	 max_capacity(int):  flexible and size of the camp which is varied from hundreds to thousands;
-	 occupancy(int): current amount of people settled in
 	 humanitarian_plan_in: the humanitarian plan that the camp is in;
 	 volunteers_in_charge(str_list): a list storing volunteer who in charge of the camp
 	 ### notice: if one volunteer can only charge one camp(of his own),
@@ -173,7 +172,6 @@ class Camp:
 			return True
 		else:
 			return False
-	# what is the attribute list? location/max_capacity/occupancy?
 
 	@staticmethod
 	def edit_volunteer(camp_id, volunteer, username, method = "add"):
