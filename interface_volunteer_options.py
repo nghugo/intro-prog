@@ -21,9 +21,10 @@ class InterfaceVolunteerOptions:
 			input_message = f"\n<homepage>\nPlease choose an option: (logged in as {users[self.current_user.username]['fullname']} ({self.current_user.username}) - {'admin' if users[self.current_user.username]['is_admin'] else 'volunteer'})\
 				\n[1] Log out\
 				\n[2] Manage my user account\
-				\n[3] Manage camps\
-				\n[4] Manage refugee profiles\
-				\n[5] Manage resources",
+				\n[3] Manage camps (*)\
+				\n[4] Manage refugee profiles (*)\
+				\n[5] Manage resources (*)\
+				\nPlease note: options annotated with (*) are only for entities under active plans",
 			is_valid=lambda user_input: user_input.isdigit() and int(user_input) > 0 and int(user_input) <= 6,
 			validation_message="Unrecognized input. Please choose from the above list."
 		)

@@ -52,7 +52,7 @@ class InterfaceManageRefugees:
 				\n[4] Add a refugee profile\
 				\n[5] Edit a refugee profile\
 				\n[6] Delete a refugee profile",
-			is_valid=lambda user_input: user_input.isdigit() and int(user_input) > 0 and int(user_input) <= 5,
+			is_valid=lambda user_input: user_input.isdigit() and int(user_input) > 0 and int(user_input) <= 6,
 			validation_message="Unrecognized input. Please choose from the above list."
 		)
 		if option == "1":
@@ -336,7 +336,7 @@ class InterfaceManageRefugees:
 			print("Refugee modification aborted.")
 			return
 	
-		recorded_refugees = load_active_refugees()			
+		recorded_refugees = load_ALL_refugees()			
 		refugee_obj = recorded_refugees[refugee_id]
 		refugee_obj[field] = value  # update refugee object's field to new value
 		recorded_refugees[refugee_id] = refugee_obj
@@ -371,7 +371,7 @@ class InterfaceManageRefugees:
 		refugee_fullname = accessible_refugees[refugee_id]["fullname"]
 
 		
-		data = load_active_refugees()
+		data = load_ALL_refugees()
 		del data[refugee_id]
 		with open("refugees.json", "w") as json_file:
 			json.dump(data, json_file, indent=2)

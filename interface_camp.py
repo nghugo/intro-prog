@@ -161,6 +161,7 @@ class InterfaceCamp:
 	def prompt_edit_camp_details(self):
 		
 		filtered_active_camps = Camp.load_active_camps_user_has_access_to(self.current_user.username)
+		filtered_ALL_camps = Camp.load_ALL_camps_user_has_access_to(self.current_user.username)
 		self.print_existing_or_accessible_active_camps()
 
 		camp_id = input_until_valid(
@@ -207,9 +208,10 @@ class InterfaceCamp:
 			)
 
 		if attribute == "camp_id":
+			print(f"Existing camp IDs: {", ".join(filtered_ALL_camps.keys()) if filtered_ALL_camps.keys() else "None found"}")
 			new_value = input_until_valid(
-				input_message = f"Please enter the new value for {attribute}",
-				is_valid = lambda user_input: user_input != "" and user_input not in list(filtered_active_camps.keys()),
+				input_message = f"Please enter the new value for camp_id",
+				is_valid = lambda user_input: user_input != "" and user_input not in list(filtered_ALL_camps.keys()),
 				validation_message = f"This camp_id must not be already taken or empty. Please enter another camp_id."
 			)
 

@@ -107,7 +107,7 @@ class Camp:
 		users = Users.load_users()
 		if not users[username]['is_admin']:  # only admin gets to delete camp
 			return False
-		data = Camp.loadActiveCampData()
+		data = Camp.loadALLCampData()
 		if camp_id not in data:
 			return False
 		data.pop(camp_id)
@@ -144,16 +144,17 @@ class Camp:
 		user require to be admin or volunteer in charge.
 		:return: boolean value. True if edited, False if not accessible"""
 		users = Users.load_users()
-		camp_data = Camp.loadActiveCampData()
-		if username in users and (users[username]['is_admin'] or username in camp_data[camp_id]["volunteers_in_charge"]):
-			camp_data[new_id] = camp_data.pop(camp_id)
+		ALL_camps = Camp.loadALLCampData()
+		if new_id in ALL_camps:
+			return False
+		if username in users and (users[username]['is_admin'] or username in ALL_camps[camp_id]["volunteers_in_charge"]):
+			ALL_camps[new_id] = ALL_camps.pop(camp_id)
 			with open('camps.json','w') as file:
-				json.dump(camp_data, file, indent=2)
+				json.dump(ALL_camps, file, indent=2)
 			update_all_camp_values_in_refugees(camp_id, new_id)
 			update_all_camp_values_in_camp_resources(camp_id, new_id)
 			return True
-		else:
-			return False
+		return False
 
 	@staticmethod
 	def edit_camp_details(camp_id, attribute, new_value, username):
@@ -161,7 +162,7 @@ class Camp:
 		user require to be admin or volunteer in charge.
 		:return: boolean value. True if edited, False if not accessible"""
 		users = Users.load_users()
-		camp_data = Camp.loadActiveCampData()
+		camp_data = Camp.loadALLCampData()
 
 		if username in users and (users[username]['is_admin'] or username in camp_data[camp_id]["volunteers_in_charge"]):
 			camp_data[camp_id][attribute] = new_value
@@ -177,7 +178,7 @@ class Camp:
 		:parameter: method = "add" or "remove" where add means add volunteer to list and remove means remove volunteer from list"""
 		
 		users = Users.load_users()
-		camp_data = Camp.loadActiveCampData()
+		camp_data = Camp.loadALLCampData()
 
 		if method == "add":
 			if not users[username]["is_admin"]:
