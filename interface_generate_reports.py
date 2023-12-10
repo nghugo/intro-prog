@@ -93,14 +93,14 @@ class InterfaceGenerateReports:
 			save_report = input("Do you want to save this report as a text file? (y/n): ").lower()
 			
 			if save_report == 'y': 
-				directory = "reports"  
+				directory = "reports_timestamp"  
 				if not os.path.exists(directory):
 					os.makedirs(directory)  
-					
-					file_name = f"{directory}/report_{plan_name}_{timestamp}.txt"
-					with open(file_name, 'w') as file:
-							file.write(report)
-					print(f"Report for {plan_name} has been saved to {file_name}")
+				
+				file_name = f"{directory}/report_{plan_name}_{timestamp}.txt"
+				with open(file_name, 'w') as file:
+					file.write(report)
+				print(f"Report for {plan_name} has been saved to {file_name}")
 			else:
 				print(report)  
 			input("Press Enter to continue...")
