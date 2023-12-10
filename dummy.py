@@ -145,8 +145,8 @@ dummy_plans = {
     "description": "UCL campaign for refugee education",
     "country": "United Kingdom",
     "start_date": "25/09/2023",
-    "end_date": "12/01/2024",
-    "status": "Active"
+    "end_date": "27/09/2023",
+    "status": "Ended"
   },
   "planB": {
     "description": "Helping Asylum Seekers and refugees in London since 2023",
