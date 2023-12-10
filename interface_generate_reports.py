@@ -1,5 +1,6 @@
 import json
-
+import os 
+import datetime 
 from interface_helper import input_until_valid
 from refugees import get_num_families_and_members_by_camp
 from resource_modified import CampResources
@@ -51,47 +52,58 @@ class InterfaceGenerateReports:
 	
 	@classmethod
 	def generate_specific_plan_report(cls):
-		with open('plans.json', 'r') as file:
-			plans_data = json.load(file)
-		
-		print("\nAvailable plans: " + ", ".join(plans_data.keys()))
-		plan_name = input("\nEnter the name of the plan to generate the report for (leave empty to abort): ").strip()
-		
-		if plan_name == "":
-			print("Operation aborted.")
-			return
-
-		if plan_name not in plans_data:
-			print(f"Plan '{plan_name}' not found, Please enter an existing plan name or leave empty to abort.")
-			return
-		
-		
-
-		plan_data = plans_data[plan_name]
-		print(f"\n--- Report for {plan_name} Plan ---\n")
-		for key, val in plan_data.items():
-			print(f"{cls.plan_key_to_text[key]+":":16} {val}")
-
-		with open('camps.json', 'r') as file:
-			camps_data = json.load(file)
-			camps_under_plan = {k: v for k, v in camps_data.items() if v["humanitarian_plan_in"] == plan_name}
-
-		print(f"\nCamps in {plan_name}:")
-		if not camps_data:
-			print(f"No camps found under plan: {plan_name}. Please try a different plan name.")
-		else:
-			for camp_name, camp_data in camps_under_plan.items():
-				print(f"\n  {camp_name}")
-				for attr, val in camp_data.items():
-					if attr == "humanitarian_plan_in":
-						continue
-					elif attr == "volunteers_in_charge":
-						print(f"  -> {cls.camp_key_to_text[attr]}: {", ".join(val) if val else 'Currently none'}")
-					else:
-						print(f"  -> {cls.camp_key_to_text[attr]}: {val}")
+			with open('plans.json', 'r') as file:
+				plans_data = json.load(file)
 			
-		print(f"\n--- End of Report for {plan_name} Plan ---\n")
-		input("Press Enter to continue...")
+			print("\nAvailable plans: " + ", ".join(plans_data.keys()))
+			plan_name = input("\nEnter the name of the plan to generate the report for (leave empty to abort): ").strip()
+			
+			if plan_name == "":
+				print("Operation aborted.")
+				return
+
+			if plan_name not in plans_data:
+				print(f"Plan '{plan_name}' not found, Please enter an existing plan name or leave empty to abort.")
+				return
+			
+			plan_data = plans_data[plan_name]
+			report = f"\n--- Report for {plan_name} Plan ---\n"
+			for key, val in plan_data.items():
+				report += f"{cls.plan_key_to_text[key]+":":16} {val}\n"
+
+			with open('camps.json', 'r') as file:
+				camps_data = json.load(file)
+				camps_under_plan = {k: v for k, v in camps_data.items() if v["humanitarian_plan_in"] == plan_name}
+
+			report += f"\nCamps in {plan_name}:\n"
+			if not camps_data:
+				report += f"No camps found under plan: {plan_name}. Please try a different plan name.\n"
+			else:
+				for camp_name, camp_data in camps_under_plan.items():
+					report += f"\n  {camp_name}\n"
+					for attr, val in camp_data.items():
+						if attr == "humanitarian_plan_in":
+							continue
+						report += f"  -> {attr}: {val}\n"
+
+			report += f"\n--- End of Report for {plan_name} Plan ---\n"
+
+			current_time = datetime.datetime.now()
+			timestamp = current_time.strftime("%Y%m%d_%H%M%S")
+			save_report = input("Do you want to save this report as a text file? (y/n): ").lower()
+			
+			if save_report == 'y':
+				directory = "reports"  # Folder where you want to save reports
+				if not os.path.exists(directory):
+					os.makedirs(directory)  # Create the directory if it doesn't exist
+					
+					file_name = f"{directory}/report_{plan_name}_{timestamp}.txt"
+					with open(file_name, 'w') as file:
+							file.write(report)
+					print(f"Report for {plan_name} has been saved to {file_name}")
+			else:
+				print(report)  # Display the report in the console
+			input("Press Enter to continue...")
 
 			
 
