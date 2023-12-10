@@ -47,8 +47,8 @@ class InterfaceManageRefugees:
 			
 			input_message = f"\n<homepage/manage-refugees>\nPlease choose a refugee management option below:\
 				\n[1] CANCEL\
-				\n[2] List all refugee profiles under all camps you have access rights to\
-				\n[3] List all refugee profiles under a specific camp\
+				\n[2] List all refugee profiles under all camps you have access rights to (under active plans)\
+				\n[3] List all refugee profiles under a specific camp (under an active plan)\
 				\n[4] Add a refugee profile\
 				\n[5] Edit a refugee profile\
 				\n[6] Delete a refugee profile",
@@ -155,7 +155,7 @@ class InterfaceManageRefugees:
 		if users[self.current_user.username]["is_admin"]:
 			print("\n--- List of refugees ---")
 		else:
-			print("\n--- List of refugees under camps you have access rights to ---")
+			print("\n--- List of refugees under camps you have access rights to (under active plans) ---")
 		if not accessible_refugees_sep_by_camp:
 			print("None found")
 		else:

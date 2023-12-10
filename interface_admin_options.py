@@ -35,7 +35,7 @@ class InterfaceAdminOptions:
 				\n[5] Manage camps and volunteers\
 				\n[6] Manage refugee profiles\
 				\n[7] Manage resources\
-				\n[8] Generate a report (plans, camps)",
+				\n[8] Generate a report (active/ended plans and camps)",
 			is_valid=lambda user_input: user_input.isdigit() and int(user_input) > 0 and int(user_input) <= 8,
 			validation_message="Unrecognized input. Please choose from the above list."
 		)

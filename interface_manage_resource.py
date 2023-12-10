@@ -47,8 +47,8 @@ class InterfaceManageResource:
 		option = input_until_valid(
 				input_message = f"\n<homepage/manage-resources>\nPlease choose a resource management option below:\
 					\n[1] CANCEL\
-					\n[2] List all resource profiles under a specific camp\
-					\n[3] Allocate resources to a specific camp",
+					\n[2] List all resource profiles under a specific camp (under an active plan)\
+					\n[3] Allocate resources to a specific camp (under an active plan)",
 				is_valid=lambda user_input: user_input.isdigit() and int(user_input) > 0 and int(user_input) <= 3,
 				validation_message="Unrecognized input. Please choose from the above list.")
 		
@@ -80,7 +80,7 @@ class InterfaceManageResource:
 		is_admin = users[self.current_user.username]["is_admin"]
 
 		filtered_camps = Camp.load_active_camps_user_has_access_to(self.current_user.username)
-		message_key = "\nExisting camp(s) under active plan(s):" if is_admin else "Camp(s) you have access rights to:"
+		message_key = "\nExisting camp(s) under active plan(s):" if is_admin else "Camp(s) you have access rights to (under active plans):"
 		message_value = ", ".join(list(filtered_camps.keys())) if filtered_camps else "None found"
 		print(f"{message_key} {message_value}")
 
@@ -120,7 +120,7 @@ class InterfaceManageResource:
 		is_admin =  users[self.current_user.username]["is_admin"]
 
 		filtered_ALL_camps = Camp.load_active_camps_user_has_access_to(self.current_user.username)
-		message_key = "\nExisting camp(s) under active plan(s):" if is_admin else "Camp(s) you have access rights to:"
+		message_key = "\nExisting camp(s) under active plan(s):" if is_admin else "Camp(s) you have access rights to (under active plans):"
 		message_value = ", ".join(list(filtered_ALL_camps.keys())) if filtered_ALL_camps else "None found"
 		print(f"{message_key} {message_value}")
 

@@ -112,6 +112,5 @@ Classes:
      - Validates input data for realism and correctness.
      - Functions:
        - `validate_country()`: Validate country names.
-       - `validate_date()`: Validate date entries.
        - `validate_name()`: Validate refugee and volunteer names.
 
