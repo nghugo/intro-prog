@@ -137,7 +137,7 @@ class Plans:
 
 	def status_checker(end_date):
 		status = ""
-		if is_future_date(end_date) is True:
+		if is_future_date(end_date):
 			status = "Active"
 		else:
 			status = "Ended"

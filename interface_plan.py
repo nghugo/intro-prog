@@ -321,7 +321,7 @@ class InterfacePlan:
 		now = datetime.now()
 		new_value = input_until_valid(
 		input_message = f"\nEnter the plan's new end date in the format dd/mm/yyyy. This must be a date in the future (Today's date is {now.strftime('%d/%m/%Y')}):",
-		is_valid = lambda end_date: is_future_date(end_date),
+		is_valid = lambda end_date: is_valid_date(end_date) and is_future_date(end_date),
 		validation_message = "Invalid date entered. Please re-enter a date in the future and ensure the format is dd/mm/yyyy."
 		)
 
