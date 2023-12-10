@@ -18,8 +18,8 @@ class InterfaceManageResource:
 			input_message = f"\n<homepage/manage-resources>\
 				\nPlease choose a resource management option below:\
 				\n[1] CANCEL\
-				\n[2] List all resource profiles under all camps\
-				\n[3] List all resource profiles under a specific camp\
+				\n[2] List all resource profiles under all camps (in active plans)\
+				\n[3] List all resource profiles under a specific camp (in an active plan)\
 				\n[4] Allocate resources to a specific camp",
 			is_valid=lambda user_input: user_input.isdigit() and int(user_input) > 0 and int(user_input) <= 4,
 			validation_message="Unrecognized input. Please choose from the above list.")
@@ -60,7 +60,7 @@ class InterfaceManageResource:
 			self.prompt_update_resources()
 	
 	def prompt_display_all_camps(self):
-		print('Resources for all camps:')
+		print('Resources for all camp(s) under active plan(s):')
 		df = pd.DataFrame(self.resources)
 		df_tranpose = df.to_string()  # to_string: prevent table truncation
 		print(df_tranpose)
@@ -79,8 +79,8 @@ class InterfaceManageResource:
 		users = Users.load_users()
 		is_admin = users[self.current_user.username]["is_admin"]
 
-		filtered_camps = Camp.load_ALL_camps_user_has_access_to(self.current_user.username)
-		message_key = "\nExisting camp(s):" if is_admin else "Camp(s) you have access rights to:"
+		filtered_camps = Camp.load_active_camps_user_has_access_to(self.current_user.username)
+		message_key = "\nExisting camp(s) under active plan(s):" if is_admin else "Camp(s) you have access rights to:"
 		message_value = ", ".join(list(filtered_camps.keys())) if filtered_camps else "None found"
 		print(f"{message_key} {message_value}")
 

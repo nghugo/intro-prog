@@ -20,8 +20,8 @@ class InterfaceManageRefugees:
 			
 			input_message = f"\n<homepage/manage-refugees>\nPlease choose a refugee management option below:\
 				\n[1] CANCEL\
-				\n[2] List all refugee profiles under all camps\
-				\n[3] List all refugee profiles under a specific camp\
+				\n[2] List all refugee profiles under all camps (in active plans)\
+				\n[3] List all refugee profiles under a specific camp (in active plans)\
 				\n[4] Add a refugee profile\
 				\n[5] Edit a refugee profile\
 				\n[6] Delete a refugee profile",
@@ -73,12 +73,12 @@ class InterfaceManageRefugees:
 		existing_ids = load_active_refugees().keys()
 
 		# Done: volunteer is only able to add refugees to the camps that they have access rights to
-		accessible_camps = Camp.load_ALL_camps_user_has_access_to(self.current_user.username)
+		accessible_camps = Camp.load_active_camps_user_has_access_to(self.current_user.username)
 		accessible_camps_ids = accessible_camps.keys()
 		
 		camp_id = input_until_valid(
 			input_message=f"Enter camp ID for this refugee, or leave empty to abort:\
-				\n(Note: Camps accessible by you are: {", ".join(accessible_camps_ids) if accessible_camps_ids else "None found"})",
+				\n(Note: Camp(s) under active plan(s) accessible by you are: {", ".join(accessible_camps_ids) if accessible_camps_ids else "None found"})",
 			is_valid=lambda user_input: user_input == "" or user_input in accessible_camps_ids,
 			validation_message="Camp ID not found. Please choose from the above list of camp IDs, or leave empty to abort."
 		)
@@ -180,9 +180,9 @@ class InterfaceManageRefugees:
 
 	def prompt_verbose_print_all_refugees_under_camp(self):
 		users = Users.load_users()
-		accessible_camps = Camp.load_ALL_camps_user_has_access_to(self.current_user.username)
+		accessible_camps = Camp.load_active_camps_user_has_access_to(self.current_user.username)
 		if users[self.current_user.username]["is_admin"]:
-			print(f"Existing camps: {", ".join(accessible_camps.keys() if accessible_camps else "None found")}")
+			print(f"Existing camp(s) under active plan(s): {", ".join(accessible_camps.keys() if accessible_camps else "None found")}")
 		else:
 			print(f"The camps that you have access to are: {", ".join(accessible_camps.keys() if accessible_camps else "None found")}")
 
@@ -214,9 +214,9 @@ class InterfaceManageRefugees:
 		users = Users.load_users()
 
 		if users[self.current_user.username]["is_admin"]:
-			print("\nExisting refugees:")
+			print("\nExisting refugees under camps of active plans:")
 		else:
-			print("\nExisting refugees under camps that have access rights to:")
+			print("\nExisting refugees under camps of active plans that have access rights to:")
 		
 		for camp, refugee_id_values in accessible_refugees_sep_by_camp.items():
 			print(f"{camp}:")
