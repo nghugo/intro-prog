@@ -2,8 +2,6 @@ import json
 
 
 class CampResources:
-	def __init__(self):
-		self.resources = self.load_active_resources()
 
 	@staticmethod
 	# load resources from camp_resouces.json
@@ -31,7 +29,7 @@ class CampResources:
 
 	@staticmethod
 	# load resources from camp_resouces.json
-	def load_all_resources():
+	def load_ALL_resources():
 		try:
 			with open('camp_resources.json', 'r') as file:
 				resources = json.load(file)
@@ -39,10 +37,21 @@ class CampResources:
 			resources = {}
 		return resources
 
-	# display resources in a specific camp
-	def display_resources(self, camp_id):
-		if camp_id in self.resources:
-			camp_resources = self.resources[camp_id]
+	# display active resources in a specific camp
+	def display_active_resources(self, camp_id):
+		if camp_id in self.load_active_resources():
+			camp_resources = self.load_active_resources()[camp_id]
+			print(f"Resources for {camp_id}:")
+			for resource, amount in camp_resources.items():
+				print(f"-> {resource}: {amount}")
+			return True # return True when resources are avaliable 
+		else:
+			return False
+	
+	# display all resources in a specific camp
+	def display_ALL_resources(self, camp_id):
+		if camp_id in self.load_ALL_resources():
+			camp_resources = self.load_ALL_resources()[camp_id]
 			print(f"Resources for {camp_id}:")
 			for resource, amount in camp_resources.items():
 				print(f"-> {resource}: {amount}")
@@ -52,8 +61,8 @@ class CampResources:
 	
 	# define add_resources 
 	def add_resources(self,camp_id,resource_kind,amount):
-		if camp_id in self.resources and resource_kind in self.resources[camp_id]:
-			self.resources[camp_id][resource_kind] += amount
+		if camp_id in self.load_active_resources() and resource_kind in self.load_active_resources()[camp_id]:
+			self.load_active_resources()[camp_id][resource_kind] += amount
 			self.save_resources()
 			return True
 		else:
@@ -61,8 +70,8 @@ class CampResources:
 
 	# update specific resources in a specfic camp
 	def update_resources(self, camp_id, resource_kind, amount):
-		if camp_id in self.resources and resource_kind in self.resources[camp_id]:
-			self.resources[camp_id][resource_kind] = amount
+		if camp_id in self.load_active_resources() and resource_kind in self.load_active_resources()[camp_id]:
+			self.load_active_resources()[camp_id][resource_kind] = amount
 			self.save_resources()
 			return True
 		else:
@@ -71,5 +80,5 @@ class CampResources:
 	# save resources to json
 	def save_resources(self):
 		with open('camp_resources.json', 'w') as file:
-			json.dump(self.resources, file, indent=4)
+			json.dump(self.load_active_resources(), file, indent=4)
 		return True

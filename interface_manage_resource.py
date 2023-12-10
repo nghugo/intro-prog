@@ -11,7 +11,6 @@ import pandas as pd
 class InterfaceManageResource:
 	def __init__(self,current_user):
 		self.current_user = current_user
-		self.resources = CampResources().resources
 		
 	def prompt_admin_options(self):
 		option = input_until_valid(
@@ -61,19 +60,12 @@ class InterfaceManageResource:
 	
 	def prompt_display_all_camps(self):
 		print('Resources for all camp(s) under active plan(s):')
-		df = pd.DataFrame(self.resources)
+		df = pd.DataFrame(CampResources.load_active_resources())
 		df_tranpose = df.to_string()  # to_string: prevent table truncation
 		print(df_tranpose)
 		print("----------------------------------End of resources table-------------------------------------")
 		input("Press Enter to continue...")
 
-	# removed functionality
-	# def print_exist_camp(self):
-	#     df = pd.DataFrame(self.resources)
-	#     df_tranpose = df.transpose()
-	#     column_names = df.columns.tolist()
-	#     df_camp = pd.DataFrame({'camp name': column_names})
-	#     print(df_camp)
 
 	def prompt_display_specific_camp(self):
 		users = Users.load_users()
@@ -87,7 +79,7 @@ class InterfaceManageResource:
 		if is_admin:
 			camp_id = input_until_valid(
 				input_message = "Enter the camp name, or leave empty to abort: ", 
-				is_valid = lambda user_input: (user_input == "") or (user_input in self.resources), 
+				is_valid = lambda user_input: (user_input == "") or (user_input in CampResources.load_active_resources()), 
 				validation_message = "Unrecognized camp. Please enter a new one, or leave empty to abort: ")
 			
 			if camp_id == "":
@@ -95,7 +87,7 @@ class InterfaceManageResource:
 				return
 
 			resource_sepecific_camp = CampResources()
-			resource_sepecific_camp.display_resources(camp_id)
+			resource_sepecific_camp.display_active_resources(camp_id)
 			print("-------End of resource details--------")
 			input("Press Enter to continue...")
 		else:
@@ -109,7 +101,7 @@ class InterfaceManageResource:
 				return
 
 			resource_sepecific_camp = CampResources()
-			resource_sepecific_camp.display_resources(camp_id)
+			resource_sepecific_camp.display_active_resources(camp_id)
 			print("-------End of resource details--------")
 			input("Press Enter to continue...")
 		
@@ -138,13 +130,13 @@ class InterfaceManageResource:
 			return
 		
 		# TODO: present the population of the camp.
-		df = pd.DataFrame(self.resources).transpose()
+		df = pd.DataFrame(CampResources.load_active_resources()).transpose()
 		print(f"Resources allocated to this {camp_id}:")
 		print(df.loc[camp_id].to_string())
 		not_exit = True
 		while not_exit:
 			resource_to_edit = input_until_valid(input_message="Enter the resource to edit: food_packets/medical_packets/water_packets/shelter_packets/clothing_packets/first_aid_packets/baby_packet/sanitation_packets), or leave empty to abort:",
-												is_valid=lambda user_input: user_input in self.resources[camp_id] or user_input == "",
+												is_valid=lambda user_input: user_input in CampResources.load_active_resources()[camp_id] or user_input == "",
 												validation_message="Unrecognized input. Please enter again.")
 			if resource_to_edit == "":
 				print("Aborted resource amount modification.")

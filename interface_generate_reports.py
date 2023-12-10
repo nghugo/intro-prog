@@ -3,7 +3,7 @@ import json
 
 from plans import Plans
 from interface_helper import input_until_valid
-from refugees import get_num_families_and_members_by_camp
+from refugees import get_num_families_and_members_by_camp, load_ALL_refugees
 from resource_modified import CampResources
 
 
@@ -154,8 +154,19 @@ class InterfaceGenerateReports:
 		print()  # newline
 		
 		# Displaying resources in stock
-		if not resources_obj.display_resources(camp_name):
-			print("Resources: None available")
+		if not resources_obj.display_ALL_resources(camp_name):
+			print(f"Resources for {camp_name}: None available")
+		
+		# Display refugees in camp
+		refugees = load_ALL_refugees()
+		if not refugees:
+			print(f"\nRefugees for {camp_name}: None available")
+		else:
+			print(f"\nRefugees for {camp_name}:")
+			for refugee_id, refugee_values in refugees.items():
+				print(f"-> {refugee_values["fullname"]} ({refugee_id})")
+				print(f"     Number of members: {refugee_values["number_of_members"]}")
+				print(f"     Medical condition: {refugee_values["medical_condition"]}")
 
 		print(f"\n--- End of report for {camp_name} ---\n")
 		input("Press Enter to continue...")
