@@ -36,7 +36,7 @@ class Camp:
 				camp_data = json.load(file)
 			except ValueError:
 				camp_data = {}
-			return {key: val for key, val in camp_data.items() if plans[val["humanitarian_plan_in"]]["status"] == "Active"}
+			return camp_data
 
 	@staticmethod
 	def loadActiveCampData():
@@ -218,7 +218,7 @@ class Camp:
 		return volunteer_list
 
 	@classmethod
-	def load_camps_user_has_access_to(cls, username):
+	def load_active_camps_user_has_access_to(cls, username):
 		""" If admin, always allow access
 		If volunteer, only allow access if username is in volunteers_in_charge"""
 		
@@ -230,12 +230,40 @@ class Camp:
 				or username in camp_values["volunteers_in_charge"]):
 				filtered_camps[camp_id] = camp_values
 		return filtered_camps
+	
+	@classmethod
+	def load_active_camps_user_has_access_to(cls, username):
+		""" If admin, always allow access
+		If volunteer, only allow access if username is in volunteers_in_charge"""
+		
+		camps = cls.loadActiveCampData()
+		filtered_camps = {}
+		users = Users.load_users()
+		for camp_id, camp_values in camps.items():
+			if (users[username]["is_admin"]
+				or username in camp_values["volunteers_in_charge"]):
+				filtered_camps[camp_id] = camp_values
+		return filtered_camps
+
+	@classmethod
+	def load_ALL_camps_user_has_access_to(cls, username):
+		""" If admin, always allow access
+		If volunteer, only allow access if username is in volunteers_in_charge"""
+		
+		camps = cls.loadALLCampData()
+		filtered_camps = {}
+		users = Users.load_users()
+		for camp_id, camp_values in camps.items():
+			if (users[username]["is_admin"]
+				or username in camp_values["volunteers_in_charge"]):
+				filtered_camps[camp_id] = camp_values
+		return filtered_camps
 		
 	
-	@staticmethod
-	def user_has_access(camp_id, username):
+	@classmethod
+	def user_has_access(cls, camp_id, username):
 		users = Users.load_users()
-		camps = cls.loadActiveCampData()
+		camps = cls.loadALLCampData()
 		if camp_id not in camps:  # this is to handle deleted camps
 			print("Error: camp_id {camp_id} not in the list of camps {camps}")
 			return False

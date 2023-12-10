@@ -73,7 +73,7 @@ class InterfaceManageRefugees:
 		existing_ids = load_active_refugees().keys()
 
 		# Done: volunteer is only able to add refugees to the camps that they have access rights to
-		accessible_camps = Camp.load_camps_user_has_access_to(self.current_user.username)
+		accessible_camps = Camp.load_ALL_camps_user_has_access_to(self.current_user.username)
 		accessible_camps_ids = accessible_camps.keys()
 		
 		camp_id = input_until_valid(
@@ -180,7 +180,7 @@ class InterfaceManageRefugees:
 
 	def prompt_verbose_print_all_refugees_under_camp(self):
 		users = Users.load_users()
-		accessible_camps = Camp.load_camps_user_has_access_to(self.current_user.username)
+		accessible_camps = Camp.load_ALL_camps_user_has_access_to(self.current_user.username)
 		if users[self.current_user.username]["is_admin"]:
 			print(f"Existing camps: {", ".join(accessible_camps.keys() if accessible_camps else "None found")}")
 		else:
@@ -230,7 +230,7 @@ class InterfaceManageRefugees:
 		accessible_refugees = get_accessible_refugees(self.current_user.username)
 		self.succint_print_all_refugees_user_has_access_to()
 
-		accessible_camps = Camp.load_camps_user_has_access_to(self.current_user.username)
+		accessible_camps = Camp.load_ALL_camps_user_has_access_to(self.current_user.username)
 		accessible_camps_ids = accessible_camps.keys()
 		
 		refugee_id = input_until_valid(

@@ -79,7 +79,7 @@ class InterfaceManageResource:
 		users = Users.load_users()
 		is_admin = users[self.current_user.username]["is_admin"]
 
-		filtered_camps = Camp.load_camps_user_has_access_to(self.current_user.username)
+		filtered_camps = Camp.load_ALL_camps_user_has_access_to(self.current_user.username)
 		message_key = "\nExisting camp(s):" if is_admin else "Camp(s) you have access rights to:"
 		message_value = ", ".join(list(filtered_camps.keys())) if filtered_camps else "None found"
 		print(f"{message_key} {message_value}")
@@ -119,7 +119,7 @@ class InterfaceManageResource:
 		users = Users.load_users()
 		is_admin =  users[self.current_user.username]["is_admin"]
 
-		filtered_camps = Camp.load_camps_user_has_access_to(self.current_user.username)
+		filtered_camps = Camp.load_ALL_camps_user_has_access_to(self.current_user.username)
 		message_key = "\nExisting camp(s):" if is_admin else "Camp(s) you have access rights to:"
 		message_value = ", ".join(list(filtered_camps.keys())) if filtered_camps else "None found"
 		print(f"{message_key} {message_value}")

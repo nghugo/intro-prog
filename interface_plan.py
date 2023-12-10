@@ -40,8 +40,8 @@ class InterfacePlan:
 
 	def prompt_create_plan(self):
 		
-		plan_keys = Plans.load_plans().keys()
-		print(f"\nExisting plans(s): {", ".join(plan_keys) if plan_keys else 'None found'}")
+		plan_keys = Plans.load_all_plans().keys()
+		print(f"\nExisting plan(s): {", ".join(plan_keys) if plan_keys else 'None found'}")
 
 		plan_name = input_until_valid(
 			input_message = "\nEnter plan name. This should be the name of the emergency occuring (E.g. Ukraine War) and must be different from existing plans. Leave empty to abort:",
@@ -115,7 +115,7 @@ class InterfacePlan:
 			self.prompt_list_all_plans()
 	
 	def prompt_list_active_plans(self):
-		plans = Plans.load_plans()
+		plans = Plans.load_all_plans()
 		active_plans = {key: value for key, value in plans.items() if value.get("status") == "Active"}
 		if active_plans:
 			print("--- Active plans are as follows ---")
@@ -127,7 +127,7 @@ class InterfacePlan:
 		input("Press Enter to continue...")
 
 	def prompt_list_ended_plans(self):
-		plans = Plans.load_plans()
+		plans = Plans.load_all_plans()
 		ended_plans = {key: value for key, value in plans.items() if value.get("status") == "Ended"}
 		if ended_plans:
 			print("--- Ended plans are as follows ---")
@@ -140,7 +140,7 @@ class InterfacePlan:
 		
 	def prompt_list_all_plans(self):
 		# create pandas dataframe from dictionary
-		plans = Plans.load_plans()
+		plans = Plans.load_all_plans()
 		if plans:
 			print("--- All plans are as follows ---")
 			plans_df = pd.DataFrame.from_dict(plans).transpose()
@@ -152,7 +152,7 @@ class InterfacePlan:
 	
 	def prompt_modify_plan(self):
 		self.prompt_list_all_plans()
-		plan_keys = Plans.load_plans().keys()
+		plan_keys = Plans.load_all_plans().keys()
 		# Promps input from user
 		plan_name = input_until_valid(
 			input_message="Enter the plan you want to modify or leave empty to abort:",
@@ -164,11 +164,11 @@ class InterfacePlan:
 			print("Plan modification aborted.")
 			return  # abort current method
 		
-		selected_plan = Plans.load_plans()[plan_name]
+		selected_plan = Plans.load_all_plans()[plan_name]
 
 		print("\nCurrent values of the selected plan:")
 		print(f"-> plan_name: {plan_name}")
-		selected_plan = Plans.load_plans()[plan_name]
+		selected_plan = Plans.load_all_plans()[plan_name]
 		for field, val in selected_plan.items():
 			print(f"-> {field}: {val}")
 		
@@ -222,7 +222,7 @@ class InterfacePlan:
 			new_value = input_until_valid(f"Enter the new value for the {attribute}:")
 
 		confirm = input_until_valid(
-			input_message = f"Please confirm you want to change {attribute} from previous value to new value:\n |{plan_name if attribute == "plan_name" else Plans.load_plans()[plan_name][attribute]}| --> |{new_value}| \n[y] Yes\n[n] No (abort)",
+			input_message = f"Please confirm you want to change {attribute} from previous value to new value:\n |{plan_name if attribute == "plan_name" else Plans.load_all_plans()[plan_name][attribute]}| --> |{new_value}| \n[y] Yes\n[n] No (abort)",
 			is_valid = lambda user_input: user_input == "y" or user_input == "n",
 			validation_message = "Unrecognized input. Please confirm (y/n):\n[y] Yes\n[n] No (abort)"
 		)
@@ -240,7 +240,7 @@ class InterfacePlan:
 		if test:
 			print(f"You've changed the {attribute} successfully! Your changes can now be seen:")
 			print(f"-> plan_name: {plan_name}")
-			selected_plan = Plans.load_plans()[plan_name]
+			selected_plan = Plans.load_all_plans()[plan_name]
 			for field, val in selected_plan.items():
 				print(f"-> {field}: {val}")
 		else:
@@ -248,7 +248,7 @@ class InterfacePlan:
 
 	def prompt_immediate_end_plan(self):
 		self.prompt_list_active_plans()
-		plans = Plans.load_plans()
+		plans = Plans.load_all_plans()
 		active_plans = {key: value for key, value in plans.items() if value.get("status") == "Active"}
 		active_plan_keys = active_plans.keys()
 		# Promps input from user
@@ -264,7 +264,7 @@ class InterfacePlan:
 		
 		print("\nCurrent values of the plan you are ending:")
 		print(f"-> plan_name: {plan_name}")
-		selected_plan = Plans.load_plans()[plan_name]
+		selected_plan = Plans.load_all_plans()[plan_name]
 		for field, val in selected_plan.items():
 			if field != "end_date" and field != "status":
 				print(f"-> {field}: {val}")
@@ -294,7 +294,7 @@ class InterfacePlan:
 
 	def prompt_reactivate_plan(self):
 		self.prompt_list_ended_plans()
-		plans = Plans.load_plans()
+		plans = Plans.load_all_plans()
 		ended_plans = {key: value for key, value in plans.items() if value.get("status") == "Ended"}
 		ended_plan_keys = ended_plans.keys()
 		# Promps input from user
@@ -310,7 +310,7 @@ class InterfacePlan:
 		
 		print("\nCurrent values of the plan you are reactivating:")
 		print(f"-> plan_name: {plan_name}")
-		selected_plan = Plans.load_plans()[plan_name]
+		selected_plan = Plans.load_all_plans()[plan_name]
 		for field, val in selected_plan.items():
 			if field != "end_date" and field != "status":
 				print(f"-> {field}: {val}")
@@ -326,7 +326,7 @@ class InterfacePlan:
 		)
 
 		confirm = input_until_valid(
-			input_message = f"Please confirm you want to reactivate {plan_name} by changing end_date from previous value to new value:\n |{Plans.load_plans()[plan_name]["end_date"]}| --> |{new_value}| \n[y] Yes\n[n] No (abort)",
+			input_message = f"Please confirm you want to reactivate {plan_name} by changing end_date from previous value to new value:\n |{Plans.load_all_plans()[plan_name]["end_date"]}| --> |{new_value}| \n[y] Yes\n[n] No (abort)",
 			is_valid = lambda user_input: user_input == "y" or user_input == "n",
 			validation_message = "Unrecognized input. Please confirm (y/n):\n[y] Yes\n[n] No (abort)"
 		)
@@ -346,7 +346,7 @@ class InterfacePlan:
 
 	def prompt_delete_plan(self):
 
-		plan_data = Plans.load_plans()
+		plan_data = Plans.load_all_plans()
 		self.prompt_list_all_plans()
 
 		plan_name = input_until_valid(

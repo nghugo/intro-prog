@@ -7,10 +7,10 @@ from camp_modified import Camp
 
 class Plans:
 	def __init__(self):
-		self.plans = self.load_plans()
+		self.plans = self.load_all_plans()
 	
 	@staticmethod
-	def load_plans():
+	def load_all_plans():
 		"""Loads plans from plans.json (persistent). Creates plans.json if not found."""
 		
 		if not os.path.exists("plans.json"):
@@ -23,6 +23,21 @@ class Plans:
 				json_load = {}
 			finally:
 				return json_load
+	
+	@staticmethod
+	def load_active_plans():
+		"""Loads active plans from plans.json (persistent). Creates plans.json if not found."""
+		
+		if not os.path.exists("plans.json"):
+			open('plans.json', 'x').close()
+
+		with open("plans.json", "r") as json_file:  # https://www.w3schools.com/python/ref_func_open.asp
+			try: 
+				json_load = json.load(json_file)
+			except ValueError: 
+				json_load = {}
+			finally:
+				return {key: val for key, val in json_load.items() if val["status"]=="Active"}
 
 	@staticmethod	
 	def add_plan(plan_name, description, country, start_date, end_date):
@@ -55,7 +70,7 @@ class Plans:
 
 	@staticmethod
 	def delete_plan(plan_name, username):
-		data = Plans.load_plans()
+		data = Plans.load_all_plans()
 		if plan_name not in data:
 			return False
 		
