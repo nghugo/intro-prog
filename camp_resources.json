@@ -1,7 +1,7 @@
 {
     "camp1": {
-        "food_packets": 100,
-        "medical_packets": 100,
+        "food_packets": 105,
+        "medical_packets": 110,
         "water_packets": 100,
         "shelter_packets": 100,
         "clothing_packets": 100,

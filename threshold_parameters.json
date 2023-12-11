@@ -1,0 +1,10 @@
+
+{
+ "factor_food":3,
+ "factor_medical":1,
+ "factor_wate":2,
+ "factor_shelter":1,
+ "factor_clothing":1,
+ "factor_sanitation":2,
+ "warnning_days":1
+}
