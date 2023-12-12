@@ -20,7 +20,7 @@ class InterfaceManageResource:
 					\n[3] List all resource profiles under a specific camp (*)\
 					\n[4] Set (overwrite) resource amounts in a specific camp (*)\
 					\n[5] Increment resource amounts in a specific camp (*)\
-					\n[6] Limited resources warning (*)\
+					\n[6] Change resource amount warning thresholds\
 					\nPlease note: Options annotated with (*) are only for entities under active plans.",
 				is_valid=lambda user_input: user_input.isdigit() and int(user_input) > 0 and int(user_input) <= 6,
 				validation_message="Unrecognized input. Please choose from the above list.")
@@ -296,7 +296,7 @@ class InterfaceManageResource:
 				InterfaceManageResource.helper_print_warning(camp_id)
 
 		InterfaceManageResource.print_warning_level_helper()
-		change = input_until_valid(input_message="Do you want to current warning factors? (Press 'enter' to return) \n[y] Yes\n[n] No (abort)",
+		change = input_until_valid(input_message="Do you want to change the resource amount warning thresholds? \n[y] Yes\n[n] No (abort)",
 										is_valid = lambda user_input: user_input == "y" or user_input == "n",
 										validation_message="Unrecognized input. Please confirm (y/n):\n[y] Yes\n[n] No (abort)")
 		
