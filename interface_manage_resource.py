@@ -265,7 +265,7 @@ class InterfaceManageResource:
 		"""helper method for print warning camp details"""
 		resources = CampResources.load_active_resources()
 		print("-"*29+"Warning"+"-"*29)
-		print(f'Warning: {camp_id} may face risk of resource shortage.\nThese resources are:')
+		print(f'Warning: {camp_id} may face risk of resource shortage.\nResources with amount lower than threshold are:')
 		for resource in resources[camp_id]:
 			amount = resources[camp_id][resource]
 			warning_amount = InterfaceManageResource.calculate_threshold(resource,camp_id)
@@ -290,9 +290,16 @@ class InterfaceManageResource:
 	def prompt_resource_warning(self):
 			print('Camps facing risk of shortage:\n')
 			active_accessible_camps = Camp.load_active_camps_user_has_access_to(self.current_user.username)
+			
+			camp_lower_than_threshold_found = False
+
 			for camp_id in active_accessible_camps:
 				if InterfaceManageResource.Test_underthreshold(camp_id):
 					InterfaceManageResource.helper_print_warning(camp_id)
+					camp_lower_than_threshold_found = True
+			
+			if not camp_lower_than_threshold_found:
+				print("None found. No camps face risk of shortage.\n")
 				
 			InterfaceManageResource.print_warning_level_helper()
 
