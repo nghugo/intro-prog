@@ -283,7 +283,7 @@ class InterfaceCamp:
 			return
 		
 		volunteer_list = Camp.get_volunteer_list(camp_id)
-		print(f"\nExisting volunteers in {camp_id}: {", ".join(volunteer_list) if volunteer_list else "None found"} (total: {len(volunteer_list)})")
+		print(f"\nExisting volunteers in {camp_id}: {', '.join(volunteer_list) if volunteer_list else 'None found'} (total: {len(volunteer_list)})")
 
 		method_char = input_until_valid(
 		input_message= "Please choose an operation, or leave empty to abort:\
@@ -301,7 +301,7 @@ class InterfaceCamp:
 		volunteers_to_add = all_volunteers_from_users.difference(set(volunteer_list))
 
 		if method_char == "a":
-			print(f"Volunteer usernames you can add: {", ".join(volunteers_to_add) if volunteers_to_add else "None found"}")
+			print(f"Volunteer usernames you can add: {', '.join(volunteers_to_add) if volunteers_to_add else 'None found'}")
 			volunteer = input_until_valid(
 				input_message= f"Please enter the volunteer username you want to add into volunteer list for {camp_id}, or leave empty to abort.",
 				is_valid = lambda user_input: user_input == "" or (user_input not in camp_data[camp_id]["volunteers_in_charge"] and user_input in volunteers_to_add),
@@ -319,7 +319,7 @@ class InterfaceCamp:
 			print(f"Volunteer operation ({method}) aborted.")
 			return  # early termination
 		confirm = input_until_valid(
-			input_message = f"Please confirm you want to {method} {volunteer} {"into" if method=="add" else "from"} the camp {camp_id} \n[y] Yes\n[n] No (abort)",
+			input_message = f"Please confirm you want to {method} {volunteer} {'into' if method == 'add' else 'from'} the camp {camp_id} \n[y] Yes\n[n] No (abort)",
 			is_valid = lambda user_input: user_input == "y" or user_input == "n",
 			validation_message = "Unrecognized input. Please confirm (y/n):\n[y] Yes\n[n] No (abort)"
 		)
@@ -329,7 +329,7 @@ class InterfaceCamp:
 
 		test = Camp.edit_volunteer(camp_id = camp_id, volunteer = volunteer, username = self.current_user.username, method = method)
 		if test:
-			print(f"You have {"added" if method=="add" else "removed"} {volunteer} successfully!")
+			print(f"You have {'added' if method == 'add' else 'removed'} {volunteer} successfully!")
 		else:
 			print(f"Failed to {method} {volunteer}!")
 			

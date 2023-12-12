@@ -19,12 +19,12 @@ class Camp:
 
 
 	# attributes
-		# camp_id
-		# location
-		# max_capacity
-		# occupancy (determined by linear scan, not by setting a number)
-		# humanitarian_plan_in
-		# volunteers_in_charge
+	# camp_id
+	# location
+	# max_capacity
+	# occupancy (determined by linear scan, not by setting a number)
+	# humanitarian_plan_in
+	# volunteers_in_charge
 
 	@staticmethod
 	def loadALLCampData():
@@ -99,7 +99,7 @@ class Camp:
 		return True
 	
 
-	#edit camp with either id or other attributtes
+	#edit camp with either id or other attributes
 	@staticmethod
 	def delete_camp(camp_id, username):
 		users = Users.load_users()
