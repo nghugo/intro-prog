@@ -1,3 +1,4 @@
+from curses import REPORT_MOUSE_POSITION
 import json
 import os 
 import datetime 
@@ -6,7 +7,7 @@ from plans import Plans
 from interface_helper import input_until_valid
 from refugees import get_num_families_and_members_by_camp, load_ALL_refugees
 from resource_modified import CampResources
-
+from curses import REPORT_MOUSE_POSITION
 
 class InterfaceGenerateReports:
 	plan_key_to_text = {
@@ -32,7 +33,8 @@ class InterfaceGenerateReports:
 				\n[2] All plans\
 				\n[3] Specific plan and its nested camps\
 				\n[4] All camps\
-				\n[5] Specific camp and its nested resources + refugees",
+				\n[5] Specific camp and its nested resources + refugees\
+				\n[6] remaing reoucses on ended plan",
 			is_valid=lambda user_input: user_input.isdigit() and int(user_input) > 0 and int(user_input) <= 6,
 			validation_message="Unrecognized input. Please choose from the above list."
 		)
@@ -46,16 +48,17 @@ class InterfaceGenerateReports:
 			self.generate_overall_report()
 		if option == "5":
 			self.generate_camp_report()
-		
+		if option == "6":
+   			 self.display_remaining_resources_in_ended_plans()
+
 		# DELETED (merged into generate_specific_plan_report)
 		# if option == ???:
 		# 	self.generate_camps_in_specific_plan_report()
-	
-	
+
 	@classmethod
 	def generate_specific_plan_report(cls):
-			with open('plans.json', 'r') as file:
-				plans_data = json.load(file)
+		with open('plans.json', 'r') as file:
+			plans_data = json.load(file)
 			
 			print("\nAvailable plans: " + ", ".join(plans_data.keys()))
 			plan_name = input("\nEnter the name of the plan to generate the report for (leave empty to abort): ").strip()
@@ -89,7 +92,8 @@ class InterfaceGenerateReports:
 						report += f"  -> {attr}: {val}\n"
 
 			report += f"\n--- End of Report for {plan_name} Plan ---\n"
-#timestamp
+			
+			# timestamp
 			current_time = datetime.datetime.now()
 			timestamp = current_time.strftime("%Y%m%d_%H%M%S")
 			save_report = input("Do you want to save this report as a text file? (y/n): ").lower()
@@ -106,6 +110,8 @@ class InterfaceGenerateReports:
 			
 			print(report)  
 			input("Press Enter to continue...")
+
+
 
 			
 
@@ -125,65 +131,84 @@ class InterfaceGenerateReports:
 			report += f"Status: {plan_data.get('status', 'N/A')}"
 			print(report)
 		print("--- End of Report for All Plans ---\n")
+	
+		save_report = input("Do you want to save this report as a text file? (y/n): ").lower()
+		if save_report == 'y':
+			directory = "reports_timestamp"
+			if not os.path.exists(directory):
+				os.makedirs(directory)
+
+			file_name = f"{directory}/all_plans_report_{datetime.datetime.now().strftime('%Y%m%d_%H%M%S')}.txt"
+			with open(file_name, 'w') as file:
+				file.write(report)
+
+			print(f"Report saved to {file_name}")
 		input("Press Enter to continue...")
 
-	@classmethod
-	def generate_camp_report(cls):		
 
+	@classmethod
+	def generate_camp_report(cls):
 		with open('camps.json', 'r') as file:
 			camps_data = json.load(file)
-		resources_obj = CampResources()  # Initialise with CampResources
 
-		print("\nAvailable camps: " + ", ".join(camps_data.keys()))
-		camp_name = input_until_valid(
-			input_message = f"Enter the name of the camp to generate the report for (leave empty to abort)",
-			is_valid = lambda user_input: user_input == "" or user_input in camps_data,
-			validation_message = f"No data available for the specified camp. Please enter an existing camp name or leave empty to abort."
-		)
-		if camp_name == "":
+		report = "\nAvailable camps: " + ", ".join(camps_data.keys()) + "\n"
+		print(report)
+
+		camp_name = input("Enter the name of the camp to generate the report for (leave empty to abort): ")
+		if camp_name == "" or camp_name not in camps_data:
 			print("Operation aborted.")
 			return
 
-		camp_data = camps_data.get(camp_name, None)  # Get camp data
+		camp_data = camps_data[camp_name]
+		report += f"\n--- Report for {camp_name} ---\n"
+		report += f"Location: {camp_data.get('location', 'N/A')}\n"
+		report += f"Max capacity: {camp_data.get('max_capacity', 'N/A')}\n"
 
-		print(f"\n--- Report for {camp_name} ---\n")
-
-		print(f"Location: {camp_data.get('location', 'N/A')}")
-		print(f"Max capacity: {camp_data.get('max_capacity', 'N/A')}")
-
-		# refugee info
+		# Assuming these functions exist in your code
 		refugee_stats = get_num_families_and_members_by_camp()
 		camp_refugee_data = refugee_stats.get(camp_name, {"num_families": 0, "num_members": 0})
-		print(f"Number of Families: {camp_refugee_data['num_families']}")
-		print(f"Total Number of Members: {camp_refugee_data['num_members']}")
+		report += f"Number of Families: {camp_refugee_data['num_families']}\n"
+		report += f"Total Number of Members: {camp_refugee_data['num_members']}\n"
 
 		plans = Plans.load_all_plans()
 		humanitarian_plan_in = camp_data.get('humanitarian_plan_in', 'N/A')
-		print(f"Humanitarian Plan: {humanitarian_plan_in} ({plans[humanitarian_plan_in]["status"]})")
+		report += f"Humanitarian Plan: {humanitarian_plan_in} ({plans[humanitarian_plan_in]['status']})\n"
+
 		volunteerString = ', '.join(camp_data.get('volunteers_in_charge', []))
-		print(f"Volunteers in Charge: {volunteerString if volunteerString else 'Currently none'}")
-		
-		print()  # newline
-		
-		# Displaying resources in stock
+		report += f"Volunteers in Charge: {volunteerString if volunteerString else 'Currently none'}\n\n"
+
+		resources_obj = CampResources()
 		if not resources_obj.display_ALL_resources(camp_name):
-			print(f"Resources for {camp_name}: None available")
-		
-		# Display refugees in camp
+			report += f"Resources for {camp_name}: None available\n"
+
 		refugees = load_ALL_refugees()
 		if not refugees:
-			print(f"\nRefugees for {camp_name}: None available")
+			report += f"\nRefugees for {camp_name}: None available\n"
 		else:
-			print(f"\nRefugees for {camp_name}:")
+			report += f"\nRefugees for {camp_name}:\n"
 			for refugee_id, refugee_values in refugees.items():
-				print(f"-> {refugee_values["fullname"]} ({refugee_id})")
-				print(f"     Number of members: {refugee_values["number_of_members"]}")
-				print(f"     Medical condition: {refugee_values["medical_condition"]}")
+				report += f"-> {refugee_values['fullname']} ({refugee_id})\n"
+				report += f"     Number of members: {refugee_values['number_of_members']}\n"
+				report += f"     Medical condition: {refugee_values['medical_condition']}\n"
 
-		print(f"\n--- End of report for {camp_name} ---\n")
+		report += f"\n--- End of report for {camp_name} ---\n"
+
+		print(report)  # Print the complete report
+
+		save_report = input("Do you want to save this report as a text file? (y/n): ").lower()
+		if save_report == 'y':
+			directory = "reports_timestamp"
+			if not os.path.exists(directory):
+				os.makedirs(directory)
+
+			file_name = f"{directory}/detailed_report_camp_{datetime.datetime.now().strftime('%Y%m%d_%H%M%S')}.txt"
+			with open(file_name, 'w') as file:
+				file.write(report)
+
+			print(f"Report saved to {file_name}")
+
 		input("Press Enter to continue...")
-
-		
+	
 	# @staticmethod
 	# def generate_camps_in_specific_plan_report():
 	# 	with open('plans.json', 'r') as file:
@@ -247,4 +272,68 @@ class InterfaceGenerateReports:
 
 			print(report)
 			print("--- End of report for all plans ---\n")
+
+			save_report = input("Do you want to save this report as a text file? (y/n): ").lower()
+			if save_report == 'y':
+				directory = "reports_timestamp"
+				if not os.path.exists(directory):
+					os.makedirs(directory)
+
+				file_name = f"{directory}/overall_report_{datetime.datetime.now().strftime('%Y%m%d_%H%M%S')}.txt"
+				with open(file_name, 'w') as file:
+					file.write(report)
+
+				print(f"Report saved to {file_name}")
+
 			input("Press Enter to continue...")
+
+
+
+	
+	@staticmethod
+	def display_remaining_resources_in_ended_plans():
+		
+		with open('plans.json', 'r') as file:
+			plans_data = json.load(file)
+
+		
+		with open('camps.json', 'r') as file:
+			camps_data = json.load(file)
+
+		
+		with open('camp_resources.json', 'r') as file:
+			camp_resources_data = json.load(file)
+
+		
+		ended_plans = [plan_name for plan_name, plan_data in plans_data.items() if plan_data.get('status') == 'Ended']
+
+	
+		report = "\n--- Resources in Ended Plans ---\n"
+		for plan_name in ended_plans:
+			report += f"\nResources for Plan: {plan_name}\n"
+			for camp_name, camp_data in camps_data.items():
+				if camp_data['humanitarian_plan_in'] == plan_name:
+					resources = camp_resources_data.get(camp_name, {})
+					report += f"Resources for camp {camp_name}:\n"
+					for resource, quantity in resources.items():
+						report += f"-> {resource}: {quantity}\n"
+					report += "\n"
+
+		report += f"--- Report generated on {datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')} ---\n"
+		print(report)
+
+		
+		save_report = input("Do you want to save this report as a text file? (y/n): ").lower()
+		if save_report == 'y':
+			directory = "reports_timestamp"
+			if not os.path.exists(directory):
+				os.makedirs(directory)
+
+			file_name = f"{directory}/ended_plans_resources_{datetime.datetime.now().strftime('%Y%m%d_%H%M%S')}.txt"
+			with open(file_name, 'w') as file:
+				file.write(report)
+
+			print(f"Report saved to {file_name}")
+
+		input("Press Enter to continue...")
+
