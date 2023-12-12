@@ -21,7 +21,7 @@ class InterfaceManageResource:
 					\n[3] List all resource profiles under a specific camp (*)\
 					\n[4] Set (overwrite) resource amounts in a specific camp (*)\
 					\n[5] Increment resource amounts in a specific camp (*)\
-					\n[6] Display/Change resource warning thresholds (*)\
+					\n[6] Display camps with insufficient resources/ Change resource warning thresholds (*)\
 					\nPlease note: Options annotated with (*) are only for entities under active plans.",
 				is_valid=lambda user_input: user_input.isdigit() and int(user_input) > 0 and int(user_input) <= 6,
 				validation_message="Unrecognized input. Please choose from the above list.")
@@ -37,31 +37,19 @@ class InterfaceManageResource:
 		if option == "5":
 			self.prompt_change_resources('add')
 		if option == "6":
-			self.prompt_resource_warning()
-
-	# @staticmethod
-	# def validate_input_camp(camp_id,current_user): 
-	# 	users = Users.load_users()
-	# 	camp_data = Camp.loadCampData()
-	# 	is_admin = users[current_user]["is_admin"]
-	# 	if camp_id in camp_data:
-	# 		if current_user in camp_data[camp_id]["volunteers_in_charge"]:
-	# 			return True
-	# 		elif is_admin:
-	# 			return True
-	# 		else:
-	# 			return False
-	# 	return False
+			self.prompt_resource_warning(is_admin = True)
 		
 	def prompt_volunteer_options(self):
 		option = input_until_valid(
-				input_message = f"\n<homepage/manage-resources>\nPlease choose a resource management option below:\
+				input_message = f"\n<homepage/manage-resources>\
+					\nPlease choose a resource management option below:\
 					\n[1] CANCEL\
 					\n[2] List all resource profiles under a specific camp (under an active plan) (*)\
 					\n[3] Set (overwrite) resource amounts in a specific camp (*)\
 					\n[4] Increment resource amounts in a specific camp (*)\
+					\n[5] Display camps with insufficient resources/ View resource warning thresholds (*)\
 					\nPlease note: Options annotated with (*) are only for entities under active plans AND camps that you have access rights to.",
-				is_valid=lambda user_input: user_input.isdigit() and int(user_input) > 0 and int(user_input) <= 4,
+				is_valid=lambda user_input: user_input.isdigit() and int(user_input) > 0 and int(user_input) <= 5,
 				validation_message="Unrecognized input. Please choose from the above list.")
 		
 		if option == "1":
@@ -72,6 +60,8 @@ class InterfaceManageResource:
 			self.prompt_change_resources('update')
 		if option == "4":
 			self.prompt_change_resources("add")
+		if option == "5":
+			self.prompt_resource_warning(is_admin = False)
 	
 	def prompt_display_all_camps(self):
 		print('Resources for all camp(s) under active plan(s):')
@@ -287,8 +277,13 @@ class InterfaceManageResource:
 			left_border = border_char + " "*4 + left_aligned + padding_char*(60-len(text)) +border_char
 			print(left_border)
 		print('-'*68+'\n')
-	def prompt_resource_warning(self):
-			print('Camps facing risk of shortage:\n')
+	
+	def prompt_resource_warning(self, is_admin):
+			
+			if is_admin:
+				print('Camps facing risk of shortage:\n')
+			else:
+				print('Camps accessible by you facing risk of shortage:\n')
 			active_accessible_camps = Camp.load_active_camps_user_has_access_to(self.current_user.username)
 			
 			camp_lower_than_threshold_found = False
@@ -299,9 +294,16 @@ class InterfaceManageResource:
 					camp_lower_than_threshold_found = True
 			
 			if not camp_lower_than_threshold_found:
-				print("None found. No camps face risk of shortage.\n")
+				if is_admin:
+					print("None found. No camps face risk of shortage.\n")
+				else:
+					print("None found. No camps accessible by you face risk of shortage.\n")
 				
 			InterfaceManageResource.print_warning_level_helper()
+
+			if not is_admin:
+				input("Press Enter to continue...")
+				return
 
 			
 			confirm = input_until_valid(input_message="Do you want to edit the thresholds? \n[y] Yes \n[n] No ",
