@@ -251,11 +251,11 @@ class InterfaceManageResource:
 		return test
 	
 	@staticmethod
-	def helper_print_warning(camp_id):
+	def helper_print_warning(camp_id, num_refugees):
 		"""helper method for print warning camp details"""
 		resources = CampResources.load_active_resources()
 		print("-"*29+"Warning"+"-"*29)
-		print(f'Warning: {camp_id} may face risk of resource shortage.\nResources with amount lower than threshold are:')
+		print(f'Warning: {camp_id} with {num_refugees} refugee(s) may face resource shortage\nResources with amount lower than threshold are:')
 		for resource in resources[camp_id]:
 			amount = resources[camp_id][resource]
 			warning_amount = InterfaceManageResource.calculate_threshold(resource,camp_id)
@@ -266,17 +266,17 @@ class InterfaceManageResource:
 	def print_warning_level_helper():
 		resources = CampResources()
 		factor = resources.resource_factor()
-		print('-'*25+'Current thresholds'+'-'*25)
+		print('-'*26+'Current thresholds'+'-'*26)
 		width = 20
 		border_char = "||"
 		padding_char = " "
 		for resource in factor:
 			amount = factor[resource]
-			text = f'The min threshold for {resource+":":20} {amount} per person'
+			text = f'The min threshold for {resource+":":21} {amount} per refugee'
 			left_aligned = text.ljust(width)
 			left_border = border_char + " "*4 + left_aligned + padding_char*(60-len(text)) +border_char
 			print(left_border)
-		print('-'*68+'\n')
+		print('-'*70+'\n')
 	
 	def prompt_resource_warning(self, is_admin):
 			
@@ -289,8 +289,10 @@ class InterfaceManageResource:
 			camp_lower_than_threshold_found = False
 
 			for camp_id in active_accessible_camps:
+				refugee_count_dict = get_num_families_and_members_by_camp()
 				if InterfaceManageResource.Test_underthreshold(camp_id):
-					InterfaceManageResource.helper_print_warning(camp_id)
+					num_refugees= refugee_count_dict[camp_id]["num_members"]
+					InterfaceManageResource.helper_print_warning(camp_id, num_refugees)
 					camp_lower_than_threshold_found = True
 			
 			if not camp_lower_than_threshold_found:
