@@ -1,5 +1,4 @@
 import json
-import uuid
 import pandas as pd
 
 
@@ -71,6 +70,7 @@ class InterfaceManageRefugees:
 
 	def prompt_add_refugee(self):
 		existing_ids = load_ALL_refugees().keys()
+		is_admin = Users.load_users()[self.current_user.username]["is_admin"]
 
 		# Done: volunteer is only able to add refugees to the camps that they have access rights to
 		accessible_camps = Camp.load_active_camps_user_has_access_to(self.current_user.username)
@@ -78,7 +78,7 @@ class InterfaceManageRefugees:
 		
 		camp_id = input_until_valid(
 			input_message=f"Enter camp ID for this refugee, or leave empty to abort:\
-				\n(Note: Camp(s) under active plan(s) accessible by you are: {", ".join(accessible_camps_ids) if accessible_camps_ids else "None found"})",
+				\n(Note: Camp(s) under active plan(s) {"accessible by you " if not is_admin else ""}are: {", ".join(accessible_camps_ids) if accessible_camps_ids else "None found"})",
 			is_valid=lambda user_input: user_input == "" or user_input in accessible_camps_ids,
 			validation_message="Camp ID not found. Please choose from the above list of camp IDs, or leave empty to abort."
 		)
@@ -97,16 +97,17 @@ class InterfaceManageRefugees:
 		
 		print(f"Existing refugee IDs: {", ".join(existing_ids) if existing_ids else "None found."}")
 		refugee_id = input_until_valid(
-			input_message="Enter a unique id to identify this refugee (different from above list), or leave empty to auto-generate:",
+			input_message="Enter a unique id to identify this refugee (different from above list), or leave empty to abort:",
 			is_valid=lambda user_input: user_input == "" or user_input not in existing_ids,
 			validation_message="Refugee id already exists. Please try another id."
 		)
 		if refugee_id == "":
-			refugee_id = uuid.uuid4().hex
+			print("Refugee creation aborted")
+			return
 		
 		fullname = input_until_valid_name(
 			input_message="Enter the full name of the refugee/ representitive of the family:",
-			validation_message="Full name can only contain letters and spaces. Please re-enter."
+			validation_message="Full name can only contain letters and spaces and must be non-empty. Please re-enter."
 		)
 		
 		print(f"Note -> Remaining space(s) in {camp_id}: {remaining_spaces}")
