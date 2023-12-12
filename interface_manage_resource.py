@@ -57,8 +57,8 @@ class InterfaceManageResource:
 				input_message = f"\n<homepage/manage-resources>\nPlease choose a resource management option below:\
 					\n[1] CANCEL\
 					\n[2] List all resource profiles under a specific camp (under an active plan) (*)\
-					\n[4] Set (overwrite) resource amounts in a specific camp (*)\
-					\n[5] Increment resource amounts in a specific camp (*)\
+					\n[3] Set (overwrite) resource amounts in a specific camp (*)\
+					\n[4] Increment resource amounts in a specific camp (*)\
 					\nPlease note: Options annotated with (*) are only for entities under active plans.",
 				is_valid=lambda user_input: user_input.isdigit() and int(user_input) > 0 and int(user_input) <= 4,
 				validation_message="Unrecognized input. Please choose from the above list.")
@@ -68,7 +68,7 @@ class InterfaceManageResource:
 		if option == "2":
 			self.prompt_display_specific_camp()
 		if option == "3":
-			self.prompt_overwrite_resources_amount()
+			self.prompt_change_resources('update')
 		if option == "4":
 			self.prompt_change_resources("add")
 	
