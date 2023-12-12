@@ -52,8 +52,8 @@ class InterfaceCamp:
 		option = input_until_valid(
 			input_message = f"\n<homepage/manage-camps>\nPlease choose an operation on camps below:\
 				\n[1] CANCEL\
-				\n[2] View plans of camps that you have access rights to (active plans only)\
-				\n[3] List all camps that you have access rights to (under active plans)\
+				\n[2] View plans of camps that you have access rights to\
+				\n[3] List all camps that you have access rights to\
 				\n[4] Edit camp details",
 			is_valid = lambda user_input: user_input.isdigit() and int(user_input) > 0 and int(user_input) <= 4,
 			validation_message = "Unrecognized input. Please choose from the above list."
