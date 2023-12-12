@@ -6,15 +6,16 @@ from resource_modified import CampResources
 class Camp:
 	"""camp is used for store and modify data regard with camps;
 
-	 :parameter:
-	 --------------------------------
-	 camp_id(str): refer to camp_1,camp_2,camp_3 (don't overlap even in different humanitarian plan);
-	 location(str): detailed location;
-	 max_capacity(int):  flexible and size of the camp which is varied from hundreds to thousands;
-	 humanitarian_plan_in: the humanitarian plan that the camp is in;
-	 volunteers_in_charge(str_list): a list storing volunteer who in charge of the camp
-	 ### notice: if one volunteer can only charge one camp(of his own),
-	 I am not sure would it be easier to add attribute in volunteer, since storing list in json is some kinda strange
+	:parameter:
+	--------------------------------
+	camp_id(str): refer to camp_1,camp_2,camp_3 (don't overlap even in different humanitarian plan);
+	location(str): detailed location;
+	max_capacity(int):  flexible and size of the camp which is varied from hundreds to thousands;
+	occupancy(int): current amount of people settled in
+	humanitarian_plan_in: the humanitarian plan that the camp is in;
+	volunteers_in_charge(str_list): a list storing volunteer who in charge of the camp
+	### notice: if one volunteer can only charge one camp(of his own),
+	I am not sure would it be easier to add attribute in volunteer, since storing list in json is some kinda strange
 	"""
 
 
@@ -243,16 +244,17 @@ class Camp:
 	def load_ALL_camps_user_has_access_to(cls, username):
 		""" If admin, always allow access
 		If volunteer, only allow access if username is in volunteers_in_charge"""
-		
-		camps = cls.loadALLCampData()
-		filtered_camps = {}
-		users = Users.load_users()
-		for camp_id, camp_values in camps.items():
-			if (users[username]["is_admin"]
-				or username in camp_values["volunteers_in_charge"]):
-				filtered_camps[camp_id] = camp_values
-		return filtered_camps
-		
+		try:
+			with open("camps.json", "r") as camp_json:
+				filtered_camps = {}
+				camps = json.load(camp_json)
+				users = Users.load_users()
+				for camp_id, camp_values in camps.items():
+					if (users[username]["is_admin"]or username in camp_values["volunteers_in_charge"]):
+						filtered_camps[camp_id] = camp_values
+				return filtered_camps
+		except FileNotFoundError:
+			return {}
 	
 	@classmethod
 	def user_has_access(cls, camp_id, username):
@@ -264,5 +266,6 @@ class Camp:
 		if users[username]["is_admin"] or username in camps[camp_id]["volunteers_in_charge"]:
 			return True
 		return False
+			
 
 

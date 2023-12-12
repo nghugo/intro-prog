@@ -55,4 +55,28 @@
     "clothing_packets": 16,
     "sanitation_packets": 10
   }
+    "camp1": {
+        "food_packets": 100,
+        "medical_packets": 100,
+        "water_packets": 100,
+        "shelter_packets": 100,
+        "clothing_packets": 100,
+        "sanitation_packets": 100
+    },
+    "camp2": {
+        "food_packets": 12,
+        "medical_packets": 0,
+        "water_packets": 0,
+        "shelter_packets": 0,
+        "clothing_packets": 2,
+        "sanitation_packets": 0
+    },
+    "camp3": {
+        "food_packets": 2,
+        "medical_packets": 0,
+        "water_packets": 0,
+        "shelter_packets": 0,
+        "clothing_packets": 0,
+        "sanitation_packets": 0
+    }
 }

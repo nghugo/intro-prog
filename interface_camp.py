@@ -101,6 +101,16 @@ class InterfaceCamp:
 			validation_message = "Camp max_capacity must be a positive integer. Please re-enter."
 		)
 
+		plan_keys = Plans.load_plans().keys()
+		print(f"\nExisting plan(s): {','.join(plan_keys) if plan_keys else 'None found'}")
+		humanitarian_plan_in = input_until_valid(
+			input_message= "Please enter the humanitarian plan this camp belongs to. Choose from the above list, or leave empty to abort.",
+			is_valid = lambda user_input: user_input == "" or user_input in plan_keys,
+			validation_message = "Invalid value. Please enter the name of the humanitarian plan from the above list, or leave empty to abort."
+		)
+		if humanitarian_plan_in == "":
+			print("Camp creation aborted.")
+			return
 
 		confirm = input_until_valid(
 			input_message = f"Please confirm details of the new camp (y/n):\
@@ -198,6 +208,7 @@ class InterfaceCamp:
 			attribute = input_until_valid(
 				input_message = "Enter the attribute (camp_id/humanitarian_plan_in/location/max_capacity) to modify:",
 				is_valid = lambda user_input: user_input in {"camp_id", "location", "max_capacity", "humanitarian_plan_in"},
+				validation_message = "Unrecognized input. Please enter a valid field (camp_method id/location/max_capacity/humanitarian_plan_in)."
 				validation_message = "Unrecognized input. Please enter a valid field (camp_id/humanitarian_plan_in/location/max_capacity)."
 			)
 		else:
@@ -284,6 +295,7 @@ class InterfaceCamp:
 		
 		volunteer_list = Camp.get_volunteer_list(camp_id)
 		print(f"\nExisting volunteers in {camp_id}: {', '.join(volunteer_list) if volunteer_list else 'None found'} (total: {len(volunteer_list)})")
+		print(f"\nExisting volunteers in {camp_id}: {', '.join(volunteer_list) if volunteer_list else 'None found'} (total: {len(volunteer_list)})")
 
 		method_char = input_until_valid(
 		input_message= "Please choose an operation, or leave empty to abort:\
@@ -301,6 +313,7 @@ class InterfaceCamp:
 		volunteers_to_add = all_volunteers_from_users.difference(set(volunteer_list))
 
 		if method_char == "a":
+			print(f"Volunteer usernames you can add: {', '.join(volunteers_to_add) if volunteers_to_add else 'None found'}")
 			print(f"Volunteer usernames you can add: {', '.join(volunteers_to_add) if volunteers_to_add else 'None found'}")
 			volunteer = input_until_valid(
 				input_message= f"Please enter the volunteer username you want to add into volunteer list for {camp_id}, or leave empty to abort.",
@@ -320,6 +333,7 @@ class InterfaceCamp:
 			return  # early termination
 		confirm = input_until_valid(
 			input_message = f"Please confirm you want to {method} {volunteer} {'into' if method == 'add' else 'from'} the camp {camp_id} \n[y] Yes\n[n] No (abort)",
+			input_message = f"Please confirm you want to {method} {volunteer} {'into' if method == 'add' else 'from'} the camp {camp_id} \n[y] Yes\n[n] No (abort)",
 			is_valid = lambda user_input: user_input == "y" or user_input == "n",
 			validation_message = "Unrecognized input. Please confirm (y/n):\n[y] Yes\n[n] No (abort)"
 		)
@@ -329,6 +343,7 @@ class InterfaceCamp:
 
 		test = Camp.edit_volunteer(camp_id = camp_id, volunteer = volunteer, username = self.current_user.username, method = method)
 		if test:
+			print(f"You have {'added' if method == 'add' else 'removed'} {volunteer} successfully!")
 			print(f"You have {'added' if method == 'add' else 'removed'} {volunteer} successfully!")
 		else:
 			print(f"Failed to {method} {volunteer}!")
