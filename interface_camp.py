@@ -101,17 +101,6 @@ class InterfaceCamp:
 			validation_message = "Camp max_capacity must be a positive integer. Please re-enter."
 		)
 
-		plan_keys = Plans.load_all_plans().keys()
-		print(f"\nExisting plan(s): {','.join(plan_keys) if plan_keys else 'None found'}")
-		humanitarian_plan_in = input_until_valid(
-			input_message= "Please enter the humanitarian plan this camp belongs to. Choose from the above list, or leave empty to abort.",
-			is_valid = lambda user_input: user_input == "" or user_input in plan_keys,
-			validation_message = "Invalid value. Please enter the name of the humanitarian plan from the above list, or leave empty to abort."
-		)
-		if humanitarian_plan_in == "":
-			print("Camp creation aborted.")
-			return
-
 		confirm = input_until_valid(
 			input_message = f"Please confirm details of the new camp (y/n):\
 				\n->Camp ID: {camp_id}\
