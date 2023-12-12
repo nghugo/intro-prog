@@ -50,9 +50,9 @@ class InterfaceManageUsers:
 			return  # early termination
 
 		plain_text_password = input_until_valid(
-			input_message=f"Please enter the password for the new user (5+ digits)",
+			input_message=f"Please enter the password for the new user (5+ characters)",
 			is_valid=lambda user_input: len(user_input) >= 5,
-			validation_message=f"Unrecognized input. Please specify the password for the new user (5+ digits or leave empty)"
+			validation_message=f"Unrecognized input. Please specify the password for the new user (5+ characters or leave empty)"
 		)
 		
 		salt = secrets.token_hex(16)
@@ -125,6 +125,7 @@ class InterfaceManageUsers:
 		else:
 			Users.modify_user(username, "is_activated", True)
 			print(f"User {username} has been activated.")
+			input("Press Enter to continue...")
 
 	def prompt_deactivate_user(self):
 		self.print_all_users()
@@ -139,9 +140,11 @@ class InterfaceManageUsers:
 		elif username == self.current_user.username:
 			print(
 				"You are not allowed to deactivate your own account. User deactivation aborted.")
+			input("Press Enter to continue...")
 		else:
 			Users.modify_user(username, "is_activated", False)
 			print(f"User {username} has been deactivated.")
+			input("Press Enter to continue...")
 
 	def prompt_modify_user(self):
 		users = Users.load_users()
@@ -172,6 +175,7 @@ class InterfaceManageUsers:
 				# do not allow deactivation or admin disabling of own account
 				print(f"You are not allowed to modify the {
 					  field} field of your own account. Modification aborted.")
+				input("Press Enter to continue...")
 				return
 			value = input_until_valid(
 				input_message=f"Specify the new value for the {field} field (t/f):\n[t] True\n[f] False",
@@ -252,9 +256,11 @@ class InterfaceManageUsers:
 		elif username == self.current_user.username:
 			print(
 				"You are not allowed to delete your own account. User deletion aborted.")
+			input("Press Enter to continue...")
 		else:
 			Users.delete_user(username)
 			print(f"User {username} has been deleted.")
+			input("Press Enter to continue...")
 
 	@staticmethod
 	def list_users():
