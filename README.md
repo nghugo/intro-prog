@@ -81,8 +81,9 @@ Please note:
   - `[3]` Edit my details
 - `[3]` Manage camps (*)
   - `[1]` CANCEL
-  - `[2]` List all camps that you have access rights to (under active plans)
-  - `[3]` Edit camp details
+  - `[2]` View plans of camps that you have access rights to (active plans only)
+  - `[3]` List all camps that you have access rights to (under active plans)
+  - `[4]` Edit camp details
 - `[4]` Manage refugee profiles (*)
   - `[1]` CANCEL
   - `[2]` List all refugee profiles under all camps you have access rights to (under active plans)
