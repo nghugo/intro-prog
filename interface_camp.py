@@ -54,8 +54,8 @@ class InterfaceCamp:
 				\n[1] CANCEL\
 				\n[2] View plans of camps that you have access rights to (active plans only)\
 				\n[3] List all camps that you have access rights to (under active plans)\
-				\n[4] Edit camp details (under active plans)",
-			is_valid = lambda user_input: user_input.isdigit() and int(user_input) > 0 and int(user_input) <= 4,
+				\n[4] Edit camp details",
+			is_valid = lambda user_input: user_input.isdigit() and int(user_input) > 0 and int(user_input) <= 3,
 			validation_message = "Unrecognized input. Please choose from the above list."
 		)
 		if option == "1":
