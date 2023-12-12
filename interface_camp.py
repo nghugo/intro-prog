@@ -5,6 +5,8 @@ from users import Users
 from plans import Plans
 from interface_helper import input_until_valid
 
+from collections import defaultdict
+
 from refugees import get_num_families_and_members_by_camp
 
 class InterfaceCamp:
@@ -50,21 +52,20 @@ class InterfaceCamp:
 		option = input_until_valid(
 			input_message = f"\n<homepage/manage-camps>\nPlease choose an operation on camps below:\
 				\n[1] CANCEL\
-				\n[2] List all camps that you have access rights to (under active plans)\
-				\n[3] Edit camp details",
+				\n[2] View plans of camps that you have access rights to (active plans only)\
+				\n[3] List all camps that you have access rights to (under active plans)\
+				\n[4] Edit camp details",
 			is_valid = lambda user_input: user_input.isdigit() and int(user_input) > 0 and int(user_input) <= 3,
 			validation_message = "Unrecognized input. Please choose from the above list."
 		)
 		if option == "1":
 			return  # CANCEL
 		if option == "2":
-			self.list_active_camps_user_has_access_to()
+			self.view_plans_of_active_accessible_camps()
 		if option == "3":
-			self.prompt_edit_camp_details()
+			self.list_active_camps_user_has_access_to()
 		if option == "4":
-			pass
-		if option == "5":
-			pass
+			self.prompt_edit_camp_details()
 		
 
 	def prompt_add_camp(self):
@@ -395,7 +396,43 @@ class InterfaceCamp:
 		message_value = ", ".join(list(filtered_ALL_camps.keys())) if filtered_ALL_camps else "None found"
 		print(f"{message_key} {message_value}")
 
-	
+	def view_plans_of_active_accessible_camps(self):
+		plans = Plans.load_active_plans()
+		camps = Camp.load_active_camps_user_has_access_to(self.current_user.username)
+
+		planToCamps = defaultdict(list)
+		for camp_id in camps:
+			planToCamps[camps[camp_id]["humanitarian_plan_in"]].append(camp_id)
+
+		planDict = {
+			"description": "Description",
+			"country": "Country",
+			"start_date": "Start Date",
+			"end_date": "End Date",
+			"status": "Status"
+		}
+
+		campDict = {
+			"location": "Location",
+			"start_date": "Start Date",
+			"max_capacity": "Max Capacity",
+		}
+		
+		for plan_id in planToCamps:
+			print("\n" + "-"*10 + f"Plan ID: {plan_id}" + "-"*10)
+			for attr, val in plans[plan_id].items():
+				print(f"{planDict[attr]}: {val}")
+			print(f"Camps under {plan_id}:")
+			for camp_id in planToCamps[plan_id]:
+				print(f"\n  Camp ID: {camp_id}")
+				for attr, val in camps[camp_id].items():
+					if attr in {"humanitarian_plan_in", "volunteers_in_charge"}:
+						continue
+					print(f"  -> {campDict[attr]}: {val}")
+		input("Press Enter to continue ...")
+		
+
+
 
 		
 	
