@@ -41,22 +41,22 @@ class InterfaceManageUsers:
 		users = Users.load_users()
 		self.print_all_users()
 		username = input_until_valid(
-			input_message="Enter the username for the new user (username CANNOT be changed), or leave empty to abort:",
+			input_message="Enter the username for the new user, or leave empty to abort:",
 			is_valid=lambda user_input: user_input == "" or user_input not in users,
-			validation_message="Username is already taken. Please enter a different username for the new user (username CANNOT be changed). Leave empty to abort:"
+			validation_message="Username is already taken. Please enter a different username for the new user. Leave empty to abort:"
 		)
 		if username == "":
 			print("User creation aborted.")
 			return  # early termination
 
-		password = input_until_valid(
-			input_message="Enter the password for the new user:",
-			is_valid=lambda user_input: user_input != "",
-			validation_message="Password cannot be empty"
-			)
+		plain_text_password = input_until_valid(
+			input_message=f"Please enter the password for the new user (5+ digits)",
+			is_valid=lambda user_input: len(user_input) >= 5,
+			validation_message=f"Unrecognized input. Please specify the password for the new user (5+ digits or leave empty)"
+		)
 		
 		salt = secrets.token_hex(16)
-		hashed_password = hashlib.sha256((password + salt).encode('utf-8')).hexdigest()
+		hashed_password = hashlib.sha256((plain_text_password + salt).encode('utf-8')).hexdigest()
 
 		fullname = input_until_valid_name(
 			input_message="Enter the full name of the new user:",
@@ -85,8 +85,8 @@ class InterfaceManageUsers:
 
 		confirm = input_until_valid(
 			input_message=f"Please confirm details of the new user (y/n):\
-				\n->Username: {username} (please note: username CANNOT be changed)\
-				\n->Password: {password}\
+				\n->Username: {username}\
+				\n->Password: {plain_text_password}\
 				\n->Full Name: {fullname}\
 				\n->Email: {email}\
 				\n->phone_number: {phone_number}\
@@ -200,7 +200,11 @@ class InterfaceManageUsers:
 				validation_message=f"Unrecognized input. Please specify the new phone number (5+ digits or leave empty)"
 			)
 		elif field == "password":
-			plain_text_password = input_until_valid(f"Please enter the new password:") 
+			plain_text_password = input_until_valid(
+				input_message=f"Please enter the new password (5+ characters)",
+				is_valid=lambda user_input: len(user_input) >= 5,
+				validation_message=f"Unrecognized input. Please specify the new password (5+ characters)"
+			)
 			salt = users[username]["salt"]
 			hashed_password = hashlib.sha256((plain_text_password + salt).encode('utf-8')).hexdigest()
 			value = hashed_password
@@ -258,6 +262,10 @@ class InterfaceManageUsers:
 		print("--- Users are as follows ---")
 		# use pandas for pretty print
 		users_df = pd.DataFrame.from_dict(users).transpose()
+
+		users_df = users_df.loc[:, ~users_df.columns.isin(["salt"])]
+		users_df["password"] = "[HIDDEN]"
+
 		print(users_df)
 		print("--- End of users list ---")
 		input("Press Enter to continue...")

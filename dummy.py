@@ -1,6 +1,4 @@
 import json
-import secrets
-import hashlib
 
 # password for most users are 111
 # exceptions: user a has password a, and user v has password v
@@ -71,56 +69,88 @@ dummy_users = {
 }
 
 dummy_camps = {
-    "camp1": {
-        "location": "China",
-        "max_capacity": 20,
-        "humanitarian_plan_in": "planA",
-        "volunteers_in_charge": ["volunteer1", "v"]
-    },
-    "camp2": {
-        "location": "Ukraine",
-        "max_capacity": 224,
-        "humanitarian_plan_in": "planB",
-        "volunteers_in_charge": ["volunteer1", "volunteer2", "v"]
-    },
-    "camp3": {
-        "location": "UK",
-        "max_capacity": 30,
-        "humanitarian_plan_in": "planC",
-        "volunteers_in_charge": ["v"]
-    },
-    "camp4": {
-        "location": "China",
-        "max_capacity": 10,
-        "humanitarian_plan_in": "planA",
-        "volunteers_in_charge": ["volunteer2"]
-    },
-    "camp5": {
-        "location": "Ukraine",
-        "max_capacity": 13,
-        "humanitarian_plan_in": "planB",
-        "volunteers_in_charge": ["volunteer1", "v"]
-    }
+  "camp1": {
+    "humanitarian_plan_in": "planB",
+    "location": "London",
+    "max_capacity": 20,
+    "volunteers_in_charge": [
+      "volunteer1",
+      "v"
+    ]
+  },
+  "camp2": {
+    "humanitarian_plan_in": "planA",
+    "location": "UCL Engineering Building",
+    "max_capacity": 224,
+    "volunteers_in_charge": [
+      "volunteer1",
+      "volunteer2",
+      "v"
+    ]
+  },
+  "camp3": {
+    "humanitarian_plan_in": "planA",
+    "location": "JBS Haldane Student Hub",
+    "max_capacity": 30,
+    "volunteers_in_charge": [
+      "v"
+    ]
+  },
+  "camp4": {
+    "humanitarian_plan_in": "planA",
+    "location": "Birkbeck",
+    "max_capacity": 10,
+    "volunteers_in_charge": [
+      "volunteer2"
+    ]
+  },
+  "camp5": {
+    "humanitarian_plan_in": "planB",
+    "location": "Euston Station",
+    "max_capacity": 13,
+    "volunteers_in_charge": [
+      "volunteer1",
+      "v"
+    ]
+  },
+  "camp6": {
+    "humanitarian_plan_in": "Ukraine war",
+    "location": "Kyiv",
+    "max_capacity": 130,
+    "volunteers_in_charge": [
+      "volunteer1",
+      "v"
+    ]
+  },
+  "camp7": {
+    "humanitarian_plan_in": "Ukraine war",
+    "location": "Outside Kyiv",
+    "max_capacity": 120,
+    "volunteers_in_charge": [
+      "volunteer2",
+      "v"
+    ]
+  }
 }
 
 dummy_plans = {
   "Ukraine war": {
     "description": "Helping victims of Ukraine war",
-    "location": "kyiv",
+    "country": "Ukraine",
     "start_date": "24/12/2022",
     "end_date": "12/01/2024",
     "status": "Active"
   },
   "planA": {
     "description": "UCL campaign for refugee education",
-    "location": "ucl",
+    "country": "United Kingdom",
     "start_date": "25/09/2023",
-    "end_date": "12/01/2024",
-    "status": "Active"
+    "end_date": "27/09/2023",
+    "status": "Ended"
   },
   "planB": {
     "description": "Helping Asylum Seekers and refugees in London since 2023",
-    "location": "london",
+    "country": "United Kingdom",
     "start_date": "05/01/2023",
     "end_date": "12/01/2024",
     "status": "Active"
@@ -128,100 +158,131 @@ dummy_plans = {
 }
 
 dummy_refugees = {
-    "refugee1": {
-        "fullname": "John Doe",
-        "number_of_members": 1,
-        "camp_id": "camp1",
-        "medical_condition": "food starved"
-    },
-    "refugee2": {
-        "fullname": "Jane Smith",
-        "number_of_members": 3,
-        "camp_id": "camp1",
-        "medical_condition": "healthy"
-    },
-    "refugee3": {
-        "fullname": "Pepe the Frog",
-        "number_of_members": 3,
-        "camp_id": "camp3",
-        "medical_condition": "dehydrated"
-    },
-    "refugee4": {
-        "fullname": "Saul Goodman",
-        "number_of_members": 3,
-        "camp_id": "camp2",
-        "medical_condition": "broken bones"
-    },
-    "f2db20d5525c49c2adaca68b15795f36": {
-        "fullname": "Hugo",
-        "number_of_members": 1,
-        "camp_id": "camp3",
-        "medical_condition": "hungry"
-    }
+  "refugee1": {
+    "fullname": "John Doe",
+    "number_of_members": 1,
+    "camp_id": "camp1",
+    "medical_condition": "food starved"
+  },
+  "refugee2": {
+    "fullname": "Jane Smith",
+    "number_of_members": 3,
+    "camp_id": "camp1",
+    "medical_condition": "healthy"
+  },
+  "refugee3": {
+    "fullname": "Pepe the Frog",
+    "number_of_members": 3,
+    "camp_id": "camp3",
+    "medical_condition": "dehydrated"
+  },
+  "refugee4": {
+    "fullname": "Saul Goodman",
+    "number_of_members": 3,
+    "camp_id": "camp2",
+    "medical_condition": "broken bones"
+  },
+  "refugee5": {
+    "fullname": "Hugo",
+    "number_of_members": 1,
+    "camp_id": "camp3",
+    "medical_condition": "food starved"
+  },
+  "refugee6": {
+    "fullname": "Hugo",
+    "number_of_members": 1,
+    "camp_id": "camp5",
+    "medical_condition": "healthy"
+  },
+  "refugee7": {
+    "fullname": "Hugo R",
+    "number_of_members": 12,
+    "camp_id": "camp6",
+    "medical_condition": "healthy"
+  },
+  "refugee8": {
+    "fullname": "Hugo N",
+    "number_of_members": 1,
+    "camp_id": "camp4",
+    "medical_condition": "dehydrated"
+  },
+  "refugee9": {
+    "fullname": "Hugo UCL",
+    "number_of_members": 3,
+    "camp_id": "camp5",
+    "medical_condition": "minor injuries"
+  }
 }
 
 dummy_resources = {
   "camp1": {
-    "food_packets": 10,
+    "food_packets": 30,
     "medical_packets": 10,
-    "water_packets": 5,
-    "shelter_packets": 5,
-    "clothing_packets": 5,
-    "first_aid_packets": 5,
-    "baby_packets": 3,
+    "water_packets": 22,
+    "shelter_packets": 20,
+    "clothing_packets": 20,
     "sanitation_packets": 10
   },
   "camp2": {
-    "food_packets": 2,
-    "medical_packets": 3,
-    "water_packets": 4,
-    "shelter_packets": 5,
-    "clothing_packets": 6,
-    "first_aid_packets": 7,
-    "baby_packets": 8,
-    "sanitation_packets": 9
+    "food_packets": 23,
+    "medical_packets": 2,
+    "water_packets": 20,
+    "shelter_packets": 20,
+    "clothing_packets": 21,
+    "sanitation_packets": 12
   },
   "camp3": {
-    "food_packets": 0,
-    "medical_packets": 0,
-    "water_packets": 0,
-    "shelter_packets": 0,
-    "clothing_packets": 0,
-    "first_aid_packets": 0,
-    "baby_packets": 0,
-    "sanitation_packets": 0
+    "food_packets": 10,
+    "medical_packets": 10,
+    "water_packets": 20,
+    "shelter_packets": 20,
+    "clothing_packets": 10,
+    "sanitation_packets": 10
   },
   "camp4": {
-    "food_packets": 0,
-    "medical_packets": 0,
-    "water_packets": 0,
+    "food_packets": 10,
+    "medical_packets": 5,
+    "water_packets": 12,
     "shelter_packets": 0,
-    "clothing_packets": 0,
-    "first_aid_packets": 0,
-    "baby_packets": 0,
-    "sanitation_packets": 0
+    "clothing_packets": 6,
+    "sanitation_packets": 3
   },
   "camp5": {
-    "food_packets": 0,
+    "food_packets": 12,
     "medical_packets": 0,
-    "water_packets": 0,
+    "water_packets": 15,
     "shelter_packets": 0,
     "clothing_packets": 0,
-    "first_aid_packets": 0,
-    "baby_packets": 0,
     "sanitation_packets": 0
+  },
+  "camp6": {
+    "food_packets": 12,
+    "medical_packets": 12,
+    "water_packets": 21,
+    "shelter_packets": 7,
+    "clothing_packets": 16,
+    "sanitation_packets": 13
+  },
+  "camp7": {
+    "food_packets": 15,
+    "medical_packets": 2,
+    "water_packets": 13,
+    "shelter_packets": 23,
+    "clothing_packets": 16,
+    "sanitation_packets": 10
   }
+}
+
+dummy_thresholds = {
+  "food_packets_factor": 2,
+  "medical_packets_factor": 1,
+  "water_packets_factor": 3,
+  "shelter_packets_factor": 1,
+  "clothing_packets_factor": 1,
+  "sanitation_packets_factor": 2
 }
 
 
 def overwrite_json(object, file):
     with open(file, "w") as json_file:
         json.dump(object, json_file, indent=2)
-
-# initial_password = "111"
-# for username, user_info in dummy_users.items():
-#     salt = secrets.token_hex(16)
-#     hashed_password = hashlib.sha256((initial_password + salt).encode('utf-8')).hexdigest()
-#     user_info["password"] = hashed_password
-#     user_info["salt"] = salt
-# overwrite_json(dummy_users, 'users.json')

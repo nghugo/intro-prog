@@ -22,7 +22,6 @@ def update_all_camp_values_in_refugees(from_camp, to_camp):
 
 def update_all_camp_values_in_camp_resources(from_camp, to_camp):
     """ Changes all camp_id == from_camp to to_camp for all resources in refugees.json """
-    # TODO Have the edit resource method call this method -> Relocate resources
     try:
         with open("camp_resources.json", "r") as camp_resources_file:
             camp_resources = json.load(camp_resources_file)
@@ -35,7 +34,6 @@ def update_all_camp_values_in_camp_resources(from_camp, to_camp):
 
 
 def update_all_plan_values_in_camps(from_plan, to_plan):
-    # TODO Have the modify_plan method in plans.py call this method -> Relocate camps
     try:
         with open("camps.json", "r") as camps_file:
             camps = json.load(camps_file)
@@ -46,4 +44,5 @@ def update_all_plan_values_in_camps(from_plan, to_plan):
                 json.dump(camps, file, indent = 2)
     except:
         print("\nError relocating camps by plan\n")
+
 

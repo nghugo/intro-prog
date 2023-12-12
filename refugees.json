@@ -23,10 +23,34 @@
     "camp_id": "camp2",
     "medical_condition": "broken bones"
   },
-  "f2db20d5525c49c2adaca68b15795f36": {
+  "refugee5": {
     "fullname": "Hugo",
     "number_of_members": 1,
     "camp_id": "camp3",
-    "medical_condition": "hungry"
+    "medical_condition": "food starved"
+  },
+  "refugee6": {
+    "fullname": "Hugo",
+    "number_of_members": 1,
+    "camp_id": "camp5",
+    "medical_condition": "healthy"
+  },
+  "refugee7": {
+    "fullname": "Hugo R",
+    "number_of_members": 12,
+    "camp_id": "camp6",
+    "medical_condition": "healthy"
+  },
+  "refugee8": {
+    "fullname": "Hugo N",
+    "number_of_members": 1,
+    "camp_id": "camp4",
+    "medical_condition": "dehydrated"
+  },
+  "refugee9": {
+    "fullname": "Hugo UCL",
+    "number_of_members": 3,
+    "camp_id": "camp5",
+    "medical_condition": "minor injuries"
   }
 }

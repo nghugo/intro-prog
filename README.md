@@ -1,4 +1,10 @@
 # intro-prog
 Introductory Programming Project Group 1
 
-Requires Python version 3.12.0 or above
+### Dependencies
+- Requires `python` version `3.12.0` or above
+- Requires `pandas`
+
+### Running the app
+- This is a command line interface app
+- Please clone all files and run `main.py` with `python` from the terminal
