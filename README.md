@@ -9,9 +9,9 @@ Introductory Programming Project Group 1
 - This is a command line interface app
 - Please clone all files and run `main.py` with `python` from the terminal (depending on your installation, this could be `python main.py`, `python3 main.py`, or `py main.py`)
 
-### Navigation Schematic for Menu Options
+### Navigation Schematic for Admin Menu Options
 
-#### Homepage
+#### Homepage (Admin)
 - `[1]` Log out
 - `[2]` Manage my user account
   - `[1]` CANCEL
@@ -71,4 +71,33 @@ Please note:
 - Options annotated with `(*)` are only available for entities under active plans.
 - To view entities under ended plans, choose option `[8]` from the homepage.
 
+### Navigation Schematic for Volunteer Menu Options
+
+#### Homepage (Volunteer)
+- `[1]` Log out
+- `[2]` Manage my user account
+  - `[1]` CANCEL
+  - `[2]` List my details
+  - `[3]` Edit my details
+- `[3]` Manage camps (*)
+  - `[1]` CANCEL
+  - `[2]` List all camps that you have access rights to (under active plans)
+  - `[3]` Edit camp details
+- `[4]` Manage refugee profiles (*)
+  - `[1]` CANCEL
+  - `[2]` List all refugee profiles under all camps you have access rights to (under active plans)
+  - `[3]` List all refugee profiles under a specific camp (under an active plan)
+  - `[4]` Add a refugee profile
+  - `[5]` Edit a refugee profile
+  - `[6]` Delete a refugee profile
+- `[5]` Manage resources (*)
+  - `[1]` CANCEL
+  - `[2]` List all resource profiles under a specific camp (under an active plan) (*)
+  - `[3]` Set (overwrite) resource amounts in a specific camp (*)
+  - `[4]` Increment resource amounts in a specific camp (*)
+  - `[5]` Display camps with insufficient resources/ View resource warning thresholds (*)
+
+Please note:
+- Options annotated with `(*)` are only available for entities under active plans AND camps that you have access rights to.
+- To view entities under ended plans, log in as admin instead.
 
