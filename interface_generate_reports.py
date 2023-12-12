@@ -32,7 +32,7 @@ class InterfaceGenerateReports:
                 \n[3] Specific plan and its nested camps\
                 \n[4] All camps\
                 \n[5] Specific camp and its nested resources + refugees\
-                \n[6] Resources on ended plan",
+                \n[6] All resources in ended plans",
             is_valid=lambda user_input: user_input.isdigit() and int(user_input) > 0 and int(user_input) <= 6,
             validation_message="Unrecognized input. Please choose from the above list."
         )
@@ -43,16 +43,11 @@ class InterfaceGenerateReports:
         if option == "3":
             self.generate_specific_plan_report()
         if option == "4":
-            self.generate_overall_report()
+            self.generate_all_camps_report()
         if option == "5":
-            self.generate_camp_report()
+            self.generate_specific_camp_report()
         if option == "6":
-                self.display_remaining_resources_in_ended_plans()
-
-        # DELETED (merged into generate_specific_plan_report)
-        # if option == ???:
-        # 	self.generate_camps_in_specific_plan_report()
-
+            self.display_remaining_resources_in_ended_plans()
 
 
     @classmethod
@@ -96,14 +91,18 @@ class InterfaceGenerateReports:
             # timestamp
             current_time = datetime.datetime.now()
             timestamp = current_time.strftime("%Y%m%d_%H%M%S")
-            save_report = input("Do you want to save this report as a text file? (y/n): ").lower()
+            save_report = input_until_valid(
+                input_message = "Do you want to save this report as a text file? (y/n):",
+                is_valid = lambda user_input: user_input == "y" or user_input == "n",
+                validation_message = "Unrecognized input. Please confirm if you want to sasve this report as a text file (y/n):\n[y] Yes\n[n] No (abort)"
+            ).lower()
             
             if save_report == 'y': 
                 directory = "reports_timestamp"  
                 if not os.path.exists(directory):
                     os.makedirs(directory)  
                 
-                file_name = f"{directory}/report_{plan_name}_{timestamp}.txt"
+                file_name = f"{directory}/{plan_name}_{timestamp}.txt"
                 with open(file_name, 'w') as file:
                     file.write(report)
                 print(f"Report for {plan_name} has been saved to {file_name}")
@@ -132,13 +131,17 @@ class InterfaceGenerateReports:
             print(report)
         print("--- End of Report for All Plans ---\n")
     
-        save_report = input("Do you want to save this report as a text file? (y/n): ").lower()
+        save_report = input_until_valid(
+        input_message = "Do you want to save this report as a text file? (y/n):",
+        is_valid = lambda user_input: user_input == "y" or user_input == "n",
+        validation_message = "Unrecognized input. Please confirm if you want to sasve this report as a text file (y/n):\n[y] Yes\n[n] No (abort)"
+    ).lower()
         if save_report == 'y':
             directory = "reports_timestamp"
             if not os.path.exists(directory):
                 os.makedirs(directory)
 
-            file_name = f"{directory}/all_plans_report_{datetime.datetime.now().strftime('%Y%m%d_%H%M%S')}.txt"
+            file_name = f"{directory}/all_plans_{datetime.datetime.now().strftime('%Y%m%d_%H%M%S')}.txt"
             with open(file_name, 'w') as file:
                 file.write(report)
 
@@ -147,7 +150,7 @@ class InterfaceGenerateReports:
 
 
     @classmethod
-    def generate_camp_report(cls):
+    def generate_specific_camp_report(cls):
         with open('camps.json', 'r') as file:
             camps_data = json.load(file)
 
@@ -194,13 +197,17 @@ class InterfaceGenerateReports:
         report += f"\n--- End of report for {camp_name} ---\n"
         print(report)  # Print the complete report
 
-        save_report = input("Do you want to save this report as a text file? (y/n): ").lower()
+        save_report = input_until_valid(
+        input_message = "Do you want to save this report as a text file? (y/n):",
+        is_valid = lambda user_input: user_input == "y" or user_input == "n",
+        validation_message = "Unrecognized input. Please confirm if you want to sasve this report as a text file (y/n):\n[y] Yes\n[n] No (abort)"
+    ).lower()
         if save_report == 'y':
             directory = "reports_timestamp"
             if not os.path.exists(directory):
                 os.makedirs(directory)
 
-            file_name = f"{directory}/detailed_report_camp_{datetime.datetime.now().strftime('%Y%m%d_%H%M%S')}.txt"
+            file_name = f"{directory}/{camp_name}_{datetime.datetime.now().strftime('%Y%m%d_%H%M%S')}.txt"
             with open(file_name, 'w') as file:
                 file.write(report)
 
@@ -251,7 +258,7 @@ class InterfaceGenerateReports:
 
     
     @staticmethod
-    def generate_overall_report():
+    def generate_all_camps_report():
             with open('camps.json', 'r') as file:
                 camps_data = json.load(file)
             print("\n--- Report for all plans ---")
@@ -272,13 +279,17 @@ class InterfaceGenerateReports:
             print(report)
             print("--- End of report for all plans ---\n")
 
-            save_report = input("Do you want to save this report as a text file? (y/n): ").lower()
+            save_report = input_until_valid(
+        input_message = "Do you want to save this report as a text file? (y/n):",
+        is_valid = lambda user_input: user_input == "y" or user_input == "n",
+        validation_message = "Unrecognized input. Please confirm if you want to sasve this report as a text file (y/n):\n[y] Yes\n[n] No (abort)"
+    ).lower()
             if save_report == 'y':
                 directory = "reports_timestamp"
                 if not os.path.exists(directory):
                     os.makedirs(directory)
 
-                file_name = f"{directory}/overall_report_{datetime.datetime.now().strftime('%Y%m%d_%H%M%S')}.txt"
+                file_name = f"{directory}/all_camps_{datetime.datetime.now().strftime('%Y%m%d_%H%M%S')}.txt"
                 with open(file_name, 'w') as file:
                     file.write(report)
 
@@ -294,15 +305,12 @@ class InterfaceGenerateReports:
         
         with open('plans.json', 'r') as file:
             plans_data = json.load(file)
-
         
         with open('camps.json', 'r') as file:
             camps_data = json.load(file)
-
         
         with open('camp_resources.json', 'r') as file:
             camp_resources_data = json.load(file)
-
         
         ended_plans = [plan_name for plan_name, plan_data in plans_data.items() if plan_data.get('status') == 'Ended']
 
@@ -322,7 +330,11 @@ class InterfaceGenerateReports:
         print(report)
 
         
-        save_report = input("Do you want to save this report as a text file? (y/n): ").lower()
+        save_report = input_until_valid(
+        input_message = "Do you want to save this report as a text file? (y/n):",
+        is_valid = lambda user_input: user_input == "y" or user_input == "n",
+        validation_message = "Unrecognized input. Please confirm if you want to sasve this report as a text file (y/n):\n[y] Yes\n[n] No (abort)"
+        ).lower()
         if save_report == 'y':
             directory = "reports_timestamp"
             if not os.path.exists(directory):
@@ -335,4 +347,3 @@ class InterfaceGenerateReports:
             print(f"Report saved to {file_name}")
 
         input("Press Enter to continue...")
-
