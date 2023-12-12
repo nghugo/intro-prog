@@ -86,14 +86,12 @@ class Camp:
 
 		data_resource[camp_id] = {  #set all initial value into zero
 			"food_packets": 0,
-			"medical_packets": 0,
-			"water_packets": 0,
-			"shelter_packets": 0,
-			"clothing_packets": 0,
-			"first_aid_packets": 0,
-			"baby_packets": 0,
-			"sanitation_packets": 0,
-		}
+            "medical_packets": 0,
+            "water_packets": 0,
+            "shelter_packets": 0,
+            "clothing_packets": 0,
+            "sanitation_packets": 0,
+        }
 
 		with open('camp_resources.json', 'w') as json_file:
 			json.dump(data_resource, json_file, indent = 2)
@@ -266,7 +264,5 @@ class Camp:
 		if users[username]["is_admin"] or username in camps[camp_id]["volunteers_in_charge"]:
 			return True
 		return False
-
-
 
 
