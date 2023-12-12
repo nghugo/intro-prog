@@ -18,10 +18,10 @@ class InterfaceManageResource:
 					\n[1] CANCEL\
 					\n[2] List all resource profiles under all camps (*)\
 					\n[3] List all resource profiles under a specific camp (*)\
-					\n[4] Update (overwrite) resources of a specific camp (*)\
-					\n[5] Add resources to a specific camp (*)\
+					\n[4] Set (overwrite) resource amounts in a specific camp (*)\
+					\n[5] Increment resource amounts in a specific camp (*)\
 					\n[6] Limited resources warning (*)\
-					\nPlease note: options annotated with (*) are only for entities under active plans",
+					\nPlease note: Options annotated with (*) are only for entities under active plans.",
 				is_valid=lambda user_input: user_input.isdigit() and int(user_input) > 0 and int(user_input) <= 6,
 				validation_message="Unrecognized input. Please choose from the above list.")
 		
@@ -57,9 +57,9 @@ class InterfaceManageResource:
 				input_message = f"\n<homepage/manage-resources>\nPlease choose a resource management option below:\
 					\n[1] CANCEL\
 					\n[2] List all resource profiles under a specific camp (under an active plan) (*)\
-					\n[3] Update (overwrite) resources of a specific camp (under an active plan) (*)\
-					\n[4] Add resources to a specific camp (under an active plan) (*)\
-					\nPlease note: options annotated with (*) are only for entities under active plans",
+					\n[4] Set (overwrite) resource amounts in a specific camp (*)\
+					\n[5] Increment resource amounts in a specific camp (*)\
+					\nPlease note: Options annotated with (*) are only for entities under active plans.",
 				is_valid=lambda user_input: user_input.isdigit() and int(user_input) > 0 and int(user_input) <= 4,
 				validation_message="Unrecognized input. Please choose from the above list.")
 		
@@ -68,7 +68,7 @@ class InterfaceManageResource:
 		if option == "2":
 			self.prompt_display_specific_camp()
 		if option == "3":
-			self.prompt_update_resources()
+			self.prompt_overwrite_resources_amount()
 		if option == "4":
 			self.prompt_change_resources("add")
 	
@@ -170,70 +170,55 @@ class InterfaceManageResource:
 		print("detailed information of this camp:")
 		print(df.loc[camp_id])
 		not_exit = True
+		
 		while not_exit:
-			resource_to_edit = input_until_valid(input_message="Enter the resource to edit: food_packets/medical_packets/water_packets/shelter_packets/clothing_packets/first_aid_packets/baby_packet/sanitation_packets), or leave empty to abort:",
+			resource_to_edit = input_until_valid(input_message="Enter the resource to edit: food_packets/medical_packets/water_packets/shelter_packets/clothing_packets/sanitation_packets), or leave empty to abort:",
 												is_valid=lambda user_input: user_input in CampResources.load_active_resources()[camp_id] or user_input == "",
 												validation_message="Unrecognized input. Please enter again.")
 			if resource_to_edit == "":
 				print("Aborted resource amount modification.")
 				return
 			
-			# new_amount = input_until_valid(input_message= f"Enter the new amount for {resource_to_edit} or leave empty to abort: ",
-			# 										is_valid=lambda user_input: user_input.isdigit() or user_input == "",
-			# 										validation_message="Unrecognized input. Please enter again.")
-			# 	if new_amount == "":
-			# 		print("Aborted resource amount modification.")
-			# 		return
 			
-			
-			amount_edit = input_until_valid(input_message= f"Enter the new amount for {resource_to_edit} or press enter to return: ",
+			amount_edit = input_until_valid(input_message= f"Enter the new amount for {resource_to_edit} or leave empty to abort: ",
 												is_valid=lambda user_input: user_input.isdigit() or user_input == "",
-												validation_message="Unrecognized type, please enter again.")
-			# if amount_edit == "":
-			# 	print("edition aborted.")
-			# 	return
-			
-			# confirm = input_until_valid(input_message="Please confirm your edition for change "+resource_to_edit+ "to amount"+ amount_edit+" \n[y] Yes\n[n] No (abort)",
-			# 							is_valid = lambda user_input: user_input == "y" or user_input == "n",
-			# 							validation_message="Unrecognized input. Please confirm (y/n):\n[y] Yes\n[n] No (abort)")
-			
-			# if confirm == "n":
-			# 	print(f"Camp information modification aborted.")
-			# 	return
-			# resource = CampResources()
-			# test = resource.update_resources(camp_id,resource_to_edit,int(amount_edit))
+												validation_message="Unrecognized input. Please enter again.")
+			if amount_edit == "":
+				print("Aborted resource amount modification.")
+				return
 
 
 			if method == 'update':
-				confirm = input_until_valid(input_message=f"Please confirm your edition for change {resource_to_edit} to amount {amount_edit} \n[y] Yes\n[n] No (abort)",
+				confirm = input_until_valid(input_message=f"Please confirm that you want to set the amount of {resource_to_edit} to {amount_edit} \n[y] Yes\n[n] No (abort)",
 										is_valid = lambda user_input: user_input == "y" or user_input == "n",
 										validation_message="Unrecognized input. Please confirm (y/n):\n[y] Yes\n[n] No (abort)")
 				if confirm == "n":
 					print(f"Camp information modification aborted.")
 					return          
 				resource = CampResources()
-				test = resource.update_resources(camp_id,resource_to_edit,int(amount_edit))
+				test = resource.overwrite_resources_amount(camp_id,resource_to_edit,int(amount_edit))
 			else:  # method == 'add'
-				confirm = input_until_valid(input_message=f"Please confirm your edition for adding {amount_edit} to {resource_to_edit} \n[y] Yes\n[n] No (abort)",
+				
+				current_resource_amount = int(CampResources.load_ALL_resources()[camp_id][resource_to_edit])
+
+				confirm = input_until_valid(input_message=f"Please confirm that you want to add {amount_edit} units of {resource_to_edit} (result: {int(amount_edit) + current_resource_amount}) \n[y] Yes\n[n] No (abort)",
 										is_valid = lambda user_input: user_input == "y" or user_input == "n",
 										validation_message="Unrecognized input. Please confirm (y/n):\n[y] Yes\n[n] No (abort)")
 				if confirm == "n":
 					print(f"Camp information modification aborted.")
 					return
 				resource = CampResources()
-				test = resource.adjust_resources(camp_id,resource_to_edit,int(amount_edit))
+				test = resource.increment_resources_amount(camp_id,resource_to_edit,int(amount_edit))
 			
 
-
-
 			if test:
-				print(f"You've changed the {resource_to_edit} successfully!")
+				print(f"You've changed the {resource_to_edit} amount successfully!")
 			else:
-				print(f'Failed to change {resource_to_edit}')
+				print(f'Failed to change {resource_to_edit} amount')
 
-			exit_confirm = input_until_valid(input_message="Do you want to edit other resource amounts?\n[y] Yes\n[n] No (abort)",
+			exit_confirm = input_until_valid(input_message="Do you want to edit other resource amounts?\n[y] Yes\n[n] No (leave)",
 										is_valid = lambda user_input: user_input == "y" or user_input == "n",
-										validation_message="Unrecognized input. Please confirm (y/n):\n[y] Yes\n[n] No (abort)")
+										validation_message="Unrecognized input. Please confirm (y/n):\n[y] Yes\n[n] No (leave)")
 			
 			if exit_confirm == 'y':
 				not_exit = True

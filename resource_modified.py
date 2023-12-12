@@ -82,15 +82,15 @@ class CampResources:
 		return False
 
 
-	def update_resources(self, camp_id, resource_kind, amount):
-		"""Adjust the amount of a resource by a relative amount (positive or negative)."""
+	def overwrite_resources_amount(self, camp_id, resource_kind, amount):
+		"""Set the amount of a resource to the given value."""
 		if camp_id in self.resources and resource_kind in self.resources[camp_id]:
 			self.resources[camp_id][resource_kind] = amount
 			self.save_resources()
 			return True
 		return False
 	
-	def adjust_resources(self, camp_id, resource_kind, relative_amount):
+	def increment_resources_amount(self, camp_id, resource_kind, relative_amount):
 		"""Adjust the amount of a resource by a relative amount (positive or negative)."""
 		if camp_id in self.resources and resource_kind in self.resources[camp_id]:
 			self.resources[camp_id][resource_kind] += relative_amount
