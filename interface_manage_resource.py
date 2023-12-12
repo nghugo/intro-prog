@@ -21,7 +21,7 @@ class InterfaceManageResource:
 					\n[3] List all resource profiles under a specific camp (*)\
 					\n[4] Set (overwrite) resource amounts in a specific camp (*)\
 					\n[5] Increment resource amounts in a specific camp (*)\
-					\n[6] Change resource warning thresholds (*)\
+					\n[6] Display/Change resource warning thresholds (*)\
 					\nPlease note: Options annotated with (*) are only for entities under active plans.",
 				is_valid=lambda user_input: user_input.isdigit() and int(user_input) > 0 and int(user_input) <= 6,
 				validation_message="Unrecognized input. Please choose from the above list.")
@@ -60,7 +60,7 @@ class InterfaceManageResource:
 					\n[2] List all resource profiles under a specific camp (under an active plan) (*)\
 					\n[3] Set (overwrite) resource amounts in a specific camp (*)\
 					\n[4] Increment resource amounts in a specific camp (*)\
-					\nPlease note: Options annotated with (*) are only for entities under active plans.",
+					\nPlease note: Options annotated with (*) are only for entities under active plans AND camps that you have access rights to.",
 				is_valid=lambda user_input: user_input.isdigit() and int(user_input) > 0 and int(user_input) <= 4,
 				validation_message="Unrecognized input. Please choose from the above list.")
 		
