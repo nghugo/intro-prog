@@ -1,4 +1,3 @@
-from curses import REPORT_MOUSE_POSITION
 import json
 import os 
 import datetime 
@@ -7,7 +6,6 @@ from plans import Plans
 from interface_helper import input_until_valid
 from refugees import get_num_families_and_members_by_camp, load_ALL_refugees
 from resource_modified import CampResources
-from curses import REPORT_MOUSE_POSITION
 
 class InterfaceGenerateReports:
     plan_key_to_text = {
