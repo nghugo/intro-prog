@@ -21,6 +21,7 @@ class CampResources:
     warnning_days = 1
     def __init__(self):
         self.resources = self.load_resources()
+        self.factors = self.load_factors()
   
     @staticmethod
     # load resources from camp_resouces.json
@@ -77,28 +78,39 @@ class CampResources:
             return True
         return False
     
-
-
-
+    @staticmethod
+    def load_factors():
+        try:
+            with open('threshold_parameters.json', 'r') as file:
+                factors = json.load(file)
+        except (FileNotFoundError, ValueError):
+            factors = {  #defualt value for resources
+                "factor_food":3,
+                "factor_medical":1,
+                "factor_wate":2,
+                "factor_shelter":1,
+                "factor_clothing":1,
+                "factor_sanitation":2,
+                "warnning_days":1
+            }
+        return factors
+    
     def resource_factor(self):
         """Return the threshold for a given resource."""
-        #thresholds set based on population per day (or could set to per week?)
-        #food packets 3 packets per person
-        #medical packets 1 pack per person
-        #water packets 2 packets per person
-        #shelter packets 1 packet per person
-        #colthing packets 1 packet per person
-        #baby packets (don't set threshold)
-        #sanitation packets 2 pack per person
-
-        #here need to fix to based on population 
+        data = self.factors
         factors = {
-            "food_packets": self.factor_food,
-            "medical_packets": self.factor_medical,
-            "water_packets": self.factor_water,
-            "shelter_packets": self.factor_shelter,
-            "clothing_packets": self.factor_clothing,
-            "sanitation_packets": self.factor_sanitation
+            "food_packets": data["food_packets_factor"],
+            "medical_packets": data["medical_packets_factor"],
+            "water_packets": data["water_packets_factor"],
+            "shelter_packets": data["shelter_packets_factor"],
+            "clothing_packets": data["clothing_packets_factor"],
+            "sanitation_packets": data["sanitation_packets_factor"]
         }
         return factors
+    @staticmethod
+    def reset_factor(reset_value):
+        """reset_value should be a dictionary"""
+        with open("threshold_parameters.json",'w') as file:
+            json.dump(reset_value,file,indent=2)
+            return True
 
