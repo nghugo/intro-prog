@@ -55,7 +55,7 @@ class InterfaceCamp:
 				\n[2] View plans of camps that you have access rights to (active plans only)\
 				\n[3] List all camps that you have access rights to (under active plans)\
 				\n[4] Edit camp details",
-			is_valid = lambda user_input: user_input.isdigit() and int(user_input) > 0 and int(user_input) <= 3,
+			is_valid = lambda user_input: user_input.isdigit() and int(user_input) > 0 and int(user_input) <= 4,
 			validation_message = "Unrecognized input. Please choose from the above list."
 		)
 		if option == "1":
@@ -162,6 +162,7 @@ class InterfaceCamp:
 		
 		filtered_active_camps = Camp.load_active_camps_user_has_access_to(self.current_user.username)
 		filtered_ALL_camps = Camp.load_ALL_camps_user_has_access_to(self.current_user.username)
+		ALL_camps = Camp.loadALLCampData()
 		self.print_existing_or_accessible_active_camps()
 
 		camp_id = input_until_valid(
@@ -207,17 +208,14 @@ class InterfaceCamp:
 				validation_message = "Unrecognized input. Please enter a valid field (camp_id/location/max_capacity)."
 			)
 
-		if is_admin:
-			validation_message = f"This camp_id must exist and be active. Please enter another camp_id."
-		else:
-			validation_message = f"This camp_id must exist, be active, and you must have access rights to it. Please enter another camp_id."
+		
 
 		if attribute == "camp_id":
-			print(f"Existing active camp IDs{" accessible by you" if not is_admin else ""}: {", ".join(filtered_active_camps.keys()) if filtered_active_camps.keys() else "None found"}")
+			print(f"Existing camp IDs: {", ".join(ALL_camps.keys()) if ALL_camps else "None found"}")
 			new_value = input_until_valid(
-				input_message = f"Please enter the new value for camp_id",
-				is_valid = lambda user_input: user_input != "" and user_input in list(filtered_active_camps.keys()),
-				validation_message = validation_message
+				input_message = f"Please enter the new value for camp_id that is not in the above list",
+				is_valid = lambda user_input: user_input != "" and user_input not in list(ALL_camps.keys()),
+				validation_message = "The new camp_id must not be an existing camp_id. Please re-enter."
 			)
 
 		elif attribute == "max_capacity":
