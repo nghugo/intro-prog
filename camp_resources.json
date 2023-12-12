@@ -1,26 +1,34 @@
 {
     "camp1": {
-        "food_packets": 125,
-        "medical_packets": 110,
-        "water_packets": 100,
-        "shelter_packets": 100,
-        "clothing_packets": 100,
-        "sanitation_packets": 100
+        "food_packets": 42,
+        "medical_packets": 10,
+        "water_packets": 22,
+        "shelter_packets": 20,
+        "clothing_packets": 20,
+        "sanitation_packets": 10
     },
-    "camp2": {
+    "camp5": {
+        "food_packets": 15,
+        "medical_packets": 15,
+        "water_packets": 15,
+        "shelter_packets": 7,
+        "clothing_packets": 16,
+        "sanitation_packets": 13
+    },
+    "camp6": {
         "food_packets": 12,
-        "medical_packets": 0,
-        "water_packets": 0,
-        "shelter_packets": 0,
-        "clothing_packets": 2,
-        "sanitation_packets": 0
+        "medical_packets": 12,
+        "water_packets": 21,
+        "shelter_packets": 7,
+        "clothing_packets": 16,
+        "sanitation_packets": 13
     },
-    "camp3": {
-        "food_packets": 2,
-        "medical_packets": 0,
-        "water_packets": 0,
-        "shelter_packets": 0,
-        "clothing_packets": 0,
-        "sanitation_packets": 0
+    "camp7": {
+        "food_packets": 15,
+        "medical_packets": 2,
+        "water_packets": 13,
+        "shelter_packets": 23,
+        "clothing_packets": 16,
+        "sanitation_packets": 10
     }
 }

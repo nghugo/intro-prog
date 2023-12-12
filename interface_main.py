@@ -37,9 +37,9 @@ class InterfaceMain:
 		is_admin = account_type_or_exit=="a"
 
 		users = Users.load_users()
-		if (users  # check that the users dictionary (from persistent storage) is not empty
+		if (users  # check that the users dictionary (from persistent storage) is not empty 
 	  		and username in users  # check if the specified username matches a user
-			and users[username]['password'] == password  # check against password associated with the username
+			and Users.verify_password(username,password)  # check against password associated with the username
 			and users[username]['is_admin'] == is_admin  # check if user is of correct type (admin vs volunteer)
 		):
 			if not users[username]["is_activated"]:
@@ -73,7 +73,7 @@ class InterfaceMain:
 			validation_message="Unrecognized input. Please confirm your logout (y/n):\n[y] Yes\n[n] No"
 		)
 		if user_input == "y":
-			print(f"Goodbye {users[self.current_user.username]["fullname"]}! You are now logged out.")
+			print(f"Goodbye {users[self.current_user.username]['fullname']}! You are now logged out.")
 			self.current_user = None
 	
 	def prompt_exit(self):

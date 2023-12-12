@@ -58,7 +58,7 @@ Classes:
      - `prompt_modify_my_details()`: Prompts the volunteer to provide details for modifying a key-value pair in their user details.
      - `list_my_details()`: Lists all details of the volunteer.
      - `add_refugee()`:  Prompts the volunteer to provide details for adding a refugee.
-     - `load_refugees()`: Loads refugees from persistent storage.
+     - `load_active_refugees()`: Loads refugees from persistent storage.
 
 2. **Class: `Users`**
    - Provides the functionalities to interact with users.json.
@@ -112,6 +112,5 @@ Classes:
      - Validates input data for realism and correctness.
      - Functions:
        - `validate_country()`: Validate country names.
-       - `validate_date()`: Validate date entries.
        - `validate_name()`: Validate refugee and volunteer names.
 

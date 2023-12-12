@@ -12,54 +12,79 @@ class CampResources:
     #sanitation packets 2 pack per person
     
     #instance variables
-    factor_food = 3
-    factor_medical = 1
-    factor_water = 2
-    factor_shelter = 1
-    factor_clothing = 1
-    factor_sanitation = 2
-    warnning_days = 1
     def __init__(self):
-        self.resources = self.load_resources()
+        self.resources = self.load_active_resources()
         self.factors = self.load_factors()
-  
     @staticmethod
-    # load resources from camp_resouces.json
-    def load_resources():
-        try:
-            with open('camp_resources.json', 'r') as file:
+    def load_ALL_resources():
+        with open('camp_resources.json','r') as file:
+            try:
                 resources = json.load(file)
-        except (FileNotFoundError, ValueError):
-            resources = {}
+            except ValueError:
+                resources = {}
         return resources
 
-    # display resources in a specfic camp
-    def display_resources(self, camp_id):
-        if camp_id in self.resources:
-            camp_resources = self.resources[camp_id]
+    
+    @staticmethod
+    def load_active_resources():
+            """load all camps under active plans from camps.json"""
+
+            with open("plans.json", "r") as json_file:  # https://www.w3schools.com/python/ref_func_open.asp
+                try: 
+                    plans = json.load(json_file)
+                except ValueError: 
+                    plans = {}
+
+            with open('camps.json', 'r') as file:
+                try:
+                    camp_data = json.load(file)
+                except ValueError:
+                    camp_data = {}
+            with open('camp_resources.json','r') as file:
+                try:
+                    resource = json.load(file)
+                except ValueError:
+                    resource = {}
+                return {key: val for key, val in resource.items() if plans[camp_data[key]["humanitarian_plan_in"]]["status"] == "Active"}
+            
+    # display active resources in a specific camp
+    def display_active_resources(self, camp_id):
+        active_resources = self.load_active_resources()
+        if camp_id in active_resources:
+            camp_resources = active_resources[camp_id]
             print(f"Resources for {camp_id}:")
             for resource, amount in camp_resources.items():
                 print(f"-> {resource}: {amount}")
-        else:
-            return False
-        
-    def update_resources(self, camp_id, resource_kind, amount):
-        """Set the amount of a resource to an absolute value."""
+            return True # return True when resources are avaliable 
+        return False
+	
+	# display all resources in a specific camp
+    def display_ALL_resources(self, camp_id):
+        ALL_resources = self.load_ALL_resources()
+        if camp_id in ALL_resources:
+            camp_resources = ALL_resources[camp_id]
+            print(f"Resources for {camp_id}:")
+            for resource, amount in camp_resources.items():
+                print(f"-> {resource}: {amount}")
+            return True # return True when resources are avaliable 
+        return False
+
+
+    def overwrite_resources_amount(self, camp_id, resource_kind, amount):
+        """Set the amount of a resource to the given value."""
         if camp_id in self.resources and resource_kind in self.resources[camp_id]:
             self.resources[camp_id][resource_kind] = amount
             self.save_resources()
             return True
-        else:
-            return False
-
-    def adjust_resources(self, camp_id, resource_kind, relative_amount):
+        return False
+	
+    def increment_resources_amount(self, camp_id, resource_kind, relative_amount):
         """Adjust the amount of a resource by a relative amount (positive or negative)."""
         if camp_id in self.resources and resource_kind in self.resources[camp_id]:
             self.resources[camp_id][resource_kind] += relative_amount
             self.save_resources()
             return True
-        else:
-            return False
+        return False
 
     # save resources to json
     def save_resources(self):
@@ -93,6 +118,8 @@ class CampResources:
                 "factor_sanitation":2,
                 "warnning_days":1
             }
+            with open("threshold_parameters.json",'w') as file:
+                json.dump(factors,file,indent=2)
         return factors
     
     def resource_factor(self):
@@ -107,10 +134,11 @@ class CampResources:
             "sanitation_packets": data["sanitation_packets_factor"]
         }
         return factors
+    
     @staticmethod
     def reset_factor(reset_value):
         """reset_value should be a dictionary"""
         with open("threshold_parameters.json",'w') as file:
             json.dump(reset_value,file,indent=2)
-            return True
+        return True
 

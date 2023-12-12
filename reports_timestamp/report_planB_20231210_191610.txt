@@ -1,0 +1,21 @@
+
+--- Report for planB Plan ---
+Description:     Helping Asylum Seekers and refugees in London since 2023
+Country:         United Kingdom
+Start Date:      05/01/2023
+End Date:        12/01/2024
+Status:          Active
+
+Camps in planB:
+
+  camp1
+  -> location: London
+  -> max_capacity: 20
+  -> volunteers_in_charge: ['volunteer1', 'v']
+
+  camp5
+  -> location: Euston Station
+  -> max_capacity: 13
+  -> volunteers_in_charge: ['volunteer1', 'v']
+
+--- End of Report for planB Plan ---
