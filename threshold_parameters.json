@@ -1,9 +1,8 @@
 {
   "food_packets_factor": 2,
-  "medical_packets_factor": 3,
-  "water_packets_factor": 1,
-  "shelter_packets_factor": 2,
-  "clothing_packets_factor": 3,
-  "sanitation_packets_factor": 2,
-  "warning_days": 3
+  "medical_packets_factor": 1,
+  "water_packets_factor": 3,
+  "shelter_packets_factor": 1,
+  "clothing_packets_factor": 1,
+  "sanitation_packets_factor": 2
 }

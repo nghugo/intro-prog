@@ -21,7 +21,7 @@ class InterfaceManageResource:
 					\n[3] List all resource profiles under a specific camp (*)\
 					\n[4] Set (overwrite) resource amounts in a specific camp (*)\
 					\n[5] Increment resource amounts in a specific camp (*)\
-					\n[6] Change resource amount warning thresholds\
+					\n[6] Change resource warning thresholds (*)\
 					\nPlease note: Options annotated with (*) are only for entities under active plans.",
 				is_valid=lambda user_input: user_input.isdigit() and int(user_input) > 0 and int(user_input) <= 6,
 				validation_message="Unrecognized input. Please choose from the above list.")
@@ -246,7 +246,7 @@ class InterfaceManageResource:
 		num_refugees= refugee_count_dict[camp_id]["num_members"]
 		factor = resources.resource_factor()
 		factor_day = resources.factors
-		threshold = num_refugees*factor[resource_name]*factor_day["warning_days"]
+		threshold = num_refugees*factor[resource_name]
 		return threshold
 	@staticmethod
 	def Test_underthreshold(camp_id):
@@ -264,38 +264,31 @@ class InterfaceManageResource:
 	def helper_print_warning(camp_id):
 		"""helper method for print warning camp details"""
 		resources = CampResources.load_active_resources()
-
-		print("*******")
-		print(resources.keys())
-		print("*******")
-
-		print("-"*25+"warning"+"-"*25)
-		print(f'warning: {camp_id} may face risk of resource shortage.\n  The resource in shortage is:')
+		print("-"*29+"Warning"+"-"*29)
+		print(f'Warning: {camp_id} may face risk of resource shortage.\nThese resources are:')
 		for resource in resources[camp_id]:
 			amount = resources[camp_id][resource]
 			warning_amount = InterfaceManageResource.calculate_threshold(resource,camp_id)
 			if amount<warning_amount:
-				print(f' |{resource}: current amount {amount}. warning level: {warning_amount}')
-		print("-"*25+"warning"+"-"*25+'\n')
+				print(f'-> {resource :20} current amount: {str(amount):6} min threshold: {warning_amount}')
+		print("-"*65+'\n')
 	@staticmethod
 	def print_warning_level_helper():
 		resources = CampResources()
 		factor = resources.resource_factor()
-		warning_day = resources.factors["warning_days"]
-		print('-'*29+'warning level'+'-'*29)
+		print('-'*25+'Current thresholds'+'-'*25)
 		width = 20
 		border_char = "||"
 		padding_char = " "
 		for resource in factor:
 			amount = factor[resource]
-			text = f'The warning level for {resource} is {amount} per person every day.'
+			text = f'The min threshold for {resource+":":20} {amount} per person'
 			left_aligned = text.ljust(width)
-			left_border = border_char + left_aligned + padding_char*(70-len(text)) +border_char
+			left_border = border_char + " "*4 + left_aligned + padding_char*(60-len(text)) +border_char
 			print(left_border)
-		print('||'+' '*17+'the warning level of day time is '+str(warning_day)+'.'+' '*18+'||')
-		print('-'*29+'warning level'+'-'*29)
+		print('-'*68+'\n')
 	def prompt_resource_warning(self):
-			print('warning for camps facing risk of shortage:\n')
+			print('Camps facing risk of shortage:\n')
 			active_accessible_camps = Camp.load_active_camps_user_has_access_to(self.current_user.username)
 			for camp_id in active_accessible_camps:
 				if InterfaceManageResource.Test_underthreshold(camp_id):
@@ -304,39 +297,33 @@ class InterfaceManageResource:
 			InterfaceManageResource.print_warning_level_helper()
 
 			
-			confirm = input_until_valid(input_message="Do you want to reset the warning level ? \n[y] Yes \n[n] No ",
+			confirm = input_until_valid(input_message="Do you want to edit the thresholds? \n[y] Yes \n[n] No ",
 											is_valid = lambda user_input: user_input == "y" or user_input == "n",
 											validation_message="Unrecognized input.")
 			
-			if confirm == "no":
+			if confirm == "n":
 				return
 		
-			print("Reset factors.(Press 'Enter' to retrieve)")
 			resource_reset = CampResources()
 			factor_reset_amounts = {}
 			for resource in resource_reset.resource_factor().keys():
-				reset = input_until_valid(input_message= resource +" (non-negative integer value): ", is_valid=lambda user_input: user_input.isdigit() and int(user_input)>=0 or user_input == "",
-										validation_message="Please input Non-negative intergers.or press enter to exit directly ")
-				if reset == "":
-					return
+				reset = input_until_valid(input_message= f"Please enter the new threshold for {resource}:", 
+							is_valid=lambda user_input: user_input.isdigit() and int(user_input)>=0,
+							validation_message="Threshold must be a non-negative integer. Please re-enter.")
 				factor_reset_amounts[resource+"_factor"] = int(reset)
-			reset = input_until_valid(input_message= "Warning days (possitive integer value): ", is_valid=lambda user_input: user_input.isdigit() and int(user_input)>=0 or user_input == "",
-										validation_message="Please input possitive intergers.or press enter to exit directly ")
-			if reset == "":
-				return
-			factor_reset_amounts["warning_days"] = int(reset)
-			print(factor_reset_amounts)
+			
+			print("Your inputted thresholds:")
 			print(pd.DataFrame.from_dict(factor_reset_amounts,orient="index",columns=["factor"]))
-			confirm = input_until_valid(input_message="please confirm your reset warning factors. \n" +" \n[y] Yes\n[n] No (abort)",
+			confirm = input_until_valid(input_message="Please confirm the new thresholds. \n" +" \n[y] Yes\n[n] No (abort)",
 											is_valid = lambda user_input: user_input == "y" or user_input == "n",
-											validation_message="Unrecognized input. Please confirm (y/n):\n[y] Yes\n[n] No (abort)")
+											validation_message="Unrecognized input. Please confirm the new thresholds (y/n):\n[y] Yes\n[n] No (abort)")
 			if confirm == "n":
-				print(f"Edition aborted.")
+				print(f"Resource threshold modification aborted.")
 				return
 			
 			test= CampResources.reset_factor(factor_reset_amounts)
 
 			if test:
-				print(f"You've changed the warning factors successfully!")
+				print(f"You've changed the resource thresholds successfully!")
 			else:  
 				print(f'Failed to change.')

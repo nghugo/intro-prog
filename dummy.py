@@ -273,6 +273,15 @@ dummy_resources = {
   }
 }
 
+dummy_thresholds = {
+  "food_packets_factor": 2,
+  "medical_packets_factor": 1,
+  "water_packets_factor": 3,
+  "shelter_packets_factor": 1,
+  "clothing_packets_factor": 1,
+  "sanitation_packets_factor": 2
+}
+
 
 def overwrite_json(object, file):
     with open(file, "w") as json_file:
