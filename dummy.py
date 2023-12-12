@@ -158,36 +158,60 @@ dummy_plans = {
 }
 
 dummy_refugees = {
-    "refugee1": {
-        "fullname": "John Doe",
-        "number_of_members": 1,
-        "camp_id": "camp1",
-        "medical_condition": "food starved"
-    },
-    "refugee2": {
-        "fullname": "Jane Smith",
-        "number_of_members": 3,
-        "camp_id": "camp1",
-        "medical_condition": "healthy"
-    },
-    "refugee3": {
-        "fullname": "Pepe the Frog",
-        "number_of_members": 3,
-        "camp_id": "camp3",
-        "medical_condition": "dehydrated"
-    },
-    "refugee4": {
-        "fullname": "Saul Goodman",
-        "number_of_members": 3,
-        "camp_id": "camp2",
-        "medical_condition": "broken bones"
-    },
-    "f2db20d5525c49c2adaca68b15795f36": {
-        "fullname": "Hugo",
-        "number_of_members": 1,
-        "camp_id": "camp3",
-        "medical_condition": "hungry"
-    }
+  "refugee1": {
+    "fullname": "John Doe",
+    "number_of_members": 1,
+    "camp_id": "camp1",
+    "medical_condition": "food starved"
+  },
+  "refugee2": {
+    "fullname": "Jane Smith",
+    "number_of_members": 3,
+    "camp_id": "camp1",
+    "medical_condition": "healthy"
+  },
+  "refugee3": {
+    "fullname": "Pepe the Frog",
+    "number_of_members": 3,
+    "camp_id": "camp3",
+    "medical_condition": "dehydrated"
+  },
+  "refugee4": {
+    "fullname": "Saul Goodman",
+    "number_of_members": 3,
+    "camp_id": "camp2",
+    "medical_condition": "broken bones"
+  },
+  "refugee5": {
+    "fullname": "Hugo",
+    "number_of_members": 1,
+    "camp_id": "camp3",
+    "medical_condition": "food starved"
+  },
+  "refugee6": {
+    "fullname": "Hugo",
+    "number_of_members": 1,
+    "camp_id": "camp5",
+    "medical_condition": "healthy"
+  },
+  "refugee7": {
+    "fullname": "Hugo R",
+    "number_of_members": 12,
+    "camp_id": "camp6",
+    "medical_condition": "healthy"
+  },
+  "refugee8": {
+    "fullname": "Hugo N",
+    "number_of_members": 1,
+    "camp_id": "camp4",
+    "medical_condition": "dehydrated"
+  },
+  "refugee9": {
+    "fullname": "Hugo UCL",
+    "number_of_members": 3,
+    "camp_id": "camp5",
+    "medical_condition": "minor injuries"
+  }
 }
 
 dummy_resources = {
@@ -247,6 +271,15 @@ dummy_resources = {
     "clothing_packets": 16,
     "sanitation_packets": 10,
   }
+}
+
+dummy_thresholds = {
+  "food_packets_factor": 2,
+  "medical_packets_factor": 1,
+  "water_packets_factor": 3,
+  "shelter_packets_factor": 1,
+  "clothing_packets_factor": 1,
+  "sanitation_packets_factor": 2
 }
 
 
