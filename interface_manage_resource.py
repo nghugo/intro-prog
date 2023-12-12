@@ -148,13 +148,14 @@ class InterfaceManageResource:
 		if camp_id =="":
 			print("Aborted resource amount modification.")
 			return
-
-		if InterfaceManageResource.Test_underthreshold(camp_id):
-			InterfaceManageResource.helper_print_warning(camp_id)
-
+		
 		camp_population = get_num_families_and_members_by_camp()
 		num_family = camp_population[camp_id]['num_families']
 		num_members = camp_population[camp_id]['num_members']
+
+		if InterfaceManageResource.Test_underthreshold(camp_id):
+			InterfaceManageResource.helper_print_warning(camp_id, num_members)
+
 		
 		#todo: present the population of the camp.
 		df = pd.DataFrame(CampResources.load_active_resources()).transpose()
