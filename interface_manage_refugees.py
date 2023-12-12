@@ -140,7 +140,7 @@ class InterfaceManageRefugees:
 				"camp_id": camp_id,
 				"medical_condition": medical_condition,
 			}
-			recorded_refugees = load_active_refugees()
+			recorded_refugees = load_ALL_refugees()
 			recorded_refugees[refugee_id] = refugee_infomation
 			with open("refugees.json", "w") as json_file:
 				json.dump(recorded_refugees, json_file, indent=2)
