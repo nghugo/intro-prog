@@ -13,7 +13,7 @@ class CampResources:
     
     #instance variables
     def __init__(self):
-        self.resources = self.load_active_resources()
+        self.resources = self.load_ALL_resources()
         self.factors = self.load_factors()
     @staticmethod
     def load_ALL_resources():
@@ -89,7 +89,7 @@ class CampResources:
     # save resources to json
     def save_resources(self):
         with open('camp_resources.json', 'w') as file:
-            json.dump(self.resources, file, indent=4)
+            json.dump(self.resources, file, indent=2)
         return True
     
     #c

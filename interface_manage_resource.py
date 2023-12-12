@@ -180,8 +180,12 @@ class InterfaceManageResource:
 				print("Aborted resource amount modification.")
 				return
 			
+			if method == 'update':
+				input_msg = f"Enter the new amount for {resource_to_edit} or leave empty to abort: "
+			else:
+				input_msg = f"Enter the increment amount for {resource_to_edit} or leave empty to abort: "
 			
-			amount_edit = input_until_valid(input_message= f"Enter the new amount for {resource_to_edit} or leave empty to abort: ",
+			amount_edit = input_until_valid(input_message= input_msg,
 												is_valid=lambda user_input: user_input.isdigit() or user_input == "",
 												validation_message="Unrecognized input. Please enter again.")
 			if amount_edit == "":
@@ -217,7 +221,12 @@ class InterfaceManageResource:
 			else:
 				print(f'Failed to change {resource_to_edit} amount')
 
-			exit_confirm = input_until_valid(input_message="Do you want to edit other resource amounts?\n[y] Yes\n[n] No (leave)",
+			if method == 'update':
+				exit_msg = f"Do you want to update (overwrite) other resource amounts?\n[y] Yes\n[n] No (leave)"
+			else:
+				exit_msg = f"Do you want to increment other resource amounts?\n[y] Yes\n[n] No (leave)"
+
+			exit_confirm = input_until_valid(input_message=exit_msg,
 										is_valid = lambda user_input: user_input == "y" or user_input == "n",
 										validation_message="Unrecognized input. Please confirm (y/n):\n[y] Yes\n[n] No (leave)")
 			
