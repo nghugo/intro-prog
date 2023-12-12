@@ -106,15 +106,15 @@ class InterfaceManageResource:
 		message_value = ", ".join(list(filtered_camps.keys())) if filtered_camps else "None found"
 		print(f"{message_key} {message_value}")
 
-        if is_admin:
-            camp_id = input_until_valid(
+		if is_admin:
+			camp_id = input_until_valid(
 				input_message = "Enter the camp name, or leave empty to abort: ", 
 				is_valid = lambda user_input: (user_input == "") or (user_input in CampResources.load_active_resources()), 
 				validation_message = "Unrecognized camp. Please enter a new one, or leave empty to abort: ")
 			
-            if camp_id == "":
-                print("Aborted displaying resources.")
-                return
+			if camp_id == "":
+				print("Aborted displaying resources.")
+				return
 
 			resource_sepecific_camp = CampResources()
 			resource_sepecific_camp.display_active_resources(camp_id)
@@ -231,14 +231,14 @@ class InterfaceManageResource:
 			else:
 				print(f'Failed to change {resource_to_edit}')
 
-            exit_confirm = input_until_valid(input_message="Do you want to edit other resource amounts?\n[y] Yes\n[n] No (abort)",
+			exit_confirm = input_until_valid(input_message="Do you want to edit other resource amounts?\n[y] Yes\n[n] No (abort)",
 										is_valid = lambda user_input: user_input == "y" or user_input == "n",
 										validation_message="Unrecognized input. Please confirm (y/n):\n[y] Yes\n[n] No (abort)")
 			
-            if exit_confirm == 'y':
-                not_exit = True
-            else:
-                not_exit = False
+			if exit_confirm == 'y':
+				not_exit = True
+			else:
+				not_exit = False
 
 		
 

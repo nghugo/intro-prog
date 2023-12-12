@@ -208,7 +208,6 @@ class InterfaceCamp:
 			attribute = input_until_valid(
 				input_message = "Enter the attribute (camp_id/humanitarian_plan_in/location/max_capacity) to modify:",
 				is_valid = lambda user_input: user_input in {"camp_id", "location", "max_capacity", "humanitarian_plan_in"},
-				validation_message = "Unrecognized input. Please enter a valid field (camp_method id/location/max_capacity/humanitarian_plan_in)."
 				validation_message = "Unrecognized input. Please enter a valid field (camp_id/humanitarian_plan_in/location/max_capacity)."
 			)
 		else:
@@ -332,7 +331,6 @@ class InterfaceCamp:
 			print(f"Volunteer operation ({method}) aborted.")
 			return  # early termination
 		confirm = input_until_valid(
-			input_message = f"Please confirm you want to {method} {volunteer} {'into' if method == 'add' else 'from'} the camp {camp_id} \n[y] Yes\n[n] No (abort)",
 			input_message = f"Please confirm you want to {method} {volunteer} {'into' if method == 'add' else 'from'} the camp {camp_id} \n[y] Yes\n[n] No (abort)",
 			is_valid = lambda user_input: user_input == "y" or user_input == "n",
 			validation_message = "Unrecognized input. Please confirm (y/n):\n[y] Yes\n[n] No (abort)"
