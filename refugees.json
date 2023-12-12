@@ -52,11 +52,5 @@
     "number_of_members": 3,
     "camp_id": "camp5",
     "medical_condition": "minor injuries"
-  },
-  "efdf994210b64f20bd1047c83888ced9": {
-    "fullname": "Hugo",
-    "number_of_members": 16,
-    "camp_id": "camp1",
-    "medical_condition": "hugo"
   }
 }
