@@ -55,15 +55,16 @@ class InterfaceGenerateReports:
         with open('plans.json', 'r') as file:
             plans_data = json.load(file)
             
-            print("\nAvailable plans: " + ", ".join(plans_data.keys()))
-            plan_name = input("\nEnter the name of the plan to generate the report for (leave empty to abort): ").strip()
+            print("\nAvailable plans: " + ", ".join(plans_data.keys()))            
             
+            plan_name = input_until_valid(
+				input_message= "\nEnter the name of the plan to generate the report for (leave empty to abort): ",
+				is_valid = lambda user_input: user_input == "" or user_input in plans_data,
+				validation_message = "Plan not found. Please enter an existing plan name or leave empty to abort."
+			).strip()
+
             if plan_name == "":
                 print("Operation aborted.")
-                return
-
-            if plan_name not in plans_data:
-                print(f"Plan '{plan_name}' not found, Please enter an existing plan name or leave empty to abort.")
                 return
             
             plan_data = plans_data[plan_name]
@@ -157,8 +158,13 @@ class InterfaceGenerateReports:
         report = "\nAvailable camps: " + ", ".join(camps_data.keys()) + "\n"
         print(report)
 
-        camp_name = input("Enter the name of the camp to generate the report for (leave empty to abort): ")
-        if camp_name == "" or camp_name not in camps_data:
+        camp_name = input_until_valid(
+            input_message= "Enter the name of the camp to generate the report for (leave empty to abort):",
+            is_valid = lambda user_input: user_input == "" or user_input in camps_data,
+            validation_message = "Camp not found. Please enter an existing camp name or leave empty to abort."
+        ).strip()
+        
+        if camp_name == "":
             print("Operation aborted.")
             return
 
