@@ -24,7 +24,9 @@ class InterfaceVolunteerOptions:
 				\n[3] Manage camps (*)\
 				\n[4] Manage refugee profiles (*)\
 				\n[5] Manage resources (*)\
-				\nPlease note: options annotated with (*) are only for entities under active plans",
+				\nPlease note: \
+				\nOptions annotated with (*) are only for entities under active plans.\
+				\nTo view entities under ended plans, log in as admin instead.",
 			is_valid=lambda user_input: user_input.isdigit() and int(user_input) > 0 and int(user_input) <= 6,
 			validation_message="Unrecognized input. Please choose from the above list."
 		)

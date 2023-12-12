@@ -36,7 +36,9 @@ class InterfaceAdminOptions:
 				\n[6] Manage refugee profiles (*) \
 				\n[7] Manage resources (*) \
 				\n[8] Generate a report (all entities under active/ended plans) \
-				\nPlease note: options annotated with (*) are only for entities under active plans",
+				\nPlease note:\
+				\nOptions annotated with (*) are only for entities under active plans.\
+				\nTo view entities under ended plans, choose [8].",
 			is_valid=lambda user_input: user_input.isdigit() and int(user_input) > 0 and int(user_input) <= 8,
 			validation_message="Unrecognized input. Please choose from the above list."
 		)
