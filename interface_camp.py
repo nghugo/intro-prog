@@ -387,7 +387,7 @@ class InterfaceCamp:
 		Accessible camps if user is volunteer type """
 		
 		users = Users.load_users()
-		is_admin =  users[self.current_user.username]["is_admin"]
+		is_admin = users[self.current_user.username]["is_admin"]
 		filtered_active_camps = Camp.load_active_camps_user_has_access_to(self.current_user.username)
 
 		message_key = "\nExisting camp(s) under active an plan:" if is_admin else "Camp(s) you have access rights to:"

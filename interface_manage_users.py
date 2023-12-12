@@ -113,8 +113,9 @@ class InterfaceManageUsers:
 			print(f"Aborted user addition.")
 
 	def prompt_activate_user(self):
-		self.print_all_users()
-		users = Users.load_users()
+		self.print_deactivated_users()
+		users = {key: val for key, val in Users.load_users().items() if not val["is_activated"]}
+		
 		username = input_until_valid(
 			input_message="Enter the username of the user to activate or leave empty to abort:",
 			is_valid=lambda user_input: user_input in users or user_input == "",
@@ -128,6 +129,8 @@ class InterfaceManageUsers:
 			input("Press Enter to continue...")
 
 	def prompt_deactivate_user(self):
+		self.print_activated_users()
+		users = {key: val for key, val in Users.load_users().items() if val["is_activated"]}
 		self.print_all_users()
 		users = Users.load_users()
 		username = input_until_valid(
@@ -280,3 +283,13 @@ class InterfaceManageUsers:
 	def print_all_users():
 		users = Users.load_users()
 		print(f"\nExisting username(s): {", ".join(users.keys()) if users else 'None found'}")
+	
+	@staticmethod
+	def print_deactivated_users():
+		users = {key: val for key, val in Users.load_users().items() if not val["is_activated"]}
+		print(f"\nDeactivated user(s): {", ".join(users.keys()) if users else 'None found'}")
+	
+	@staticmethod
+	def print_activated_users():
+		users = {key: val for key, val in Users.load_users().items() if val["is_activated"]}
+		print(f"\nActivated user(s): {", ".join(users.keys()) if users else 'None found'}")
