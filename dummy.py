@@ -4,7 +4,7 @@ import json
 # exceptions: user a has password a, and user v has password v
 dummy_users = {
   "admin": {
-    "fullname": "Homer Simpsons",
+    "fullname": "Homer Simpson",
     "password": "d2cdf18f2676375dc4f0f6bda15ad3198fc5ef67961ba4a15f45e5ec70726228",
     "phone_number": "11111",
     "email": "admin@mail.com",
@@ -13,7 +13,7 @@ dummy_users = {
     "salt": "80306a615dcab5952ea15e3369ed7196"
   },
   "volunteer1": {
-    "fullname": "Lisa Simpsons",
+    "fullname": "Lisa Simpson",
     "password": "3c7ff0ad540f6971a970b1121626c91d787ab2a21fff82ce3fe116decfa8e453",
     "phone_number": "5028382739",
     "email": "volunteer1@mail.com",
