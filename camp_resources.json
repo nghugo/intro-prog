@@ -1,34 +1,58 @@
 {
-    "camp1": {
-        "food_packets": 42,
-        "medical_packets": 10,
-        "water_packets": 22,
-        "shelter_packets": 20,
-        "clothing_packets": 20,
-        "sanitation_packets": 10
-    },
-    "camp5": {
-        "food_packets": 15,
-        "medical_packets": 15,
-        "water_packets": 15,
-        "shelter_packets": 7,
-        "clothing_packets": 16,
-        "sanitation_packets": 13
-    },
-    "camp6": {
-        "food_packets": 12,
-        "medical_packets": 12,
-        "water_packets": 21,
-        "shelter_packets": 7,
-        "clothing_packets": 16,
-        "sanitation_packets": 13
-    },
-    "camp7": {
-        "food_packets": 15,
-        "medical_packets": 2,
-        "water_packets": 13,
-        "shelter_packets": 23,
-        "clothing_packets": 16,
-        "sanitation_packets": 10
-    }
+  "camp1": {
+    "food_packets": 30,
+    "medical_packets": 10,
+    "water_packets": 22,
+    "shelter_packets": 20,
+    "clothing_packets": 20,
+    "sanitation_packets": 10
+  },
+  "camp2": {
+    "food_packets": 23,
+    "medical_packets": 30,
+    "water_packets": 20,
+    "shelter_packets": 20,
+    "clothing_packets": 21,
+    "sanitation_packets": 12
+  },
+  "camp3": {
+    "food_packets": 10,
+    "medical_packets": 10,
+    "water_packets": 20,
+    "shelter_packets": 20,
+    "clothing_packets": 10,
+    "sanitation_packets": 10
+  },
+  "camp4": {
+    "food_packets": 10,
+    "medical_packets": 5,
+    "water_packets": 12,
+    "shelter_packets": 4,
+    "clothing_packets": 6,
+    "sanitation_packets": 3
+  },
+  "camp5": {
+    "food_packets": 15,
+    "medical_packets": 15,
+    "water_packets": 15,
+    "shelter_packets": 7,
+    "clothing_packets": 16,
+    "sanitation_packets": 13
+  },
+  "camp6": {
+    "food_packets": 12,
+    "medical_packets": 12,
+    "water_packets": 21,
+    "shelter_packets": 7,
+    "clothing_packets": 16,
+    "sanitation_packets": 13
+  },
+  "camp7": {
+    "food_packets": 15,
+    "medical_packets": 2,
+    "water_packets": 13,
+    "shelter_packets": 23,
+    "clothing_packets": 16,
+    "sanitation_packets": 10
+  }
 }
