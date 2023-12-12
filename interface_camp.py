@@ -207,12 +207,17 @@ class InterfaceCamp:
 				validation_message = "Unrecognized input. Please enter a valid field (camp_id/location/max_capacity)."
 			)
 
+		if is_admin:
+			validation_message = f"This camp_id must exist and be active. Please enter another camp_id."
+		else:
+			validation_message = f"This camp_id must exist, be active, and you must have access rights to it. Please enter another camp_id."
+
 		if attribute == "camp_id":
-			print(f"Existing camp IDs: {", ".join(filtered_ALL_camps.keys()) if filtered_ALL_camps.keys() else "None found"}")
+			print(f"Existing active camp IDs{" accessible by you" if not is_admin else ""}: {", ".join(filtered_active_camps.keys()) if filtered_active_camps.keys() else "None found"}")
 			new_value = input_until_valid(
 				input_message = f"Please enter the new value for camp_id",
-				is_valid = lambda user_input: user_input != "" and user_input not in list(filtered_ALL_camps.keys()),
-				validation_message = f"This camp_id must not be already taken or empty. Please enter another camp_id."
+				is_valid = lambda user_input: user_input != "" and user_input in list(filtered_active_camps.keys()),
+				validation_message = validation_message
 			)
 
 		elif attribute == "max_capacity":
