@@ -116,7 +116,7 @@ class CampResources:
                 "factor_shelter":1,
                 "factor_clothing":1,
                 "factor_sanitation":2,
-                "warnning_days":1
+                "warning_days":1
             }
             with open("threshold_parameters.json",'w') as file:
                 json.dump(factors,file,indent=2)

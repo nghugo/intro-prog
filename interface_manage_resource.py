@@ -160,7 +160,7 @@ class InterfaceManageResource:
 			return
 
 		if InterfaceManageResource.Test_underthreshold(camp_id):
-			InterfaceManageResource.helper_print_warnning(camp_id)
+			InterfaceManageResource.helper_print_warning(camp_id)
 
 		camp_population = get_num_families_and_members_by_camp()
 		num_family = camp_population[camp_id]['num_families']
@@ -237,46 +237,51 @@ class InterfaceManageResource:
 	@staticmethod 
 	def calculate_threshold(resource_name,camp_id):
 		"""calculate the set resource threshold
-        with algorithm: threshold = population*resource_factors*warnning_days
-        ----------------------------
-        return threshold(int)
-        """
+		with algorithm: threshold = population*resource_factors*warning_days
+		----------------------------
+		return threshold(int)
+		"""
 		resources = CampResources()
 		refugee_count_dict = get_num_families_and_members_by_camp()
 		num_refugees= refugee_count_dict[camp_id]["num_members"]
 		factor = resources.resource_factor()
 		factor_day = resources.factors
-		threshold = num_refugees*factor[resource_name]*factor_day["warnning_days"]
+		threshold = num_refugees*factor[resource_name]*factor_day["warning_days"]
 		return threshold
 	@staticmethod
 	def Test_underthreshold(camp_id):
-		"""helper method for determine which camp to warnning
-        -------------------------------
-        return boolean value: true if underthreshold"""
+		"""helper method for determine which camp to warning
+		-------------------------------
+		return boolean value: true if underthreshold"""
 		resources = CampResources.load_active_resources()
 		test = False
 		for resource in resources[camp_id]:
-			if resources[camp_id][resource]<InterfaceManageResource.calculate_threshold(resource,camp_id):
+			if resources[camp_id][resource] < InterfaceManageResource.calculate_threshold(resource,camp_id):
 				test = True
 		return test
 	
 	@staticmethod
-	def helper_print_warnning(camp_id):
-		"""helper method for print warnning camp details"""
+	def helper_print_warning(camp_id):
+		"""helper method for print warning camp details"""
 		resources = CampResources.load_active_resources()
-		print("-"*25+"Warnning"+"-"*25)
-		print(f'Warnning: {camp_id} may face risk of resource shortage.\n  The resource in shortage is:')
+
+		print("*******")
+		print(resources.keys())
+		print("*******")
+
+		print("-"*25+"warning"+"-"*25)
+		print(f'warning: {camp_id} may face risk of resource shortage.\n  The resource in shortage is:')
 		for resource in resources[camp_id]:
 			amount = resources[camp_id][resource]
-			warnning_amount = InterfaceManageResource.calculate_threshold(resource,camp_id)
-			if amount<warnning_amount:
-				print(f' |{resource}: current amount {amount}. warnning level: {warnning_amount}')
-		print("-"*25+"Warnning"+"-"*25+'\n')
+			warning_amount = InterfaceManageResource.calculate_threshold(resource,camp_id)
+			if amount<warning_amount:
+				print(f' |{resource}: current amount {amount}. warning level: {warning_amount}')
+		print("-"*25+"warning"+"-"*25+'\n')
 	@staticmethod
-	def print_warnning_level_helper():
+	def print_warning_level_helper():
 		resources = CampResources()
 		factor = resources.resource_factor()
-		warning_day = resources.factors["warnning_days"]
+		warning_day = resources.factors["warning_days"]
 		print('-'*29+'warning level'+'-'*29)
 		width = 20
 		border_char = "||"
@@ -290,47 +295,48 @@ class InterfaceManageResource:
 		print('||'+' '*17+'the warning level of day time is '+str(warning_day)+'.'+' '*18+'||')
 		print('-'*29+'warning level'+'-'*29)
 	def prompt_resource_warning(self):
-            print('warnning for camps facing risk of shortage:\n')
-            for camp_id in self.resources:
-                if InterfaceManageResource.Test_underthreshold(camp_id):
-                    InterfaceManageResource.helper_print_warnning(camp_id)
-                
-            InterfaceManageResource.print_warnning_level_helper()
+			print('warning for camps facing risk of shortage:\n')
+			active_accessible_camps = Camp.load_active_camps_user_has_access_to(self.current_user.username)
+			for camp_id in active_accessible_camps:
+				if InterfaceManageResource.Test_underthreshold(camp_id):
+					InterfaceManageResource.helper_print_warning(camp_id)
+				
+			InterfaceManageResource.print_warning_level_helper()
 
-            
-            confirm = input_until_valid(input_message="Do you want to reset the warning level ? \n[y] YES \n[n] NO ",
-                                            is_valid = lambda user_input: user_input == "y" or user_input == "n",
-                                            validation_message="Unrecognized input. Please press 'enter' to return to former page.")
-            
-            if confirm == "no":
-                return
-        
-            print("Reset factors.(Press 'Enter' to retrieve)")
-            resource_reset = CampResources()
-            factor_reset_amounts = {}
-            for resource in resource_reset.resource_factor().keys():
-                reset = input_until_valid(input_message= resource +" (non-negative integer value): ", is_valid=lambda user_input: user_input.isdigit() and int(user_input)>=0 or user_input == "",
-                                        validation_message="Please input Non-negative intergers.or press enter to exit directly ")
-                if reset == "":
-                    return
-                factor_reset_amounts[resource+"_factor"] = int(reset)
-            reset = input_until_valid(input_message= "Warning days (possitive integer value): ", is_valid=lambda user_input: user_input.isdigit() and int(user_input)>=0 or user_input == "",
-                                        validation_message="Please input possitive intergers.or press enter to exit directly ")
-            if reset == "":
-                return
-            factor_reset_amounts["warnning_days"] = int(reset)
-            print(factor_reset_amounts)
-            print(pd.DataFrame.from_dict(factor_reset_amounts,orient="index",columns=["factor"]))
-            confirm = input_until_valid(input_message="please confirm your reset warnning factors. \n" +" \n[y] Yes\n[n] No (abort)",
-                                            is_valid = lambda user_input: user_input == "y" or user_input == "n",
-                                            validation_message="Unrecognized input. Please confirm (y/n):\n[y] Yes\n[n] No (abort)")
-            if confirm == "n":
-                print(f"Edition aborted.")
-                return
-            
-            test= CampResources.reset_factor(factor_reset_amounts)
+			
+			confirm = input_until_valid(input_message="Do you want to reset the warning level ? \n[y] Yes \n[n] No ",
+											is_valid = lambda user_input: user_input == "y" or user_input == "n",
+											validation_message="Unrecognized input.")
+			
+			if confirm == "no":
+				return
+		
+			print("Reset factors.(Press 'Enter' to retrieve)")
+			resource_reset = CampResources()
+			factor_reset_amounts = {}
+			for resource in resource_reset.resource_factor().keys():
+				reset = input_until_valid(input_message= resource +" (non-negative integer value): ", is_valid=lambda user_input: user_input.isdigit() and int(user_input)>=0 or user_input == "",
+										validation_message="Please input Non-negative intergers.or press enter to exit directly ")
+				if reset == "":
+					return
+				factor_reset_amounts[resource+"_factor"] = int(reset)
+			reset = input_until_valid(input_message= "Warning days (possitive integer value): ", is_valid=lambda user_input: user_input.isdigit() and int(user_input)>=0 or user_input == "",
+										validation_message="Please input possitive intergers.or press enter to exit directly ")
+			if reset == "":
+				return
+			factor_reset_amounts["warning_days"] = int(reset)
+			print(factor_reset_amounts)
+			print(pd.DataFrame.from_dict(factor_reset_amounts,orient="index",columns=["factor"]))
+			confirm = input_until_valid(input_message="please confirm your reset warning factors. \n" +" \n[y] Yes\n[n] No (abort)",
+											is_valid = lambda user_input: user_input == "y" or user_input == "n",
+											validation_message="Unrecognized input. Please confirm (y/n):\n[y] Yes\n[n] No (abort)")
+			if confirm == "n":
+				print(f"Edition aborted.")
+				return
+			
+			test= CampResources.reset_factor(factor_reset_amounts)
 
-            if test:
-                print(f"You've changed the warning factors successfully!")
-            else:  
-                print(f'Failed to change.')
+			if test:
+				print(f"You've changed the warning factors successfully!")
+			else:  
+				print(f'Failed to change.')

@@ -5,5 +5,5 @@
   "shelter_packets_factor": 2,
   "clothing_packets_factor": 3,
   "sanitation_packets_factor": 2,
-  "warnning_days": 3
+  "warning_days": 3
 }
