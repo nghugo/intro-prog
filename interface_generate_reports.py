@@ -339,7 +339,7 @@ class InterfaceGenerateReports:
         save_report = input_until_valid(
         input_message = "Do you want to save this report as a text file? (y/n):",
         is_valid = lambda user_input: user_input == "y" or user_input == "n",
-        validation_message = "Unrecognized input. Please confirm if you want to sasve this report as a text file (y/n):\n[y] Yes\n[n] No (abort)"
+        validation_message = "Unrecognized input. Please confirm if you want to save this report as a text file (y/n):\n[y] Yes\n[n] No (abort)"
         ).lower()
         if save_report == 'y':
             directory = "reports_timestamp"
